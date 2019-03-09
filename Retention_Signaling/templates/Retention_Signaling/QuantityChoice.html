@@ -1,0 +1,14 @@
+{% extends "global/Page.html" %}
+{% load otree static %}
+
+{% block title %}
+    Sell
+{% endblock %}
+
+
+{% block content %}
+
+{% formfield player.quantity_choice label='Please the number of tickets you would like to sell.' %}
+
+{% next_button %}
+{% endblock %}

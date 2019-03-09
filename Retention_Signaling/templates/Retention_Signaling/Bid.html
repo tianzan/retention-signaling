@@ -1,0 +1,16 @@
+{% extends "global/Page.html" %}
+{% load otree static %}
+
+{% block title %}
+Bid
+{% endblock %}
+
+
+{% block content %}
+
+<p> There are {{quantity}} tickets for sale in this auction. </p>
+
+{% formfield player.bid label='Please choose a per-ticket price.' %}
+
+{% next_button %}
+{% endblock %}
