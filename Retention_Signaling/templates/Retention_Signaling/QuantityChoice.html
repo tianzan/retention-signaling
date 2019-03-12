@@ -2,13 +2,16 @@
 {% load otree static %}
 
 {% block title %}
-    Sell
+Sell
 {% endblock %}
 
 
 {% block content %}
 
-{% formfield player.quantity_choice label='Please the number of tickets you would like to sell.' %}
+<p style="color:{{player.seller_color}};">If you are chosen to be the seller, your tickets will be
+    {{player.seller_color}}.</p>
 
-{% next_button %}
+{% formfield player.quantity_choice label='Please the number of tickets you would like to sell, if you are chosen to be the group seller.' %}
+
+<p>{% next_button %}</p>
 {% endblock %}

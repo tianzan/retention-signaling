@@ -1,5 +1,5 @@
 {% extends "global/Page.html" %}
-{% load otree static %}
+{% load staticfiles otree_tags %}
 
 {% block title %}
 Bid
@@ -7,10 +7,21 @@ Bid
 
 
 {% block content %}
-
 <p> There are {{quantity}} tickets for sale in this auction. </p>
 
+    <div class="jumbotron">
+        <h3>Current price: <span class="label label-success" id='group_price'>{{ group.price }}</span></h3>
+        <div class="col-xs-12" style="height:10px;"></div>
+        <p>
+            <button   class="btn btn-primary btn-lg btn-danger">Exit the auction</button>
+        </p>
+    </div>
 {% formfield player.bid label='Please choose a per-ticket price.' %}
 
-{% next_button %}
+
+
+
+
 {% endblock %}
+
+

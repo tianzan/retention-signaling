@@ -1,33 +1,49 @@
 from otree.api import Currency as c, currency_range
 from ._builtin import Page, WaitPage
 from .models import Constants
+import time
 
 
 class QuantityChoice(Page):
     form_model = 'player'
     form_fields = ['quantity_choice']
 
-
-class Wait(WaitPage):
-    def after_all_players_arrive(self):
-        self.group.set_quantity()
+    def vars_for_template(self):
+        if self.round_number > 1:
+            data = self.session.vars
+            return {
+                'data': data
+            }
 
 
 class Bid(Page):
+    def is_displayed(self):
+        return self.player.role() == 'buyer'
 
     def vars_for_template(self):
         return {
-            'quantity': self.player.group.set_quantity()
+            'quantity': self.player.group.group_quantity
         }
 
     form_model = 'player'
     form_fields = ['bid']
 
 
-class ResultsWaitPage(WaitPage):
+class Wait(WaitPage):
+    def after_all_players_arrive(self):
+        self.group.set_quantity()
+        self.group.get_type()
 
+
+class ResultsWaitPage(WaitPage):
     def after_all_players_arrive(self):
         self.group.set_price()
+        self.session.vars[str(self.round_number) + '.' +
+                          str(self.group.group_number) + 'price'] = self.group.price
+        self.session.vars[str(self.round_number) + '.' +
+                          str(self.group.group_number) + 'quantity'] = self.group.group_quantity
+        self.session.vars[str(self.round_number) + '.' +
+                          str(self.group.group_number) + 'type'] = self.group.group_type
 
 
 class Results(Page):
@@ -38,6 +54,5 @@ page_sequence = [
     QuantityChoice,
     Wait,
     Bid,
-    ResultsWaitPage,
-    Results
+    ResultsWaitPage
 ]
