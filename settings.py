@@ -10,12 +10,12 @@ SESSION_CONFIG_DEFAULTS = {
     'participation_fee': 15.00,
     'doc': "",
 }
-
+EXTENSION_APPS = ['Retention_Signaling']
 SESSION_CONFIGS = [
     {
         'name': 'Retention_Signaling',
         'display_name': 'Lab Experiment',
-        'num_demo_participants': 2,
+        'num_demo_participants': 3,
         'use_browser_bots': False,
         'app_sequence': [
             'Retention_Signaling'

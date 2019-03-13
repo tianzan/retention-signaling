@@ -2,6 +2,9 @@ from otree.api import Currency as c, currency_range
 from ._builtin import Page, WaitPage
 from .models import Constants
 import time
+from .models import Constants
+import json
+import channels
 
 
 class QuantityChoice(Page):
@@ -36,8 +39,8 @@ class Bid(Page):
             'quantity': self.player.group.group_quantity
         }
 
-    form_model = 'player'
-    form_fields = ['bid']
+    def before_next_page(self):
+        self.group.activated = False
 
 
 class Wait(WaitPage):
@@ -45,23 +48,16 @@ class Wait(WaitPage):
         self.group.set_quantity()
         self.group.get_type()
         self.group.get_color()
+        self.group.activated = True
 
 
 class ResultsWaitPage(WaitPage):
     def after_all_players_arrive(self):
-        self.group.set_price()
+        # self.group.set_price()
         self.session.vars[str(self.round_number) + 'R' +
                           str(self.group.group_number)] = {'price': self.group.price,
                                                            'quantity': self.group.group_quantity,
                                                            'color': self.group.group_color}
-        # self.session.vars[str(self.round_number) + 'R' +
-        #                   str(self.group.group_number) + 'price'] = self.group.price
-        # self.session.vars[str(self.round_number) + 'R' +
-        #                   str(self.group.group_number) + 'quantity'] = self.group.group_quantity
-        # self.session.vars[str(self.round_number) + 'R' +
-        #                   str(self.group.group_number) + 'type'] = self.group.group_type
-        # self.session.vars[str(self.round_number) + 'R' +
-        #                   str(self.group.group_number) + 'color'] = self.group.group_color
 
 
 class Results(Page):
