@@ -16,9 +16,10 @@ Bid
             <button   class="btn btn-primary btn-lg btn-danger">Exit the auction</button>
         </p>
     </div>
-{% formfield player.bid label='Please choose a per-ticket price.' %}
 
-
+{% block scripts %}
+    {% include 'includes/decision_channel.js.html' %}
+{% endblock %}
 
 
 
