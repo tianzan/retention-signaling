@@ -22,15 +22,14 @@ Trading game with asymmetric information and retention.
 
 class Constants(BaseConstants):
     name_in_url = 'Retention_Signaling'
-    players_per_group = 3
-    num_rounds = 2
+    players_per_group = 2
+    num_rounds = 3
     alpha = 0.5
     Q = 5
     num_groups = 1
 
 
 class Subsession(BaseSubsession):
-    test = models.StringField()
 
     def creating_session(self):
         # Creates random groups of buyers and sellers every round
@@ -58,6 +57,8 @@ class Group(BaseGroup):
 
     group_type = models.BooleanField()
 
+    group_color = models.StringField()
+
     def set_quantity(self):
         seller = self.get_player_by_role('seller')
         self.group_quantity = seller.quantity_choice
@@ -65,6 +66,10 @@ class Group(BaseGroup):
     def get_type(self):
         seller = self.get_player_by_role('seller')
         self.group_type = seller.seller_type
+
+    def get_color(self):
+        seller = self.get_player_by_role('seller')
+        self.group_color = seller.seller_color
 
     def set_price(self):
         buyers = [
