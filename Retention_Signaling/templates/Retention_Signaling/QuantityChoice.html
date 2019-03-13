@@ -14,4 +14,10 @@ Sell
 {% formfield player.quantity_choice label='Please the number of tickets you would like to sell, if you are chosen to be the group seller.' %}
 
 <p>{% next_button %}</p>
+
+{% if roundNumber  > 1 %}
+{% include 'includes/history.html' %}
+{% endif %}
+
+
 {% endblock %}

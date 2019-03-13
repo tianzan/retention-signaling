@@ -15,7 +15,7 @@ SESSION_CONFIGS = [
     {
         'name': 'Retention_Signaling',
         'display_name': 'Lab Experiment',
-        'num_demo_participants': 3,
+        'num_demo_participants': 2,
         'use_browser_bots': False,
         'app_sequence': [
             'Retention_Signaling'
