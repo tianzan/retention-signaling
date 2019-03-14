@@ -77,7 +77,7 @@ source, and you can modify them as you wish.
 SECRET_KEY = '+*0=j_ybon)wk8$%r7y1yb2zf!kbep9l%wo-f)$g^s9dqakhoj'
 
 # if an app is included in SESSION_CONFIGS, you don't need to list it here
-INSTALLED_APPS = []
+INSTALLED_APPS = ['otree']
 
 # inactive session configs
 ### {

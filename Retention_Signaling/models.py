@@ -66,8 +66,16 @@ class Group(BaseGroup):
 
     group_color = models.StringField()
 
+    num_in_auction = models.IntegerField(initial=Constants.players_per_group-1)
+
     def get_channel_group_name(self):
         return 'auction_group_{}'.format(self.pk)
+
+    def remaining_bidders(self):
+        num = 0
+        for p in self.get_players():
+            num = num + p.in_auction
+        self.num_in_auction = num
 
     def advance_participants(self):
         channels.Group(self.get_channel_group_name()).send(
@@ -103,6 +111,8 @@ class Player(BasePlayer):
     seller_type = models.BooleanField()
     seller_color = models.StringField()
     quantity_choice = models.IntegerField()
+    in_auction = models.BooleanField(initial=False)
+    leave_price = models.IntegerField()
 
     def role(self):
         if self.id_in_group == 1:
@@ -112,19 +122,27 @@ class Player(BasePlayer):
             self.is_seller = 0
             return 'buyer'
 
+    def enter_auction(self):
+        self.in_auction = True
+
+    def leave_auction(self):
+        self.in_auction = False
+        self.leave_price = self.group.price
+
 
 def runEverySecond():
     if group_model_exists():
         activated_groups = Group.objects.filter(activated=True)
         for g in activated_groups:
-            if g.price < Constants.fH:
+            if g.price < 40:
                 g.price += 1
                 g.save()
                 channels.Group(
                     g.get_channel_group_name()
                 ).send(
                     {'text': json.dumps(
-                        {'price': g.price})}
+                        {'price': g.price,
+                         'num': g.num_in_auction})}
                 )
 
 

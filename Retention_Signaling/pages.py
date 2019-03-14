@@ -29,6 +29,10 @@ class QuantityChoice(Page):
                 'data': 0
             }
 
+    def before_next_page(self):
+        if self.player.role() == 'buyer':
+            self.player.enter_auction()
+
 
 class Bid(Page):
     def is_displayed(self):
@@ -40,7 +44,10 @@ class Bid(Page):
         }
 
     def before_next_page(self):
-        self.group.activated = False
+        self.player.leave_auction()
+        self.group.remaining_bidders()
+    # def before_next_page(self):
+    #     self.group.activated = False
 
 
 class Wait(WaitPage):
