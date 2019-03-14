@@ -18,8 +18,10 @@
         // Handle messages sent by the server.
         wpsocket.onmessage = function (event) {
             var obj = jQuery.parseJSON(event.data);
-            console.log(obj);
-            if (obj.accept) {
+            var num = obj.num;
+            var over = obj.over;
+            console.log(over)
+            if (obj.accept || num ==1 || over ) {
                 $('input#out_of_auction').attr("value", 'False');
                 $('form').submit();
             }

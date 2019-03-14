@@ -25,13 +25,13 @@ def group_model_exists():
 
 class Constants(BaseConstants):
     name_in_url = 'Retention_Signaling'
-    players_per_group = 3
-    num_rounds = 1
+    players_per_group = 4
+    num_rounds = 2
     alpha = 0.5
     Q = 5
     fL = 10
     fH = 30
-    num_groups = 1
+    num_groups = 2
 
 
 class Subsession(BaseSubsession):
@@ -54,9 +54,12 @@ class Subsession(BaseSubsession):
 
 
 class Group(BaseGroup):
+
     group_number = models.IntegerField()
 
     activated = models.BooleanField()
+
+    price_float = models.FloatField(initial=0)
 
     price = models.IntegerField(initial=0)
 
@@ -66,7 +69,9 @@ class Group(BaseGroup):
 
     group_color = models.StringField()
 
-    num_in_auction = models.IntegerField(initial=Constants.players_per_group-1)
+    num_in_auction = models.IntegerField(initial=Constants.players_per_group - 1)
+
+    auction_over = models.BooleanField(initial=False)
 
     def get_channel_group_name(self):
         return 'auction_group_{}'.format(self.pk)
@@ -93,6 +98,9 @@ class Group(BaseGroup):
         seller = self.get_player_by_role('seller')
         self.group_color = seller.seller_color
 
+    def end_auction(self):
+        self.auction_over = True
+
     # def set_price(self):
     #     buyers = [
     #         p for p in self.get_players()
@@ -113,6 +121,7 @@ class Player(BasePlayer):
     quantity_choice = models.IntegerField()
     in_auction = models.BooleanField(initial=False)
     leave_price = models.IntegerField()
+    auction_winner = models.BooleanField(initial=True)
 
     def role(self):
         if self.id_in_group == 1:
@@ -127,22 +136,29 @@ class Player(BasePlayer):
 
     def leave_auction(self):
         self.in_auction = False
+        # Captures price at which bidder leaves auction
         self.leave_price = self.group.price
+        # A bidder does not win the auction if he/she leaves
+        self.auction_winner = False
 
 
 def runEverySecond():
     if group_model_exists():
-        activated_groups = Group.objects.filter(activated=True)
+        activated_groups = Group.objects.filter(activated=True, auction_over=False)
+        print('test')
         for g in activated_groups:
+            print('test2')
             if g.price < 40:
-                g.price += 1
+                g.price_float += 0.25
+                g.price = int(g.price_float)
                 g.save()
                 channels.Group(
                     g.get_channel_group_name()
                 ).send(
                     {'text': json.dumps(
                         {'price': g.price,
-                         'num': g.num_in_auction})}
+                         'num': g.num_in_auction,
+                         'over': g.auction_over})}
                 )
 
 
