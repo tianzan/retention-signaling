@@ -7,7 +7,7 @@ import json
 from django.db import connection
 import numpy
 from twisted.internet import task
-import time
+import random
 
 author = 'Tianzan Pang'
 
@@ -26,7 +26,7 @@ def group_model_exists():
 class Constants(BaseConstants):
     name_in_url = 'Retention_Signaling'
     players_per_group = 4
-    num_rounds = 2
+    num_rounds = 1
     alpha = 0.5
     Q = 5
     fL = 10
@@ -54,7 +54,6 @@ class Subsession(BaseSubsession):
 
 
 class Group(BaseGroup):
-
     group_number = models.IntegerField()
 
     activated = models.BooleanField()
@@ -100,6 +99,13 @@ class Group(BaseGroup):
 
     def end_auction(self):
         self.auction_over = True
+        self.activated = False
+
+    def set_winner(self):
+        potential_winners = [p for p in self.get_players()
+                             if p.role() == 'buyer' and p.in_auction]
+        winner = random.choice(potential_winners)
+        winner.auction_winner = True
 
     # def set_price(self):
     #     buyers = [
@@ -121,7 +127,7 @@ class Player(BasePlayer):
     quantity_choice = models.IntegerField()
     in_auction = models.BooleanField(initial=False)
     leave_price = models.IntegerField()
-    auction_winner = models.BooleanField(initial=True)
+    auction_winner = models.BooleanField(initial=False)
 
     def role(self):
         if self.id_in_group == 1:
@@ -148,9 +154,20 @@ def runEverySecond():
         print('test')
         for g in activated_groups:
             print('test2')
-            if g.price < 40:
-                g.price_float += 0.25
+            if g.price < 10:
+                g.price_float += 0.5
                 g.price = int(g.price_float)
+                g.save()
+                channels.Group(
+                    g.get_channel_group_name()
+                ).send(
+                    {'text': json.dumps(
+                        {'price': g.price,
+                         'num': g.num_in_auction,
+                         'over': g.auction_over})}
+                )
+            if g.price == 10:
+                g.auction_over = True
                 g.save()
                 channels.Group(
                     g.get_channel_group_name()

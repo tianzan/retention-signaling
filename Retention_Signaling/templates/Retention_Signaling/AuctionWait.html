@@ -8,10 +8,17 @@ Auction
 
 {% block content %}
 
+{% if role == 'buyer' %}
 <div class="jumbotron">
     <h3>You have exited the auction: please wait while the auction continues.</h3>
 </div>
+{% endif %}
 
+{% if role == 'seller' %}
+<div class="jumbotron">
+    <h3>Please wait while the auction proceeds.</h3>
+</div>
+{% endif %}
 
 <p> There are {{quantity}} tickets for sale in this auction. </p>
 

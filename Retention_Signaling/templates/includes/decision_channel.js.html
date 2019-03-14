@@ -21,13 +21,14 @@
             var num = obj.num;
             var over = obj.over;
             console.log(over)
-            if (obj.accept || num ==1 || over ) {
+            if (obj.accept || num ==1 || over) {
                 $('input#out_of_auction').attr("value", 'False');
                 $('form').submit();
             }
             else {
                 $('#group_price').html(obj.price);
                 $('#num_in_auction').html(obj.num);
+                $('#over').html(obj.over);
             }
         };
 

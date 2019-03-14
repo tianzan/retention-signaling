@@ -58,7 +58,7 @@ class Bid(Page):
     def before_next_page(self):
         # If there are at least 2 players left in the auction, when one leaves, these commands update the player
         # field and group field
-        if self.group.num_in_auction > 1:
+        if self.group.num_in_auction > 1 and not self.group.auction_over:
             self.player.leave_auction()
             self.group.remaining_bidders()
         # The auction ends when there is only one bidder left
@@ -72,17 +72,23 @@ class Bid(Page):
 # Waitpage that bidders see once they leave the auction
 class AuctionWait(Page):
     def is_displayed(self):
-        return self.player.role() == 'buyer' and self.group.num_in_auction > 1
+        return self.group.num_in_auction > 1 and not self.group.auction_over
 
     def vars_for_template(self):
         return {
-            'quantity': self.player.group.group_quantity
+            'quantity': self.player.group.group_quantity,
+            'role': self.player.role()
         }
-
+class SetAuction(WaitPage):
+    def after_all_players_arrive(self):
+        self.group.set_winner()
 
 class AuctionFinish(Page):
     def vars_for_template(self):
-        return
+        is_winner = self.player.auction_winner
+        return {
+            'is_winner': is_winner
+        }
 
 
 class ResultsWaitPage(WaitPage):
@@ -103,6 +109,7 @@ page_sequence = [
     Wait,
     Bid,
     AuctionWait,
+    SetAuction,
     AuctionFinish,
     ResultsWaitPage
 ]
