@@ -1,0 +1,17 @@
+{% extends "global/Page.html" %}
+{% load staticfiles otree_tags %}
+
+{% block title %}
+Auction Results
+{% endblock %}
+
+
+{% block content %}
+<p> Winner {{is_winner}}. </p>
+
+<p>{% next_button %}</p>
+
+
+{% endblock %}
+
+

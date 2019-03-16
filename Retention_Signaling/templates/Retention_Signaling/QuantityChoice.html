@@ -1,23 +1,52 @@
 {% extends "global/Page.html" %}
 {% load otree static %}
 
-{% block title %}
-Sell
-{% endblock %}
 
 
 {% block content %}
 
-<p style="color:{{player.seller_color}};">If you are chosen to be the seller, your tickets will be
-    {{player.seller_color}}.</p>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
 
-{% formfield player.quantity_choice label='Please the number of tickets you would like to sell, if you are chosen to be the group seller.' %}
 
-<p>{% next_button %}</p>
+        /* Create two equal columns that floats next to each other */
+        .column {
+            float: left;
+            width: 50%;
+            padding: 10px;
+        }
 
-{% if roundNumber  > 1 %}
-{% include 'includes/history.html' %}
-{% endif %}
+        /* Clear floats after the columns */
+        .row:after {
+            content: "";
+            display: table;
+            clear: both;
+        }
+    </style>
+</head>
+<div style="width:100%content-box;height:50px;background-color:{{player.seller_color}};"></div>
+<p></p>
+<div class="row">
+    <div class="column">
+        <h2 style="text-align: center;"> Sell</h2>
+        <p>
+        <p style="color:{{player.seller_color}};">If you are selected to be the seller, you will be given 5
+            {{player.seller_color}} tickets.</p>
+
+        <p>Please choose the number of tickets you would like to sell if selected to be a seller:</p>
+
+        {% include 'includes/buttons.html' %}
+        </p>
+    </div>
+    <div class="column">
+        <h2 style="text-align: center;">History</h2>
+        <p> {% if roundNumber > 0 %}
+            {% include 'includes/history.html' %}
+            {% endif %}
+        </p>
+    </div>
+</div>
 
 
 {% endblock %}

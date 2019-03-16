@@ -7,7 +7,7 @@ import json
 from django.db import connection
 import numpy
 from twisted.internet import task
-import time
+import random
 
 author = 'Tianzan Pang'
 
@@ -25,8 +25,8 @@ def group_model_exists():
 
 class Constants(BaseConstants):
     name_in_url = 'Retention_Signaling'
-    players_per_group = 3
-    num_rounds = 1
+    players_per_group = 4
+    num_rounds = 3
     alpha = 0.5
     Q = 5
     fL = 10
@@ -58,6 +58,8 @@ class Group(BaseGroup):
 
     activated = models.BooleanField()
 
+    price_float = models.FloatField(initial=0)
+
     price = models.IntegerField(initial=0)
 
     group_quantity = models.IntegerField()
@@ -66,8 +68,18 @@ class Group(BaseGroup):
 
     group_color = models.StringField()
 
+    num_in_auction = models.IntegerField(initial=Constants.players_per_group - 1)
+
+    auction_over = models.BooleanField(initial=False)
+
     def get_channel_group_name(self):
         return 'auction_group_{}'.format(self.pk)
+
+    def remaining_bidders(self):
+        num = 0
+        for p in self.get_players():
+            num = num + p.in_auction
+        self.num_in_auction = num
 
     def advance_participants(self):
         channels.Group(self.get_channel_group_name()).send(
@@ -84,6 +96,16 @@ class Group(BaseGroup):
     def get_color(self):
         seller = self.get_player_by_role('seller')
         self.group_color = seller.seller_color
+
+    def end_auction(self):
+        self.auction_over = True
+        self.activated = False
+
+    def set_winner(self):
+        potential_winners = [p for p in self.get_players()
+                             if p.role() == 'buyer' and p.in_auction]
+        winner = random.choice(potential_winners)
+        winner.auction_winner = True
 
     # def set_price(self):
     #     buyers = [
@@ -103,6 +125,9 @@ class Player(BasePlayer):
     seller_type = models.BooleanField()
     seller_color = models.StringField()
     quantity_choice = models.IntegerField()
+    in_auction = models.BooleanField(initial=False)
+    leave_price = models.IntegerField()
+    auction_winner = models.BooleanField(initial=False)
 
     def role(self):
         if self.id_in_group == 1:
@@ -112,19 +137,45 @@ class Player(BasePlayer):
             self.is_seller = 0
             return 'buyer'
 
+    def enter_auction(self):
+        self.in_auction = True
+
+    def leave_auction(self):
+        self.in_auction = False
+        # Captures price at which bidder leaves auction
+        self.leave_price = self.group.price
+        # A bidder does not win the auction if he/she leaves
+        self.auction_winner = False
+
 
 def runEverySecond():
     if group_model_exists():
-        activated_groups = Group.objects.filter(activated=True)
+        activated_groups = Group.objects.filter(activated=True, auction_over=False)
+        print('test')
         for g in activated_groups:
-            if g.price < Constants.fH:
-                g.price += 1
+            print('test2')
+            if g.price < 10:
+                g.price_float += 0.5
+                g.price = int(g.price_float)
                 g.save()
                 channels.Group(
                     g.get_channel_group_name()
                 ).send(
                     {'text': json.dumps(
-                        {'price': g.price})}
+                        {'price': g.price,
+                         'num': g.num_in_auction,
+                         'over': g.auction_over})}
+                )
+            if g.price == 10:
+                g.auction_over = True
+                g.save()
+                channels.Group(
+                    g.get_channel_group_name()
+                ).send(
+                    {'text': json.dumps(
+                        {'price': g.price,
+                         'num': g.num_in_auction,
+                         'over': g.auction_over})}
                 )
 
 

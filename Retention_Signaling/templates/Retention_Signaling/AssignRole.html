@@ -1,0 +1,31 @@
+{% extends "global/Page.html" %}
+{% load staticfiles otree_tags %}
+
+{% block title %}
+Your Role For This Period
+{% endblock %}
+
+
+{% block content %}
+
+<p> You have been selected to be a {{role}} for this period. </p>
+
+{% if role == 'seller' %}
+
+<p> You have chosen to sell {{quantity}} {{color}} tickets in the auction.</p>
+
+{% endif %}
+
+{% if role == 'buyer' %}
+
+<p> There are {{quantity}} tickets for sale in the auction.</p>
+
+{% endif %}
+
+
+
+{% next_button %}
+
+{% endblock %}
+
+
