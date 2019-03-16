@@ -14,21 +14,41 @@ class QuantityChoice(Page):
     # gathers data to pass to history script
     def vars_for_template(self):
         r = []
+        a = [1, 2, 3, 4, 5]
         for i in range(self.round_number - 1):
             r.append(i + 1)
 
-        if self.round_number > 1:
+        if self.round_number > 0:
             data = self.session.vars
             return {
                 'roundNumber': self.round_number,
                 'range': r,
-                'data': data
+                'data': data,
+                'color': self.player.seller_color
             }
-        else:
-            return {
-                'roundNumber': self.round_number,
-                'data': 0
-            }
+        # else:
+        #     return {
+        #         'roundNumber': self.round_number,
+        #         'data': 0,
+        #         'color': self.player.seller_color
+        #     }
+
+
+class AssignWait(WaitPage):
+    def after_all_players_arrive(self):
+        # Gathers relevant info from the group's seller to pass to group
+        self.group.get_type()
+        self.group.get_color()
+        self.group.set_quantity()
+
+
+class AssignRole(Page):
+    def vars_for_template(self):
+        return {
+            'role': self.player.role(),
+            'quantity': self.player.group.group_quantity,
+            'color': self.player.seller_color
+        }
 
     # Enters buyers into auction
     def before_next_page(self):
@@ -38,10 +58,6 @@ class QuantityChoice(Page):
 
 class Wait(WaitPage):
     def after_all_players_arrive(self):
-        # Gathers relevant info from the group's seller to pass to group
-        self.group.set_quantity()
-        self.group.get_type()
-        self.group.get_color()
         # Activates group to start the auction
         self.group.activated = True
 
@@ -79,9 +95,12 @@ class AuctionWait(Page):
             'quantity': self.player.group.group_quantity,
             'role': self.player.role()
         }
+
+
 class SetAuction(WaitPage):
     def after_all_players_arrive(self):
         self.group.set_winner()
+
 
 class AuctionFinish(Page):
     def vars_for_template(self):
@@ -95,9 +114,11 @@ class ResultsWaitPage(WaitPage):
     def after_all_players_arrive(self):
         # self.group.set_price()
         self.session.vars[str(self.round_number) + 'R' +
-                          str(self.group.group_number)] = {'price': self.group.price,
-                                                           'quantity': self.group.group_quantity,
-                                                           'color': self.group.group_color}
+                          str(self.group.group_number)] = {
+            'round': self.round_number,
+            'price': self.group.price,
+            'quantity': self.group.group_quantity,
+            'color': self.group.group_color}
 
 
 class Results(Page):
@@ -106,6 +127,8 @@ class Results(Page):
 
 page_sequence = [
     QuantityChoice,
+    AssignWait,
+    AssignRole,
     Wait,
     Bid,
     AuctionWait,

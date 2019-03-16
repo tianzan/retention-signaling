@@ -5,7 +5,7 @@
         #group_instance {
             font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
             border-collapse: collapse;
-            width: 50%;
+            width: 100%;
         }
 
         #group_instance td, #group_instance th {
@@ -36,70 +36,20 @@
 
 <table id="group_instance">
     <tr>
-        <th>Number of Tickets Offered</th>
+        <th>Round #</th>
+        <th># of Tickets Offered</th>
         <th>Ticket Color</th>
         <th>Winning Price</th>
     </tr>
     {% for k,v in data.items %}
     <tr>
+        <td> {{v.round}}</td>
         <td> {{v.quantity}}</td>
         <td> {{v.color}}</td>
         <td> {{v.price}}</td>
     </tr>
 
     {% endfor %}
-
-
-    <!--&lt;!&ndash;<tr>&ndash;&gt;-->
-    <!--&lt;!&ndash;<td>Alfreds Futterkiste</td>&ndash;&gt;-->
-    <!--&lt;!&ndash;<td>Maria Anders</td>&ndash;&gt;-->
-    <!--&lt;!&ndash;<td>Germany</td>&ndash;&gt;-->
-    <!--&lt;!&ndash;</tr>&ndash;&gt;-->
-    <!--&lt;!&ndash;<tr>&ndash;&gt;-->
-    <!--&lt;!&ndash;<td>Berglunds snabbköp</td>&ndash;&gt;-->
-    <!--&lt;!&ndash;<td>Christina Berglund</td>&ndash;&gt;-->
-    <!--&lt;!&ndash;<td>Sweden</td>&ndash;&gt;-->
-    <!--&lt;!&ndash;</tr>&ndash;&gt;-->
-    <!--&lt;!&ndash;<tr>&ndash;&gt;-->
-    <!--&lt;!&ndash;<td>Centro comercial Moctezuma</td>&ndash;&gt;-->
-    <!--&lt;!&ndash;<td>Francisco Chang</td>&ndash;&gt;-->
-    <!--&lt;!&ndash;<td>Mexico</td>&ndash;&gt;-->
-    <!--&lt;!&ndash;</tr>&ndash;&gt;-->
-    <!--&lt;!&ndash;<tr>&ndash;&gt;-->
-    <!--&lt;!&ndash;<td>Ernst Handel</td>&ndash;&gt;-->
-    <!--&lt;!&ndash;<td>Roland Mendel</td>&ndash;&gt;-->
-    <!--&lt;!&ndash;<td>Austria</td>&ndash;&gt;-->
-    <!--&lt;!&ndash;</tr>&ndash;&gt;-->
-    <!--&lt;!&ndash;<tr>&ndash;&gt;-->
-    <!--&lt;!&ndash;<td>Island Trading</td>&ndash;&gt;-->
-    <!--&lt;!&ndash;<td>Helen Bennett</td>&ndash;&gt;-->
-    <!--&lt;!&ndash;<td>UK</td>&ndash;&gt;-->
-    <!--&lt;!&ndash;</tr>&ndash;&gt;-->
-    <!--&lt;!&ndash;<tr>&ndash;&gt;-->
-    <!--&lt;!&ndash;<td>Königlich Essen</td>&ndash;&gt;-->
-    <!--&lt;!&ndash;<td>Philip Cramer</td>&ndash;&gt;-->
-    <!--&lt;!&ndash;<td>Germany</td>&ndash;&gt;-->
-    <!--&lt;!&ndash;</tr>&ndash;&gt;-->
-    <!--&lt;!&ndash;<tr>&ndash;&gt;-->
-    <!--&lt;!&ndash;<td>Laughing Bacchus Winecellars</td>&ndash;&gt;-->
-    <!--&lt;!&ndash;<td>Yoshi Tannamuri</td>&ndash;&gt;-->
-    <!--&lt;!&ndash;<td>Canada</td>&ndash;&gt;-->
-    <!--&lt;!&ndash;</tr>&ndash;&gt;-->
-    <!--&lt;!&ndash;<tr>&ndash;&gt;-->
-    <!--&lt;!&ndash;<td>Magazzini Alimentari Riuniti</td>&ndash;&gt;-->
-    <!--&lt;!&ndash;<td>Giovanni Rovelli</td>&ndash;&gt;-->
-    <!--&lt;!&ndash;<td>Italy</td>&ndash;&gt;-->
-    <!--&lt;!&ndash;</tr>&ndash;&gt;-->
-    <!--&lt;!&ndash;<tr>&ndash;&gt;-->
-    <!--&lt;!&ndash;<td>North/South</td>&ndash;&gt;-->
-    <!--&lt;!&ndash;<td>Simon Crowther</td>&ndash;&gt;-->
-    <!--&lt;!&ndash;<td>UK</td>&ndash;&gt;-->
-    <!--&lt;!&ndash;</tr>&ndash;&gt;-->
-    <!--&lt;!&ndash;<tr>&ndash;&gt;-->
-    <!--&lt;!&ndash;<td>Paris spécialités</td>&ndash;&gt;-->
-    <!--&lt;!&ndash;<td>Marie Bertrand</td>&ndash;&gt;-->
-    <!--&lt;!&ndash;<td>France</td>&ndash;&gt;-->
-    <!--&lt;!&ndash;</tr>&ndash;&gt;-->
 </table>
 
 </body>

@@ -26,12 +26,12 @@ def group_model_exists():
 class Constants(BaseConstants):
     name_in_url = 'Retention_Signaling'
     players_per_group = 4
-    num_rounds = 1
+    num_rounds = 3
     alpha = 0.5
     Q = 5
     fL = 10
     fH = 30
-    num_groups = 2
+    num_groups = 1
 
 
 class Subsession(BaseSubsession):
