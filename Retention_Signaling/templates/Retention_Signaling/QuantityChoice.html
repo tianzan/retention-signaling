@@ -2,14 +2,11 @@
 {% load otree static %}
 
 
-
 {% block content %}
 
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <style>
-
-
         /* Create two equal columns that floats next to each other */
         .column {
             float: left;
@@ -31,12 +28,12 @@
     <div class="column">
         <h2 style="text-align: center;"> Sell</h2>
         <p>
-        <p style="color:{{player.seller_color}};">If you are selected to be the seller, you will be given 5
-            {{player.seller_color}} tickets.</p>
+        <p>If you are selected to be the seller, you will be given
+        <a style = "color:{{player.seller_color}}"> 5 {{player.seller_color}} </a>tickets.</p>
 
         <p>Please choose the number of tickets you would like to sell if selected to be a seller:</p>
 
-        {% include 'includes/buttons.html' %}
+        {% include 'includes/new_buttons.html' %}
         </p>
     </div>
     <div class="column">
@@ -49,4 +46,7 @@
 </div>
 
 
+
+
 {% endblock %}
+
