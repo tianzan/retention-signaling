@@ -23,9 +23,12 @@ class QuantityChoice(Page):
                 'value': value,
                 'color': self.player.seller_color
             }
+
     timeout_seconds = 30
+
     def before_next_page(self):
-        self.player.quantity_choice = random.choice([0, 1, 2, 3, 4, 5])
+        if self.timeout_happened:
+            self.player.quantity_choice = random.choice([0, 1, 2, 3, 4, 5])
 
 
 class AssignWait(WaitPage):
@@ -37,6 +40,8 @@ class AssignWait(WaitPage):
 
 
 class AssignRole(Page):
+    def is_displayed(self):
+        return self.group.group_quantity > 0
 
     def vars_for_template(self):
         return {
@@ -52,6 +57,9 @@ class AssignRole(Page):
 
 
 class Wait(WaitPage):
+    def is_displayed(self):
+        return self.group.group_quantity > 0
+
     def after_all_players_arrive(self):
         # Activates group to start the auction
         self.group.activated = True
@@ -59,7 +67,7 @@ class Wait(WaitPage):
 
 class Bid(Page):
     def is_displayed(self):
-        return self.player.role() == 'buyer'
+        return self.player.role() == 'buyer' and self.group.group_quantity > 0
 
     def vars_for_template(self):
         return {
@@ -83,7 +91,7 @@ class Bid(Page):
 # Waitpage that bidders see once they leave the auction
 class AuctionWait(Page):
     def is_displayed(self):
-        return self.group.num_in_auction > 1 and not self.group.auction_over
+        return self.group.num_in_auction > 1 and not self.group.auction_over and self.group.group_quantity > 0
 
     def vars_for_template(self):
         return {
@@ -93,11 +101,17 @@ class AuctionWait(Page):
 
 
 class SetAuction(WaitPage):
+    def is_displayed(self):
+        return self.group.group_quantity > 0
+
     def after_all_players_arrive(self):
         self.group.set_winner()
 
 
 class AuctionFinish(Page):
+    def is_displayed(self):
+        return self.group.group_quantity > 0
+
     def vars_for_template(self):
         is_winner = self.player.auction_winner
         return {
@@ -108,12 +122,20 @@ class AuctionFinish(Page):
 class ResultsWaitPage(WaitPage):
     def after_all_players_arrive(self):
         # self.group.set_price()
+        if self.group.group_quantity > 0:
+            price = self.group.price
+        else:
+            price = "N/A"
         self.session.vars[str(self.round_number) + 'R' +
                           str(self.group.group_number)] = {
             'round': self.round_number,
-            'price': self.group.price,
+            'price': price,
             'quantity': self.group.group_quantity,
             'color': self.group.group_color}
+
+
+class AllGroupsWaitPage(WaitPage):
+    wait_for_all_groups = True
 
 
 class Results(Page):
@@ -129,5 +151,7 @@ page_sequence = [
     AuctionWait,
     SetAuction,
     AuctionFinish,
-    ResultsWaitPage
+    ResultsWaitPage,
+    AllGroupsWaitPage,
+    Results
 ]
