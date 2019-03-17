@@ -25,10 +25,11 @@ def group_model_exists():
 
 class Constants(BaseConstants):
     name_in_url = 'Retention_Signaling'
-    players_per_group = 4
-    num_rounds = 3
+    players_per_group = 3
+    num_rounds = 10
     alpha = 0.5
     Q = 5
+    delta = 0.5
     fL = 10
     fH = 30
     num_groups = 1
@@ -155,7 +156,7 @@ def runEverySecond():
         for g in activated_groups:
             print('test2')
             if g.price < 10:
-                g.price_float += 0.5
+                g.price_float += 0.05
                 g.price = int(g.price_float)
                 g.save()
                 channels.Group(
@@ -180,6 +181,6 @@ def runEverySecond():
 
 
 l = task.LoopingCall(runEverySecond)
-l.start(1.0)
+l.start(0.1)
 if not l.running:
     pass

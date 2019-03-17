@@ -13,17 +13,13 @@ class QuantityChoice(Page):
 
     # gathers data to pass to history script
     def vars_for_template(self):
-        r = []
-        a = [1, 2, 3, 4, 5]
-        for i in range(self.round_number - 1):
-            r.append(i + 1)
-
+        value = int(Constants.delta*(self.player.seller_type*(Constants.fH-Constants.fL)+Constants.fL))
         if self.round_number > 0:
             data = self.session.vars
             return {
                 'roundNumber': self.round_number,
-                'range': r,
                 'data': data,
+                'value': value,
                 'color': self.player.seller_color
             }
         # else:

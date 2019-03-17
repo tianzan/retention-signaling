@@ -1,9 +1,10 @@
 <head>
- <style>
-.button2:hover {
-  box-shadow: 0 12px 16px 0 rgba(0,0,0,0.24),0 17px 50px 0 rgba(0,0,0,0.19);
-}
- </style>
+
+    <style>
+        .button2:hover {
+            box-shadow: 0 12px 16px 0 rgba(0, 0, 0, 0.24), 0 17px 50px 0 rgba(0, 0, 0, 0.19);
+        }
+    </style>
 
 </head>
 <body>
@@ -12,34 +13,167 @@
     <table class="table">
         <tr>
             <th>
-                <button name="quantity_choice" value=1 class="btn btn-primary btn-large button2"
-                        style="width:90px;height:60px;background-color:{{player.seller_color}};">1
+                <button onclick="show" id="Button0" type="button" name="quantity_choice" value=0
+                        class="btn btn-primary btn-large button2"
+                        style="width:70px;height:60px;background-color:{{player.seller_color}};">0
                 </button>
             </th>
             <th>
-            <th>
-                <button name="quantity_choice" value=2 class="btn btn-primary btn-large button2"
-                        style="width:90px;height:60px;background-color:{{player.seller_color}};">2
+                <button onclick="confirm1()" id="Button1" type="button" name="quantity_choice" value=1
+                        class="btn btn-primary btn-large button2"
+                        style="width:70px;height:60px;background-color:{{player.seller_color}};">1
                 </button>
             </th>
             <th>
-                <button name="quantity_choice" value=3 class="btn btn-primary btn-large button2"
-                        style="width:90px;height:60px;background-color:{{player.seller_color}};">3
+                <button onclick="confirm2()" id="Button2" type="button" name="quantity_choice" value=2
+                        class="btn btn-primary btn-large button2"
+                        style="width:70px;height:60px;background-color:{{player.seller_color}};">2
                 </button>
             </th>
             <th>
-                <button name="quantity_choice" value=4 class="btn btn-primary btn-large button2"
-                        style="width:90px;height:60px;background-color:{{player.seller_color}};">4
+                <button onclick="confirm3()" id="Button3" type="button" name="quantity_choice" value=3
+                        class="btn btn-primary btn-large button2"
+                        style="width:70px;height:60px;background-color:{{player.seller_color}};">3
                 </button>
             </th>
             <th>
-                <button name="quantity_choice" value=5 class="btn btn-primary btn-large button2"
-                        style="width:90px;height:60px;background-color:{{player.seller_color}};">5
+                <button onclick="confirm4()" id="Button4" type="button" name="quantity_choice" value=4
+                        class="btn btn-primary btn-large button2"
+                        style="width:70px;height:60px;background-color:{{player.seller_color}};">4
+                </button>
+            </th>
+            <th>
+                <button onclick="confirm5()" id="Button5" type="button" name="quantity_choice" value=5
+                        class="btn btn-primary btn-large button2"
+                        style="width:70px;height:60px;background-color:{{player.seller_color}};">5
                 </button>
             </th>
 
         </tr>
     </table>
 </div>
+
+<hr>
+
+You have selected to sell
+
+<script>
+    function show(){
+        d
+    }
+</script>
+
+<!--<div id="confirm0" style="display:none;" class="answer_list">-->
+<!--<p>You have chosen to sell 0 tickets in the auction. If you are selected to be the seller, no auction will be held-->
+    <!--this-->
+    <!--round, and your earnings will be 150 francs. Please click confirm to continue or reset to choose a different-->
+    <!--number of tickets to sell.</p>-->
+    <!--<button onclick="$('form').submit()"-->
+            <!--name="quantity_choice" value=0-->
+            <!--class="btn btn-primary btn-large button2"-->
+            <!--style="width:200px;height:60px;background-color:{{player.seller_color}};">Confirm-->
+    <!--</button>-->
+    <!--<button onclick="location.reload()"-->
+            <!--type="button"-->
+            <!--class="btn btn-primary btn-large button2"-->
+            <!--style="width:200px;height:60px;background-color:orangered;">Reset-->
+    <!--</button>-->
+<!--</div>-->
+
+<!--<div id="submit1" style="display:none;" class="answer_list">-->
+<!--<p>You have chosen to sell 1 ticket in the auction and keep 4 tickets. These 4 tickets will be exchanged for-->
+    <!--francs if you are selected to be the seller. Please click confirm to continue or reset to choose a different-->
+    <!--number of tickets to sell.-->
+<!--</p>-->
+    <!--<button onclick="$('form').submit()"-->
+            <!--name="quantity_choice" value=1-->
+            <!--class="btn btn-primary btn-large button2"-->
+
+            <!--style="width:200px;height:60px;background-color:{{player.seller_color}};">Confirm-->
+    <!--</button>-->
+    <!--<button onclick="cancel()"-->
+            <!--type="button"-->
+            <!--class="btn btn-primary btn-large button2"-->
+            <!--style="width:200px;height:60px;background-color:orangered;">Reset-->
+    <!--</button>-->
+<!--</div>-->
+
+
+<!--<script>-->
+    <!--function confirm0() {-->
+        <!--document.getElementById('confirm0').style.display = "block";-->
+        <!--document.getElementById("Button0").disabled = true;-->
+        <!--document.getElementById("Button1").disabled = true;-->
+        <!--document.getElementById("Button2").disabled = true;-->
+        <!--document.getElementById("Button3").disabled = true;-->
+        <!--document.getElementById("Button4").disabled = true;-->
+        <!--document.getElementById("Button5").disabled = true;-->
+    <!--}-->
+
+    <!--function confirm1() {-->
+        <!--document.getElementById('submit1').style.display = "block";-->
+        <!--document.getElementById("Button0").disabled = true;-->
+        <!--document.getElementById("Button1").disabled = true;-->
+        <!--document.getElementById("Button2").disabled = true;-->
+        <!--document.getElementById("Button3").disabled = true;-->
+        <!--document.getElementById("Button4").disabled = true;-->
+        <!--document.getElementById("Button5").disabled = true;-->
+    <!--}-->
+
+    <!--function confirm2() {-->
+        <!--document.getElementById('confirm2').style.display = "block";-->
+        <!--document.getElementById("Button0").disabled = true;-->
+        <!--document.getElementById("Button1").disabled = true;-->
+        <!--document.getElementById("Button2").disabled = true;-->
+        <!--document.getElementById("Button3").disabled = true;-->
+        <!--document.getElementById("Button4").disabled = true;-->
+        <!--document.getElementById("Button5").disabled = true;-->
+        <!--document.getElementById("Button6").disabled = true;-->
+    <!--}-->
+
+    <!--function confirm3() {-->
+        <!--document.getElementById('confirm3').style.display = "block";-->
+        <!--document.getElementById("Button0").disabled = true;-->
+        <!--document.getElementById("Button1").disabled = true;-->
+        <!--document.getElementById("Button2").disabled = true;-->
+        <!--document.getElementById("Button3").disabled = true;-->
+        <!--document.getElementById("Button4").disabled = true;-->
+        <!--document.getElementById("Button5").disabled = true;-->
+        <!--document.getElementById("Button6").disabled = true;-->
+    <!--}-->
+
+    <!--function confirm4() {-->
+        <!--document.getElementById('confirm4').style.display = "block";-->
+        <!--document.getElementById("Button0").disabled = true;-->
+        <!--document.getElementById("Button1").disabled = true;-->
+        <!--document.getElementById("Button2").disabled = true;-->
+        <!--document.getElementById("Button3").disabled = true;-->
+        <!--document.getElementById("Button4").disabled = true;-->
+        <!--document.getElementById("Button5").disabled = true;-->
+        <!--document.getElementById("Button6").disabled = true;-->
+    <!--}-->
+
+    <!--function confirm5() {-->
+        <!--document.getElementById('confirm5').style.display = "block";-->
+        <!--document.getElementById("Button0").disabled = true;-->
+        <!--document.getElementById("Button1").disabled = true;-->
+        <!--document.getElementById("Button2").disabled = true;-->
+        <!--document.getElementById("Button3").disabled = true;-->
+        <!--document.getElementById("Button4").disabled = true;-->
+        <!--document.getElementById("Button5").disabled = true;-->
+    <!--}-->
+
+    <!--function cancel() {-->
+        <!--document.getElementById("submit1").style.display = "none";-->
+        <!--document.getElementById("Button0").disabled = false;-->
+        <!--document.getElementById("Button1").disabled = false;-->
+        <!--document.getElementById("Button2").disabled = false;-->
+        <!--document.getElementById("Button3").disabled = false;-->
+        <!--document.getElementById("Button4").disabled = false;-->
+        <!--document.getElementById("Button5").disabled = false;-->
+    <!--}-->
+
+<!--</script>-->
 </body>
+
 </html>
