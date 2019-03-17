@@ -5,6 +5,7 @@ import time
 from .models import Constants
 import json
 import channels
+import random
 
 
 class QuantityChoice(Page):
@@ -13,7 +14,7 @@ class QuantityChoice(Page):
 
     # gathers data to pass to history script
     def vars_for_template(self):
-        value = int(Constants.delta*(self.player.seller_type*(Constants.fH-Constants.fL)+Constants.fL))
+        value = int(Constants.delta * (self.player.seller_type * (Constants.fH - Constants.fL) + Constants.fL))
         if self.round_number > 0:
             data = self.session.vars
             return {
@@ -22,12 +23,9 @@ class QuantityChoice(Page):
                 'value': value,
                 'color': self.player.seller_color
             }
-        # else:
-        #     return {
-        #         'roundNumber': self.round_number,
-        #         'data': 0,
-        #         'color': self.player.seller_color
-        #     }
+    timeout_seconds = 30
+    def before_next_page(self):
+        self.player.quantity_choice = random.choice([0, 1, 2, 3, 4, 5])
 
 
 class AssignWait(WaitPage):
@@ -39,6 +37,7 @@ class AssignWait(WaitPage):
 
 
 class AssignRole(Page):
+
     def vars_for_template(self):
         return {
             'role': self.player.role(),
