@@ -1,0 +1,32 @@
+<body onload="startCount()">
+<input type="text" id="txt">
+
+
+<script>
+var c = 0;
+var t;
+var timer_is_on = 0;
+
+function timedCount() {
+  document.getElementById("txt").value = c;
+  c = c + 1;
+  t = setTimeout(timedCount, 1000);
+  if (c==5){
+            $('#quantity_choice').attr('value',3)
+            $('form').submit()
+  }
+
+
+}
+
+function startCount() {
+  if (!timer_is_on) {
+    timer_is_on = 1;
+    timedCount();
+
+
+  }
+}
+
+</script>
+</body>

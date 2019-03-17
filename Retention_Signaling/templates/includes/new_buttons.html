@@ -16,7 +16,6 @@
 
 </head>
 <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css" rel="stylesheet"/>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
 <body>
 <div class="container-fluid text-center">
 
@@ -64,7 +63,7 @@
     </ul>
 </div>
     <button onclick="$('form').submit()"
-            id = "submit"
+            id = "btnsubmit"
             name="quantity_choice" value=1
             class="btn-primary btn-large button2"
 
@@ -99,7 +98,7 @@
             $('.b').toggleClass('selected');
             $('.btn ').prop('disabled',true);
             $('.btn-primary').toggleClass('selected');
-            $('#submit').attr('value',id);
+            $('#btnsubmit').attr('value',id);
         });
         $('#cancel').on('click',function(){
             $('.b').toggleClass('selected');
@@ -108,8 +107,6 @@
             document.getElementById('retain').innerHTML = '';
             document.getElementById('keep').innerHTML = '';
             document.getElementById('calc').innerHTML = '';
-
         })
     });
 </script>
-</html>
