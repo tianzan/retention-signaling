@@ -70,8 +70,7 @@
 
             style="width:200px;height:60px;background-color:{{player.seller_color}}; display:none;">Confirm
     </button>
-    <button onclick="location.reload()"
-            id = "cancel"
+    <button id = "cancel"
             type="button"
             class="btn-primary btn-large button2"
             style="width:200px;height:60px;background-color:orangered;display:none;">Reset
@@ -92,12 +91,25 @@
             $('.b-text').hide();
         }).on('click', function () {
             var id = $(this).attr('data-id');
+            var num = {{Constants.Q}}-id;
+            document.getElementById('retain').innerHTML = {{Constants.Q}}-id;
+            document.getElementById('keep').innerHTML = id;
+            document.getElementById('calc').innerHTML = num*{{value}};
+            $('.b').show();
             $('.b').toggleClass('selected');
             $('.btn ').prop('disabled',true);
             $('.btn-primary').toggleClass('selected');
             $('#submit').attr('value',id);
         });
+        $('#cancel').on('click',function(){
+            $('.b').toggleClass('selected');
+            $('.btn ').prop('disabled',false)
+            $('.btn-primary').toggleClass('selected');
+            document.getElementById('retain').innerHTML = '';
+            document.getElementById('keep').innerHTML = '';
+            document.getElementById('calc').innerHTML = '';
 
+        })
     });
 </script>
 </html>
