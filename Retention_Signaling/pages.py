@@ -24,7 +24,7 @@ class QuantityChoice(Page):
                 'color': self.player.seller_color
             }
 
-    timeout_seconds = 30
+    # timeout_seconds = 30
 
     def before_next_page(self):
         if self.timeout_happened:
@@ -44,10 +44,26 @@ class AssignRole(Page):
         return self.group.group_quantity > 0
 
     def vars_for_template(self):
+        data = self.session.vars
+        if self.group.group_quantity == 1:
+            to_be = 'is'
+            plural = ''
+            pronoun = 'this'
+        else:
+            to_be = 'are'
+            plural = 's'
+            pronoun = 'these'
         return {
+            'roundNumber': self.round_number,
+            'data': data,
+            'vH': self.group.group_quantity*Constants.fH,
+            'vL': self.group.group_quantity*Constants.fL,
             'role': self.player.role(),
             'quantity': self.player.group.group_quantity,
-            'color': self.player.seller_color
+            'color': self.player.seller_color,
+            'to_be': to_be,
+            'plural': plural,
+            'pronoun': pronoun
         }
 
     # Enters buyers into auction
@@ -70,8 +86,18 @@ class Bid(Page):
         return self.player.role() == 'buyer' and self.group.group_quantity > 0
 
     def vars_for_template(self):
+        data = self.session.vars
+        if self.group.group_quantity == 1:
+            to_be = 'is'
+            plural = ''
+        else:
+            to_be = 'are'
+            plural = 's'
         return {
-            'quantity': self.player.group.group_quantity
+            'quantity': self.player.group.group_quantity,
+            'to_be': to_be,
+            'plural': plural,
+            'data': data
         }
 
     def before_next_page(self):

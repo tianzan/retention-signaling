@@ -29,6 +29,7 @@ class Constants(BaseConstants):
     num_rounds = 10
     alpha = 0.5
     Q = 5
+    buyer_endowment = 200
     delta = 0.5
     fL = 10
     fH = 30
@@ -153,7 +154,7 @@ def runEverySecond():
     if group_model_exists():
         activated_groups = Group.objects.filter(activated=True, auction_over=False)
         for g in activated_groups:
-            if g.price < 10:
+            if g.price < Constants.fH:
                 g.price_float += 0.05
                 g.price = int(g.price_float)
                 g.save()
@@ -165,7 +166,7 @@ def runEverySecond():
                          'num': g.num_in_auction,
                          'over': g.auction_over})}
                 )
-            if g.price == 10:
+            if g.price == Constants.fH:
                 g.auction_over = True
                 g.save()
                 channels.Group(
