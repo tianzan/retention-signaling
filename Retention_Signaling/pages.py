@@ -24,7 +24,7 @@ class QuantityChoice(Page):
                 'color': self.player.seller_color
             }
 
-    # timeout_seconds = 30
+    timeout_seconds = 5
 
     def before_next_page(self):
         if self.timeout_happened:
@@ -56,8 +56,8 @@ class AssignRole(Page):
         return {
             'roundNumber': self.round_number,
             'data': data,
-            'vH': self.group.group_quantity*Constants.fH,
-            'vL': self.group.group_quantity*Constants.fL,
+            'vH': self.group.group_quantity * Constants.fH,
+            'vL': self.group.group_quantity * Constants.fL,
             'role': self.player.role(),
             'quantity': self.player.group.group_quantity,
             'color': self.player.seller_color,
@@ -139,25 +139,61 @@ class AuctionFinish(Page):
         return self.group.group_quantity > 0
 
     def vars_for_template(self):
+        self.group.set_francs()
+        revenue = self.group.price * self.group.group_quantity
+        ticket_value = self.group.group_type * (Constants.fH - Constants.fL) + Constants.fL
+        total_value = (Constants.Q - self.group.group_quantity) * ticket_value
+        buyer_value = self.group.group_quantity*ticket_value
+        if self.group.group_quantity == 1:
+            to_be = 'was'
+            plural = ''
+            kplural = 's'
+        else:
+            to_be = 'were'
+            plural = 's'
+            kplural = ''
         is_winner = self.player.auction_winner
         return {
-            'is_winner': is_winner
+            'to_be': to_be,
+            'plural': plural,
+            'kplural': kplural,
+            'price': self.group.price,
+            'quantity': self.group.group_quantity,
+            'color': self.group.group_color,
+            'role': self.player.role(),
+            'is_winner': is_winner,
+            'francs': self.player.francs,
+            'revenue': revenue,
+            'tickets_kept': Constants.Q-self.group.group_quantity,
+            'keep': Constants.Q - self.group.group_quantity,
+            'retained_earnings': int(Constants.delta*total_value),
+            'ticket_value': ticket_value,
+            'buyer_value': buyer_value,
+            'seller_value': int(Constants.delta*ticket_value),
+            'winner_earnings': Constants.buyer_endowment-revenue+self.group.group_quantity*ticket_value,
+            'seller_earnings': revenue+int(Constants.delta*total_value)
         }
 
 
 class ResultsWaitPage(WaitPage):
     def after_all_players_arrive(self):
         # self.group.set_price()
+        seller_payoff = self.group.seller_payoff
         if self.group.group_quantity > 0:
             price = self.group.price
+            winner_payoff = self.group.winner_payoff
         else:
             price = "N/A"
+            winner_payoff = 'N/A'
         self.session.vars[str(self.round_number) + 'R' +
                           str(self.group.group_number)] = {
             'round': self.round_number,
             'price': price,
             'quantity': self.group.group_quantity,
-            'color': self.group.group_color}
+            'color': self.group.group_color,
+            'winner_payoff': winner_payoff,
+            'seller_payoff': seller_payoff,
+        }
 
 
 class AllGroupsWaitPage(WaitPage):

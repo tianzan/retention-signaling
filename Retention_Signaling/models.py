@@ -74,6 +74,10 @@ class Group(BaseGroup):
 
     auction_over = models.BooleanField(initial=False)
 
+    winner_payoff = models.IntegerField()
+
+    seller_payoff = models.IntegerField()
+
     def get_channel_group_name(self):
         return 'auction_group_{}'.format(self.pk)
 
@@ -109,17 +113,19 @@ class Group(BaseGroup):
         winner = random.choice(potential_winners)
         winner.auction_winner = True
 
-    # def set_price(self):
-    #     buyers = [
-    #         p for p in self.get_players()
-    #         if p.role() == 'buyer'
-    #     ]
-    #
-    #     bids = [
-    #         p.bid for p in buyers
-    #     ]
-    #     self.price = max(bids)
-
+    def set_francs(self):
+        for p in self.get_players():
+            if p.role() == 'seller':
+                p.francs = p.quantity_choice * self.price + (Constants.Q - p.quantity_choice) * (
+                        p.seller_type * (Constants.fH - Constants.fL) + Constants.fL)
+                self.seller_payoff = p.francs
+            else:
+                if not p.auction_winner:
+                    p.francs = Constants.buyer_endowment
+                else:
+                    p.francs = Constants.buyer_endowment + self.group_quantity * (
+                                self.group_type * (Constants.fH - Constants.fL) + Constants.fL - self.price)
+                    self.winner_payoff = p.francs
 
 class Player(BasePlayer):
     bid = models.IntegerField()
@@ -130,6 +136,7 @@ class Player(BasePlayer):
     in_auction = models.BooleanField(initial=False)
     leave_price = models.IntegerField()
     auction_winner = models.BooleanField(initial=False)
+    francs = models.IntegerField()
 
     def role(self):
         if self.id_in_group == 1:
@@ -154,7 +161,7 @@ def runEverySecond():
     if group_model_exists():
         activated_groups = Group.objects.filter(activated=True, auction_over=False)
         for g in activated_groups:
-            if g.price < Constants.fH:
+            if g.price < Constants.fL:
                 g.price_float += 0.05
                 g.price = int(g.price_float)
                 g.save()
@@ -166,7 +173,7 @@ def runEverySecond():
                          'num': g.num_in_auction,
                          'over': g.auction_over})}
                 )
-            if g.price == Constants.fH:
+            if g.price == Constants.fL:
                 g.auction_over = True
                 g.save()
                 channels.Group(
