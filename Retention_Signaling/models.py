@@ -163,7 +163,7 @@ def runEverySecond():
         print('test')
         for g in activated_groups:
             print('test2')
-            if g.price < Constants.fL:
+            if g.price < 1:
                 g.price_float += 0.05
                 g.price = int(g.price_float)
                 g.save()

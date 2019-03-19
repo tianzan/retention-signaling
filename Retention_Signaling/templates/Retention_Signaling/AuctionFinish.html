@@ -2,7 +2,7 @@
 {% load staticfiles otree_tags %}
 
 {% block title %}
-Auction Results
+Round {{round_number}}
 {% endblock %}
 
 {% block content %}
@@ -33,13 +33,12 @@ Auction Results
 
 <div class="row">
     <div class="column" style="background-color:#aaa;">
-        <center><h2 style="align-self:center;">Auction Details</h2></center>
+        <center><h2 style="align-self:center;">Auction Results</h2></center>
         <ul>
-            <li style="padding-bottom:10px">Number of tickets for sale: {{quantity}}</li>
-            <li style="padding-bottom:10px">Ticket color: <a style="color:{{color}}">{{color}}</a></li>
-            <li style="padding-bottom:10px">Winning price: {{price}} francs per-ticket</li>
-            <li style="padding-bottom:10px">Auction revenue: {{quantity}}&times;{{price}}={{revenue}} francs</li>
-            <li style="padding-bottom:10px">Winner's earnings from this round: {{winner_earnings}} francs</li>
+            <li style="padding-bottom:20px">Number of tickets for sale: {{quantity}}</li>
+            <li style="padding-bottom:20px">Ticket color: <a style="color:{{color}}">{{color}}</a></li>
+            <li style="padding-bottom:20px">Winning price: {{price}} francs per-ticket</li>
+            <li style="padding-bottom:20px">Winner's earnings from this round: {{winner_earnings}} francs</li>
             <li style="padding-bottom:10px">Seller's earnings from this round: {{seller_earnings}} francs</li>
         </ul>
     </div>
@@ -81,13 +80,13 @@ Auction Results
             {% endif %}
             {% endif %}
             {% if player.auction_winner %}
-            <li style="padding-bottom:10px"> You won the auction at a price of {{price}} francs per-ticket</li>
+            <li style="padding-bottom:20px"> You won the auction at a price of {{price}} francs per-ticket</li>
             <ul>
-                <li style="padding-bottom:10px"> The ticket{{plural}} you purchased have been exchanged for
+                <li style="padding-bottom:20px"> The ticket{{plural}} you purchased have been exchanged for
                     {{ticket_value}} francs per-ticket for a total of {{ticket_value}}&times;{{quantity}}={{buyer_value}}
                     francs
                 </li>
-                <li style="padding-bottom:10px"> You paid a total of {{price}}&times;{{quantity}}={{revenue}} francs
+                <li style="padding-bottom:20px"> You paid a total of {{price}}&times;{{quantity}}={{revenue}} francs
                 </li>
             </ul>
             <li style="padding-bottom:10px">Your earnings from this
