@@ -20,12 +20,21 @@
             var obj = jQuery.parseJSON(event.data);
             var num = obj.num;
             var over = obj.over;
+            var show_button = true;
+            var message = 'The Auction Will Start In: ' + obj.time_till;
+            if (obj.activated){
+                show_button = false;
+                message = 'The Auction Has Started';
+            }
+            var show = ! obj.activated;
             console.log(over)
             if (obj.accept || num ==1 || over) {
                 $('input#out_of_auction').attr("value", 'False');
                 $('form').submit();
             }
             else {
+                $('#exit').prop('disabled', show_button);
+                $('#time_till').html(message);
                 $('#group_price').html(obj.price);
                 $('#num_in_auction').html(obj.num);
                 $('#over').html(obj.over);

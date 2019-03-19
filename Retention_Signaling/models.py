@@ -56,9 +56,15 @@ class Subsession(BaseSubsession):
 
 
 class Group(BaseGroup):
+    start = models.BooleanField(initial=False)
+
+    time_till = models.IntegerField(initial=5)
+
+    time_till_float = models.FloatField(initial=5.05)
+
     group_number = models.IntegerField()
 
-    activated = models.BooleanField()
+    activated = models.BooleanField(initial=False)
 
     price_float = models.FloatField(initial=0)
 
@@ -124,8 +130,9 @@ class Group(BaseGroup):
                     p.francs = Constants.buyer_endowment
                 else:
                     p.francs = Constants.buyer_endowment + self.group_quantity * (
-                                self.group_type * (Constants.fH - Constants.fL) + Constants.fL - self.price)
+                            self.group_type * (Constants.fH - Constants.fL) + Constants.fL - self.price)
                     self.winner_payoff = p.francs
+
 
 class Player(BasePlayer):
     bid = models.IntegerField()
@@ -159,11 +166,35 @@ class Player(BasePlayer):
 
 def runEverySecond():
     if group_model_exists():
+        deactive_groups = Group.objects.filter(activated=False, start=True)
+        for g in deactive_groups:
+            print('test2')
+            if g.time_till > 0:
+                g.time_till_float = g.time_till_float - 0.05
+                g.time_till = int(g.time_till_float)
+                g.save()
+                channels.Group(
+                    g.get_channel_group_name()
+                ).send(
+                    {'text': json.dumps(
+                        {'time_till': g.time_till})}
+                )
+            if g.time_till == 0:
+                g.activated = True
+                g.save()
+                channels.Group(
+                    g.get_channel_group_name()
+                ).send(
+                    {'text': json.dumps(
+                        {'time_till': g.time_till,
+                         'activated': g.activated})}
+                )
         activated_groups = Group.objects.filter(activated=True, auction_over=False)
         print('test')
+
         for g in activated_groups:
-            print('test2')
-            if g.price < 1:
+            print('test3')
+            if g.price < Constants.fH:
                 g.price_float += 0.05
                 g.price = int(g.price_float)
                 g.save()
@@ -173,9 +204,10 @@ def runEverySecond():
                     {'text': json.dumps(
                         {'price': g.price,
                          'num': g.num_in_auction,
-                         'over': g.auction_over})}
+                         'over': g.auction_over,
+                         'activated': g.activated})}
                 )
-            if g.price == Constants.fL:
+            if g.price == Constants.fH:
                 g.auction_over = True
                 g.save()
                 channels.Group(
