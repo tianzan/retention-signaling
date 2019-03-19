@@ -1,0 +1,65 @@
+<!--&lt;!&ndash;<!DOCTYPE html>&ndash;&gt;-->
+<!--&lt;!&ndash;<html>&ndash;&gt;-->
+<head>
+    <style>
+
+        #group_instance {
+            font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+        #group_instance td, #group_instance th {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: center;
+        }
+
+        #group_instance tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        #group_instance tr:hover {
+            background-color: #ddd;
+        }
+
+        #group_instance th {
+            padding-top: 12px;
+            padding-bottom: 12px;
+            text-align: center;
+            background-color: darkslategray;
+            color: white;
+        }
+
+    </style>
+</head>
+<body>
+
+
+<table id="group_instance" class = "fixed_header">
+    <thead>
+    <tr>
+        <th>Round #</th>
+        <th># of Tickets Offered by Seller</th>
+        <th>Ticket Color</th>
+        <th>Winning Price</th>
+        <th>Your Earnings</th>
+    </tr>
+    </thead>
+    {% for k,v in data1.items %}
+    {% if v.role == 'buyer' %}
+    <tr>
+        <td> {{v.round}}</td>
+        <td> {{v.group_quantity}}</td>
+        <td> {{v.group_color}}</td>
+        <td> {{v.price}}</td>
+        <td> {{v.francs}}</td>
+    </tr>
+    {% endif %}
+    {% endfor %}
+</table>
+
+
+</body>
+</script>
+

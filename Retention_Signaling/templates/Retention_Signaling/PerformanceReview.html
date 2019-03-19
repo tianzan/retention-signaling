@@ -1,0 +1,50 @@
+{% extends "global/Page.html" %}
+{% load otree static %}
+
+{% block title %}
+Results from All Rounds
+{% endblock %}
+
+{% block content %}
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        /* Create three equal columns that floats next to each other */
+        .column {
+            float: left;
+            width: 50%;
+            padding: 10px;
+        }
+
+        /* Clear floats after the columns */
+        .row:after {
+            content: "";
+            display: table;
+            clear: both;
+        }
+    </style>
+</head>
+
+<div class="row">
+    <div class="column" >
+        <center> <h3> Rounds in which you were a buyer </h3></center>
+        {% include 'includes/buyer_history.html' %}
+    </div>
+    <div class="column" >
+        <center> <h3> Rounds in which you were a seller</h3></center>
+        {% include 'includes/seller_history.html' %}
+    </div>
+</div>
+<hr>
+        <center> <h3> Full History</h3></center>
+
+        {% include 'includes/history.html' %}
+
+<p> {% next_button %} </p>
+
+
+{% endblock %}

@@ -1,6 +1,10 @@
 {% extends "global/Page.html" %}
 {% load otree static %}
 
+{% block title %}
+Round {{round_number}}
+{% endblock %}
+
 
 {% block content %}
 
@@ -29,14 +33,11 @@
 <div class="row">
     <div class="column">
         <h2 style="text-align: center;"> Sell</h2>
-        <p>
         <p>If you are selected to be the seller, you will be given
-        <a style = "color:{{player.seller_color}}"> 5 {{player.seller_color}} </a>tickets.</p>
+            <a style = "color:{{player.seller_color}}"> <b>5 {{player.seller_color}} </b></a>tickets.</p>
 
         <p>Please choose the number of tickets you would like to sell if selected to be a seller:</p>
-
         {% include 'includes/new_buttons.html' %}
-        </p>
     </div>
     <div class="column">
         <h2 style="text-align: center;">History</h2>
