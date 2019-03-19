@@ -25,7 +25,7 @@ def group_model_exists():
 
 class Constants(BaseConstants):
     name_in_url = 'Retention_Signaling'
-    players_per_group = 3
+    players_per_group = 4
     num_rounds = 10
     alpha = 0.5
     Q = 5
@@ -160,7 +160,9 @@ class Player(BasePlayer):
 def runEverySecond():
     if group_model_exists():
         activated_groups = Group.objects.filter(activated=True, auction_over=False)
+        print('test')
         for g in activated_groups:
+            print('test2')
             if g.price < Constants.fL:
                 g.price_float += 0.05
                 g.price = int(g.price_float)

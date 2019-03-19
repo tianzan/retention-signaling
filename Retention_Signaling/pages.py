@@ -24,7 +24,7 @@ class QuantityChoice(Page):
                 'color': self.player.seller_color
             }
 
-    timeout_seconds = 5
+    timeout_seconds = 60
 
     def before_next_page(self):
         if self.timeout_happened:
