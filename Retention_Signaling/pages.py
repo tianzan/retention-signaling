@@ -143,15 +143,18 @@ class AuctionFinish(Page):
         revenue = self.group.price * self.group.group_quantity
         ticket_value = self.group.group_type * (Constants.fH - Constants.fL) + Constants.fL
         total_value = (Constants.Q - self.group.group_quantity) * ticket_value
-        buyer_value = self.group.group_quantity*ticket_value
+        buyer_value = self.group.group_quantity * ticket_value
         if self.group.group_quantity == 1:
             to_be = 'was'
             plural = ''
-            kplural = 's'
         else:
             to_be = 'were'
             plural = 's'
+        if self.group.group_quantity == 4:
             kplural = ''
+        else:
+            kplural = 's'
+
         is_winner = self.player.auction_winner
         return {
             'to_be': to_be,
@@ -164,14 +167,14 @@ class AuctionFinish(Page):
             'is_winner': is_winner,
             'francs': self.player.francs,
             'revenue': revenue,
-            'tickets_kept': Constants.Q-self.group.group_quantity,
+            'tickets_kept': Constants.Q - self.group.group_quantity,
             'keep': Constants.Q - self.group.group_quantity,
-            'retained_earnings': int(Constants.delta*total_value),
+            'retained_earnings': int(Constants.delta * total_value),
             'ticket_value': ticket_value,
             'buyer_value': buyer_value,
-            'seller_value': int(Constants.delta*ticket_value),
-            'winner_earnings': Constants.buyer_endowment-revenue+self.group.group_quantity*ticket_value,
-            'seller_earnings': revenue+int(Constants.delta*total_value)
+            'seller_value': int(Constants.delta * ticket_value),
+            'winner_earnings': Constants.buyer_endowment - revenue + self.group.group_quantity * ticket_value,
+            'seller_earnings': revenue + int(Constants.delta * total_value)
         }
 
 
@@ -188,20 +191,49 @@ class ResultsWaitPage(WaitPage):
         self.session.vars[str(self.round_number) + 'R' +
                           str(self.group.group_number)] = {
             'round': self.round_number,
-            'price': price,
+            'group_number': self.group.group_number,
+            'price': str(price) + ' francs per-ticket',
             'quantity': self.group.group_quantity,
             'color': self.group.group_color,
-            'winner_payoff': winner_payoff,
-            'seller_payoff': seller_payoff,
+            'winner_payoff': str(winner_payoff) + ' francs',
+            'seller_payoff': str(seller_payoff) + ' francs',
         }
-
 
 class AllGroupsWaitPage(WaitPage):
     wait_for_all_groups = True
 
 
 class Results(Page):
-    pass
+    def vars_for_template(self):
+        data = {}
+        for g in range(1, Constants.num_groups + 1):
+            data['G' + str(g)] = (self.session.vars[str(self.round_number) + 'R' + str(g)])
+        return {
+            'data': data
+        }
+
+
+class PerformanceReview(Page):
+    def vars_for_template(self):
+        self.participant.vars[str(self.round_number) + 'R' + str(self.group.group_number)] = {
+            'round': self.round_number,
+            'role': self.player.role(),
+            'color': self.player.seller_color,
+            'quantity_choice': self.player.quantity_choice,
+            'auction_winner': self.player.auction_winner,
+            'price': self.group.price,
+            'group_quantity': self.group.group_quantity,
+            'group_color': self.group.group_color,
+            'francs': self.player.francs
+        }
+        data = self.session.vars
+        data1 = self.participant.vars
+        return{
+            'data1': data1,
+            'data': data
+        }
+
+
 
 
 page_sequence = [
@@ -215,5 +247,6 @@ page_sequence = [
     AuctionFinish,
     ResultsWaitPage,
     AllGroupsWaitPage,
-    Results
+    Results,
+    PerformanceReview
 ]

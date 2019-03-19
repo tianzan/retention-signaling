@@ -2,12 +2,14 @@
 {% load otree static %}
 
 {% block title %}
-    Results from all groups
+Results from all groups
 {% endblock %}
 
 {% block content %}
+{% include 'includes/round_history.html' %}
 
-    {% next_button %}
+<p>{% next_button %}</p>
+
 {% endblock %}
 
 
