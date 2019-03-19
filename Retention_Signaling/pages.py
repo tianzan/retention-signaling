@@ -108,8 +108,7 @@ class Wait(WaitPage):
         return self.group.group_quantity > 0
 
     def after_all_players_arrive(self):
-        # Activates group to start the auction
-        self.group.activated = True
+        self.group.start = True
 
 
 class Bid(Page):
