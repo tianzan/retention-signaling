@@ -25,7 +25,7 @@ def group_model_exists():
 
 class Constants(BaseConstants):
     name_in_url = 'Retention_Signaling'
-    players_per_group = 4
+    players_per_group = 3
     num_rounds = 10
     alpha = 0.5
     Q = 5
@@ -33,12 +33,14 @@ class Constants(BaseConstants):
     delta = 0.5
     fL = 10
     fH = 30
-    num_groups = 2
+    num_groups = 1
+    num_payoff_rounds = 4
+    conversion_rate = 0.06666666666
 
 
 class Subsession(BaseSubsession):
-
     def creating_session(self):
+
         # Creates random groups of buyers and sellers every round
         self.group_randomly()
         # Assigns types
@@ -54,6 +56,17 @@ class Subsession(BaseSubsession):
             group.group_number = count
             count = count + 1
 
+        if self.round_number == 1:
+            rounds = []
+            for i in range(1, Constants.num_rounds + 1):
+                rounds.append(i)
+
+            for p in self.get_players():
+                p.participant.vars['payoff_rounds'] = random.sample(rounds, Constants.num_payoff_rounds)
+
+        for p in self.get_players():
+            if self.round_number in p.participant.vars['payoff_rounds']:
+                p.payoff_round = True
 
 class Group(BaseGroup):
     start = models.BooleanField(initial=False)
@@ -144,6 +157,8 @@ class Player(BasePlayer):
     leave_price = models.IntegerField()
     auction_winner = models.BooleanField(initial=False)
     francs = models.IntegerField()
+    payoff_round = models.BooleanField(initial=False)
+    payoff_updated = models.BooleanField(initial=False)
 
     def role(self):
         if self.id_in_group == 1:
@@ -163,12 +178,15 @@ class Player(BasePlayer):
         # A bidder does not win the auction if he/she leaves
         self.auction_winner = False
 
+    def update_payment(self):
+        if self.payoff_round and not self.payoff_updated:
+            self.payoff += self.francs*Constants.conversion_rate
+            self.payoff_updated = True
 
 def runEverySecond():
     if group_model_exists():
         deactive_groups = Group.objects.filter(activated=False, start=True)
         for g in deactive_groups:
-            print('test2')
             if g.time_till > 0:
                 g.time_till_float = g.time_till_float - 0.05
                 g.time_till = int(g.time_till_float)
@@ -190,10 +208,8 @@ def runEverySecond():
                          'activated': g.activated})}
                 )
         activated_groups = Group.objects.filter(activated=True, auction_over=False)
-        print('test')
 
         for g in activated_groups:
-            print('test3')
             if g.price < Constants.fH:
                 g.price_float += 0.05
                 g.price = int(g.price_float)

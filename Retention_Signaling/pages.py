@@ -182,6 +182,7 @@ class AuctionFinish(Page):
 
     def vars_for_template(self):
         self.group.set_francs()
+        self.player.update_payment()
         revenue = self.group.price * self.group.group_quantity
         ticket_value = self.group.group_type * (Constants.fH - Constants.fL) + Constants.fL
         total_value = (Constants.Q - self.group.group_quantity) * ticket_value
@@ -223,7 +224,6 @@ class AuctionFinish(Page):
 
 class ResultsWaitPage(WaitPage):
     def after_all_players_arrive(self):
-        # self.group.set_price()
         seller_payoff = self.group.seller_payoff
         if self.group.group_quantity > 0:
             price = self.group.price
@@ -272,10 +272,30 @@ class PerformanceReview(Page):
             'francs': self.player.francs
         }
         data = self.session.vars
-        data1 = self.participant.vars
+        if self.round_number == 1:
+            dict = self.participant.vars
+            del dict['payoff_rounds']
+        else:
+            dict = self.participant.vars
         return {
-            'data1': data1,
+            'data1': dict,
             'data': data
+        }
+
+
+class Payoffs(Page):
+    def is_displayed(self):
+        return self.round_number == Constants.num_rounds
+
+    def vars_for_template(self):
+        payoff_rounds = [[p.round_number,p.francs,p.payoff] for p in self.player.in_all_rounds()
+                         if p.payoff_round]
+        total_payoff = self.participant.payoff_plus_participation_fee()
+
+
+        return {
+            'payoff_rounds': payoff_rounds,
+            'total_payoff': total_payoff
         }
 
 
@@ -289,8 +309,9 @@ page_sequence = [
     AuctionWait,
     SetAuction,
     AuctionFinish,
-    ResultsWaitPage,
-    AllGroupsWaitPage,
-    Results,
-    PerformanceReview
+    # ResultsWaitPage,
+    # AllGroupsWaitPage,
+    # Results,
+    # PerformanceReview,
+    Payoffs
 ]
