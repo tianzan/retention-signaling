@@ -51,12 +51,12 @@ Round {{round_number}}
 <div class="relative"><h1>Auction</h1></div>
 
 <div class="row">
-    <div class="column left" style="background-color:darkseagreen; border-radius:20px; margin:2px">
+    <div class="column left" style="background-color:darkkhaki; color:black;border-radius:20px; margin:2px">
         <h6> Remaining bidders: <span style="alignment: left;" id='num_in_auction'>{{group.num_in_auction}}</span>
             <span style="float:right;">Total expense: <a id ='expense'>0</a></span>
         </h6>
         <h6>Number of tickets for sale: {{quantity}}</h6>
-        <center style="font-size: 80px">Current price: <span class="label label-success"
+        <center style="font-size: 80px">Current Price: <span class="label label-success"
                                                              id='group_price'>{{ group.price }}</span></center>
         <button class="btn btn-primary btn-lg btn-danger button2" id='exit'
                 style="width:100%;height:81.5px; border-radius:15px;margin-top: 25px"
@@ -66,12 +66,12 @@ Round {{round_number}}
 
     <div class="column right" style="background-color:lightgray; border-radius:20px;margin:2px">
         <ul>
-            <li style="padding-bottom: 10px;padding-top: 50px">Your budget: {{Constants.buyer_endowment}} francs</li>
-            <li style="padding-bottom: 10px"> The last bidder remaining purchases the tickets
+            <li style="padding-bottom: 15px;padding-top: 50px">Your budget: {{Constants.buyer_endowment}} francs</li>
+            <li style="padding-bottom: 15px"> The last bidder remaining purchases the tickets
             </li>
-            <li style="padding-bottom: 10px">The tickets will be exchanged for</li>
+            <li style="padding-bottom: 15px">The tickets will be exchanged for</li>
             <ul>
-                <li style="padding-bottom:10px"> {{quantity}}&times;{{Constants.fH}}= {{vH}} francs if the
+                <li style="padding-bottom:15px"> {{quantity}}&times;{{Constants.fH}}= {{vH}} francs if the
                     ticket{{plural}}
                     {{to_be}} <a style="color:green">green</a> or
                 </li>
