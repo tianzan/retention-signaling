@@ -24,7 +24,7 @@
             var message = 'The Auction Will Start In: ' + obj.time_till;
             if (obj.activated){
                 show_button = false;
-                message = 'The Auction Has Started';
+                message = 'Exit Auction'
             }
             var show = ! obj.activated;
             console.log(over)
@@ -33,6 +33,8 @@
                 $('form').submit();
             }
             else {
+                $('#expense').html(obj.expense);
+                $('#tminus').html(message);
                 $('#exit').prop('disabled', show_button);
                 $('#time_till').html(message);
                 $('#group_price').html(obj.price);

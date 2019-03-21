@@ -31,8 +31,8 @@ Round {{round_number}}
 </head>
 <body>
 
-<div class="row">
-    <div class="column" style="background-color:#aaa;">
+<div class="row" style="position: relative; left: 100px;">
+    <div class="column" style="background-color:#aaa;border-radius:20px; margin:2px">
         <center><h2 style="align-self:center;">Auction Results</h2></center>
         <ul>
             <li style="padding-bottom:20px">Number of tickets for sale: {{quantity}}</li>
@@ -42,7 +42,7 @@ Round {{round_number}}
             <li style="padding-bottom:10px">Seller's earnings from this round: {{seller_earnings}} francs</li>
         </ul>
     </div>
-    <div class="column" style="background-color:#bbb;">
+    <div class="column" style="background-color:#bbb;border-radius:20px; margin:2px">
         <center><h2 style="align-self:center;">Your Earnings</h2></center>
         <ul>
             {% if role == 'seller' %}
@@ -52,7 +52,8 @@ Round {{round_number}}
             </li>
             <li style="padding-bottom:10px">You earned:</li>
             <ul>
-                <li style="padding-bottom:10px">{{quantity}}&times;{{price}}={{revenue}} francs from the ticket{{plural}} you
+                <li style="padding-bottom:10px">{{quantity}}&times;{{price}}={{revenue}} francs from the
+                    ticket{{plural}} you
                     sold
                 </li>
                 <li style="padding-bottom:10px">{{keep}}&times;{{seller_value}}={{retained_earnings}} francs from the

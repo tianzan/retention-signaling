@@ -120,13 +120,18 @@ class Bid(Page):
         if self.group.group_quantity == 1:
             to_be = 'is'
             plural = ''
+            pronoun = 'this'
         else:
             to_be = 'are'
             plural = 's'
+            pronoun = 'these'
         return {
+            'vH': self.group.group_quantity * Constants.fH,
+            'vL': self.group.group_quantity * Constants.fL,
             'quantity': self.player.group.group_quantity,
             'to_be': to_be,
             'plural': plural,
+            'pronoun': pronoun,
             'data': data,
             'round_number': self.round_number
         }
@@ -313,5 +318,5 @@ page_sequence = [
     # AllGroupsWaitPage,
     # Results,
     # PerformanceReview,
-    Payoffs
+    # Payoffs
 ]

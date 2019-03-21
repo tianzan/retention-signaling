@@ -25,18 +25,21 @@ def group_model_exists():
 
 class Constants(BaseConstants):
     name_in_url = 'Retention_Signaling'
+    # Session configuration (mostly for demo purposes)
     players_per_group = 3
-    num_rounds = 4
+    num_groups = 1
+    # Number of rounds and rounds which pay (experimental design)
+    num_rounds = 1
+    num_payoff_rounds = 1
+    # Francs to dollars conversion rate
+    conversion_rate = 0.06666666666
+    # Treatment parameters
     alpha = 0.5
     Q = 5
     buyer_endowment = 200
     delta = 0.5
     fL = 10
     fH = 30
-    num_groups = 1
-    num_payoff_rounds = 4
-    conversion_rate = 0.06666666666
-
 
 class Subsession(BaseSubsession):
     def creating_session(self):
@@ -219,6 +222,7 @@ def runEverySecond():
                 ).send(
                     {'text': json.dumps(
                         {'price': g.price,
+                         'expense': g.price*g.group_quantity,
                          'num': g.num_in_auction,
                          'over': g.auction_over,
                          'activated': g.activated})}
@@ -231,6 +235,7 @@ def runEverySecond():
                 ).send(
                     {'text': json.dumps(
                         {'price': g.price,
+                         'expense': g.price * g.group_quantity,
                          'num': g.num_in_auction,
                          'over': g.auction_over})}
                 )
