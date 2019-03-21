@@ -26,7 +26,7 @@ def group_model_exists():
 class Constants(BaseConstants):
     name_in_url = 'Retention_Signaling'
     players_per_group = 3
-    num_rounds = 10
+    num_rounds = 4
     alpha = 0.5
     Q = 5
     buyer_endowment = 200
