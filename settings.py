@@ -34,6 +34,9 @@ REAL_WORLD_CURRENCY_CODE = 'USD'
 USE_POINTS = False
 
 ROOMS = [
+    {'name': 'cess',
+     'display_name': 'CESS Experiment',
+     'participant_label_file': '_rooms/labels.txt'},
     {
         'name': 'econ101',
         'display_name': 'Econ 101 class',
