@@ -20,21 +20,25 @@
             var obj = jQuery.parseJSON(event.data);
             var num = obj.num;
             var over = obj.over;
-            var message = 'The Auction Will Start In: ' + obj.time_till;
             if (obj.activated) {
                 show_button = false;
-                message = 'Exit Auction.';
             }
             if (over) {
                 $('#exit').css('display','none');
                 $('#wait').css('display','inline');
                 $('#wait').prop('disabled',false);
-                $('#something').html('The Auction Is Over');
+                $('#seller_leave').css('display','inline')
+                $('#something').html('Click to Proceed');
 
             } else if (!obj.button_activated) {
                 console.log('test1');
                 $('#expense').html(obj.expense);
-                $('#tminus').html(message);
+                if(obj.dummy ==0 ){
+                    $('#tminus').html('Exit Auction');
+                } else{
+                    $('#tminus').html('The Auction Will Start In: ' + obj.time_till);
+                    console.log('AAAAAAGHHH')
+                }
                 $('#exit').prop('disabled', show_button);
                 $('#group_price').html(obj.price);
                 $('#num_in_auction').html(obj.num);

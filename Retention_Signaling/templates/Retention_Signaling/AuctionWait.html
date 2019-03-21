@@ -2,7 +2,7 @@
 {% load staticfiles otree_tags %}
 
 {% block title %}
-Round {{round_number}} Auction
+Round {{round_number}}
 {% endblock %}
 
 
@@ -17,9 +17,15 @@ Round {{round_number}} Auction
         /* Create two equal columns that floats next to each other */
         .column {
             float: left;
-            width: 50%;
             padding: 10px;
-            height: 100px; /* Should be removed. Only for demonstration */
+        }
+
+        .left {
+            width: 64%;
+        }
+
+        .right {
+            width: 35%;
         }
 
         /* Clear floats after the columns */
@@ -29,58 +35,40 @@ Round {{round_number}} Auction
             clear: both;
         }
 
+        div.relative {
+            position: relative;
+            left: 310px;
+        }
+
         .button2:hover {
             box-shadow: 0 12px 16px 0 rgba(0, 0, 0, 0.24), 0 17px 50px 0 rgba(0, 0, 0, 0.19);
         }
+
+        .selected {
+            display: inline !important;
+        }
+
     </style>
 
 </head>
 
 <body>
-<center>
-    <div style="background-color: gray;padding:20px;width:100%; border-radius:5px; margin-bottom: 25px">
-        {% if role == 'seller' %}
-        <h3> You have chosen to sell {{quantity}} ticket{{plural}} in the auction. </h3>
-        {% endif %}
 
-        {% if role == 'buyer' %}
-        <h3> There {{to_be}}
-            {{quantity}}
-            ticket{{plural}} for sale in this auction. </h3>
-        {% endif %}
-    </div>
-</center>
-<div class="row">
-    <div class="column">
-        <center>
-            <h1>Current price: <span class="label label-success" id='group_price'>{{ group.price }}</span></h1>
-        </center>
 
-    </div>
-    <div class="column">
-        <center>
-            <h1>Remaining bidders: <span id='num_in_auction'>{{group.num_in_auction}}</span></h1>
-        </center>
-    </div>
+<div style="background-color:darkkhaki; color:black;border-radius:20px; margin:2px">
+    <h6> Remaining bidders: <span style="alignment: left;" id='num_in_auction'>{{group.num_in_auction}}</span>
+        <span style="float:right;">Total expense: <a id='expense'>0</a></span>
+    </h6>
+    <h6>Number of tickets for sale: {{quantity}}</h6>
+    <center style="font-size: 80px">Current Price: <span class="label label-success"
+                                                         id='group_price'>{{ group.price }}</span></center>
+
 </div>
-<center>
-    <div style="background-color: gray;padding:20px;width:100%; border-radius:5px; margin-bottom: 25px">
-        {% if role == 'seller' %}
-        <h3> Please wait while the auction proceeds. </h3>
-        {% endif %}
 
-        {% if role == 'buyer' %}
-        <h3> You have exited the auction; please wait while the auction proceeds. </h3>
-        {% endif %}
-    </div>
-</center>
+<p> <button id="seller_leave" style="display:none;">The Auction Is Over: Click to Proceed</button></p>
 <hr>
-<div>
-    <center>
-        <h1>History</h1>
-        {% include 'includes/history.html' %}
-    </center>
-</div>
+
+{% include 'includes/history.html' %}
 
 </body>
 

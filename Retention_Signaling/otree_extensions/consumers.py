@@ -34,7 +34,7 @@ class PriceTracker(JsonWebsocketConsumer):
 
     def receive(self, text=None, bytes=None, **kwargs):
         self.clean_kwargs()
-        msg = text
+        msg = text['dummy']
         player = self.get_player()
         group = self.get_group()
         player.leave_auction()
@@ -47,7 +47,7 @@ class PriceTracker(JsonWebsocketConsumer):
         ).send(
             {'text': json.dumps(
                 {'num': group.num_in_auction,
-                 'leave': 1,
+                 'dummy': msg,
                  })}
         )
 

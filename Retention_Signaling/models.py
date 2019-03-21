@@ -224,7 +224,7 @@ def runEverySecond():
         for g in activated_groups:
             g.button_activated_already = True
             g.save()
-            if g.price < Constants.fH:
+            if g.price < 5:
                 g.price_float += 0.05
                 g.remaining_bidders
                 g.price = int(g.price_float)
@@ -240,9 +240,10 @@ def runEverySecond():
                          'activated': g.activated,
                          'button_activated': g.button_activated_already,
                          'leave': 0,
+                         'dummy': 1,
                          })}
                 )
-            if g.price == Constants.fH or g.num_in_auction == 1:
+            if g.price == 5 or g.num_in_auction == 1:
                 print('auction_over')
                 g.auction_over = True
                 g.save()
@@ -254,6 +255,7 @@ def runEverySecond():
                          'expense': g.price * g.group_quantity,
                          'num': g.num_in_auction,
                          'over': g.auction_over,
+                         'dummy': 1,
                          })}
                 )
 
