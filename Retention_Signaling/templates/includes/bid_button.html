@@ -13,6 +13,7 @@
             display: inline !important;
         }
 
+
         .table.no-border tr td, .table.no-border tr th {
             border-width: 0;
         }
@@ -20,14 +21,18 @@
 
 </head>
 <body>
+
 <button class="b btn btn-primary btn-lg btn-danger button2" id='exit'
         style="width:100%;height:81.5px; border-radius:15px;margin-top: 25px; display:inline"
         disabled=true type="button" onclick='sendmessage()'><h3 id='tminus'>
     The Auction Will Start In: 5</h3></button>
+
 <button class="b1 btn btn-primary btn-lg btn-danger" id='wait'
         style="width:100%;height:81.5px; border-radius:15px;margin-top: 25px; display:none"
-        disabled=true type="button"><h3 id='something'>
+        disabled=true><h3 id='something'>
     Please Wait</h3></button>
+
+
 </body>
 <script>
     $(document).ready(function () {

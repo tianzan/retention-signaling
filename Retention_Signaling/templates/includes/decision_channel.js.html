@@ -20,18 +20,19 @@
             var obj = jQuery.parseJSON(event.data);
             var num = obj.num;
             var over = obj.over;
-            // var show_button = true;
             var message = 'The Auction Will Start In: ' + obj.time_till;
-            if (obj.activated){
+            if (obj.activated) {
                 show_button = false;
                 message = 'Exit Auction.';
             }
-            if (obj.accept || over) {
-                $('input#out_of_auction').attr("value", 'False');
-                // $('form').submit();
-            }
-            else if (!obj.button_activated){
-                console.log('test1')
+            if (over) {
+                $('#exit').css('display','none');
+                $('#wait').css('display','inline');
+                $('#wait').prop('disabled',false);
+                $('#something').html('The Auction Is Over');
+
+            } else if (!obj.button_activated) {
+                console.log('test1');
                 $('#expense').html(obj.expense);
                 $('#tminus').html(message);
                 $('#exit').prop('disabled', show_button);
@@ -39,9 +40,8 @@
                 $('#num_in_auction').html(obj.num);
                 $('#over').html(obj.over);
 
-            }
-            else{
-                console.log('test')
+            } else {
+                console.log('Hello');
                 $('#expense').html(obj.expense);
                 $('#group_price').html(obj.price);
                 $('#test').html(obj.price);
@@ -50,11 +50,12 @@
                 $('#tminus').html('Exit Auction');
             }
         };
-        sendmessage = function(what){
+        sendmessage = function (what) {
             var msg = {
-                'dummy': {{group.price}}
-            };
-            if (wpsocket.readyState === wpsocket.OPEN){
+                'dummy': 0
+        }
+            ;
+            if (wpsocket.readyState === wpsocket.OPEN) {
                 wpsocket.send(JSON.stringify(msg))
             }
         }

@@ -242,7 +242,8 @@ def runEverySecond():
                          'leave': 0,
                          })}
                 )
-            if g.price == Constants.fH:
+            if g.price == Constants.fH or g.num_in_auction == 1:
+                print('auction_over')
                 g.auction_over = True
                 g.save()
                 channels.Group(
@@ -252,7 +253,8 @@ def runEverySecond():
                         {'price': g.price,
                          'expense': g.price * g.group_quantity,
                          'num': g.num_in_auction,
-                         'over': g.auction_over})}
+                         'over': g.auction_over,
+                         })}
                 )
 
 
