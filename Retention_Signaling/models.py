@@ -41,6 +41,7 @@ class Constants(BaseConstants):
     fL = 10
     fH = 30
 
+
 class Subsession(BaseSubsession):
     def creating_session(self):
 
@@ -71,7 +72,9 @@ class Subsession(BaseSubsession):
             if self.round_number in p.participant.vars['payoff_rounds']:
                 p.payoff_round = True
 
+
 class Group(BaseGroup):
+    move_count = models.IntegerField(initial=0)
 
     button_activated_already = models.BooleanField(initial=False)
 
@@ -190,8 +193,9 @@ class Player(BasePlayer):
 
     def update_payment(self):
         if self.payoff_round and not self.payoff_updated:
-            self.payoff += self.francs*Constants.conversion_rate
+            self.payoff += self.francs * Constants.conversion_rate
             self.payoff_updated = True
+
 
 def runEverySecond():
     if group_model_exists():
@@ -224,7 +228,7 @@ def runEverySecond():
         for g in activated_groups:
             g.button_activated_already = True
             g.save()
-            if g.price < 5:
+            if g.price < Constants.fH:
                 g.price_float += 0.05
                 g.remaining_bidders
                 g.price = int(g.price_float)
@@ -234,7 +238,7 @@ def runEverySecond():
                 ).send(
                     {'text': json.dumps(
                         {'price': g.price,
-                         'expense': g.price*g.group_quantity,
+                         'expense': g.price * g.group_quantity,
                          'num': g.num_in_auction,
                          'over': g.auction_over,
                          'activated': g.activated,
@@ -243,7 +247,7 @@ def runEverySecond():
                          'dummy': 1,
                          })}
                 )
-            if g.price == 5 or g.num_in_auction == 1:
+            if g.price == Constants.fH or g.num_in_auction == 1:
                 print('auction_over')
                 g.auction_over = True
                 g.save()
@@ -258,6 +262,17 @@ def runEverySecond():
                          'dummy': 1,
                          })}
                 )
+
+        finished_groups = Group.objects.filter(activated=True, auction_over=True)
+        for g in finished_groups:
+            if g.move_count < 30:
+                g.move_count += 1
+                g.save()
+            if g.move_count == 30:
+                print('test')
+                g.move_count += 1
+                g.save()
+                g.advance_participants()
 
 
 l = task.LoopingCall(runEverySecond)

@@ -20,6 +20,11 @@
             var obj = jQuery.parseJSON(event.data);
             var num = obj.num;
             var over = obj.over;
+
+            if (obj.accept){
+                $('form').submit();
+            }
+
             if (obj.activated) {
                 show_button = false;
             }
