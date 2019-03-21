@@ -28,21 +28,37 @@
             }
             var show = ! obj.activated;
             console.log(over)
-            if (obj.accept || num ==1 || over) {
+            if (obj.accept || over) {
                 $('input#out_of_auction').attr("value", 'False');
-                $('form').submit();
+                // $('form').submit();
             }
-            else {
+            else if (!obj.button_activated){
                 $('#expense').html(obj.expense);
                 $('#tminus').html(message);
                 $('#exit').prop('disabled', show_button);
-                $('#time_till').html(message);
+                // $('#time_till').html(message);
                 $('#group_price').html(obj.price);
                 $('#num_in_auction').html(obj.num);
                 $('#over').html(obj.over);
             }
+            else{
+                $('#expense').html(obj.expense);
+                // $('#tminus').html(message);
+                // $('#time_till').html(message);
+                $('#group_price').html(obj.price);
+                $('#test').html(obj.price);
+                $('#num_in_auction').html(obj.num);
+                $('#over').html(obj.over);
+            }
         };
-
+        sendmessage = function(what){
+            var msg = {
+                'dummy': {{group.price}}
+            };
+            if (wpsocket.readyState === wpsocket.OPEN){
+                wpsocket.send(JSON.stringify(msg))
+            }
+        }
 
         // Show a disconnected message when the WebSocket is closed.
         wpsocket.onclose = function (event) {

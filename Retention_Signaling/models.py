@@ -26,7 +26,7 @@ def group_model_exists():
 class Constants(BaseConstants):
     name_in_url = 'Retention_Signaling'
     # Session configuration (mostly for demo purposes)
-    players_per_group = 4
+    players_per_group = 3
     num_groups = 1
     # Number of rounds and rounds which pay (experimental design)
     num_rounds = 1
@@ -72,6 +72,9 @@ class Subsession(BaseSubsession):
                 p.payoff_round = True
 
 class Group(BaseGroup):
+
+    button_activated_already = models.BooleanField(initial=False)
+
     start = models.BooleanField(initial=False)
 
     time_till = models.IntegerField(initial=5)
@@ -162,6 +165,10 @@ class Player(BasePlayer):
     francs = models.IntegerField()
     payoff_round = models.BooleanField(initial=False)
     payoff_updated = models.BooleanField(initial=False)
+    dummy = models.IntegerField(initial=3)
+
+    def get_channel_player_name(self):
+        return 'player_{}'.format(self.pk)
 
     def role(self):
         if self.id_in_group == 1:
@@ -208,13 +215,17 @@ def runEverySecond():
                 ).send(
                     {'text': json.dumps(
                         {'time_till': g.time_till,
-                         'activated': g.activated})}
+                         'activated': g.activated,
+                         'button_activated': g.button_activated_already,
+                         'leave': 0})}
                 )
         activated_groups = Group.objects.filter(activated=True, auction_over=False)
 
         for g in activated_groups:
+            g.button_activated_already = True
             if g.price < Constants.fH:
                 g.price_float += 0.05
+                g.remaining_bidders
                 g.price = int(g.price_float)
                 g.save()
                 channels.Group(
@@ -225,7 +236,10 @@ def runEverySecond():
                          'expense': g.price*g.group_quantity,
                          'num': g.num_in_auction,
                          'over': g.auction_over,
-                         'activated': g.activated})}
+                         'activated': g.activated,
+                         'button_activated': g.button_activated_already,
+                         'leave': 0,
+                         })}
                 )
             if g.price == Constants.fH:
                 g.auction_over = True
