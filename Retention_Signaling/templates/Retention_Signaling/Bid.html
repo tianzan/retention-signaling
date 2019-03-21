@@ -43,6 +43,7 @@ Round {{round_number}}
         .button2:hover {
             box-shadow: 0 12px 16px 0 rgba(0, 0, 0, 0.24), 0 17px 50px 0 rgba(0, 0, 0, 0.19);
         }
+
         .selected {
             display: inline !important;
         }
@@ -60,9 +61,9 @@ Round {{round_number}}
             <span style="float:right;">Total expense: <a id='expense'>0</a></span>
         </h6>
         <h6>Number of tickets for sale: {{quantity}}</h6>
-        <center style="font-size: 80px">Current Price: <span class="label label-success"
+        <center style="font-size: 80px"> <a id="current">Current Price:</a>  <span class="label label-success"
                                                              id='group_price'>{{ group.price }}</span></center>
-              {% include 'includes/bid_button.html' %}
+        {% include 'includes/bid_button.html' %}
 
     </div>
 
