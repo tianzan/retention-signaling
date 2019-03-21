@@ -2,7 +2,7 @@
 {% load staticfiles otree_tags %}
 
 {% block title %}
-Round {{round_number}} Auction
+Round {{round_number}}
 {% endblock %}
 
 
@@ -17,9 +17,15 @@ Round {{round_number}} Auction
         /* Create two equal columns that floats next to each other */
         .column {
             float: left;
-            width: 50%;
             padding: 10px;
-            height: 100px; /* Should be removed. Only for demonstration */
+        }
+
+        .left {
+            width: 64%;
+        }
+
+        .right {
+            width: 35%;
         }
 
         /* Clear floats after the columns */
@@ -27,6 +33,11 @@ Round {{round_number}} Auction
             content: "";
             display: table;
             clear: both;
+        }
+
+        div.relative {
+            position: relative;
+            left: 310px;
         }
 
         .button2:hover {
@@ -37,42 +48,43 @@ Round {{round_number}} Auction
 </head>
 
 <body>
-<center>
-    <div style="color:red;padding:20px;width:100%; border-radius:5px; margin-bottom: 10px">
-        <h1> <span id='time_till'>The Auction Will Start In: {{group.time_till}}</span></h1>
-    </div>
-</center>
-<center>
-    <div style="color:yellow; background-color: black;padding:20px;width:100%; border-radius:5px; margin-bottom: 25px">
-        <h3> There {{to_be}}
-            {{quantity}}
-            ticket{{plural}} for sale in this auction. </h3>
-    </div>
-</center>
+<div class="relative"><h1>Auction</h1></div>
+
 <div class="row">
-    <div class="column">
-        <center>
-            <h1>Current price: <span class="label label-success" id='group_price'>{{ group.price }}</span></h1>
-        </center>
-
+    <div class="column left" style="background-color:darkkhaki; color:black;border-radius:20px; margin:2px">
+        <h6> Remaining bidders: <span style="alignment: left;" id='num_in_auction'>{{group.num_in_auction}}</span>
+            <span style="float:right;">Total expense: <a id ='expense'>0</a></span>
+        </h6>
+        <h6>Number of tickets for sale: {{quantity}}</h6>
+        <center style="font-size: 80px">Current Price: <span class="label label-success"
+                                                             id='group_price'>{{ group.price }}</span></center>
+        <button class="btn btn-primary btn-lg btn-danger button2" id='exit'
+                style="width:100%;height:81.5px; border-radius:15px;margin-top: 25px"
+                disabled=true><h3 id='tminus'>
+            Exit Auction</h3></button>
     </div>
-    <div class="column">
-        <center>
-            <h1>Remaining bidders: <span id='num_in_auction'>{{group.num_in_auction}}</span></h1>
-        </center>
+
+    <div class="column right" style="background-color:lightgray; border-radius:20px;margin:2px">
+        <ul>
+            <li style="padding-bottom: 15px;padding-top: 50px">Your budget: {{Constants.buyer_endowment}} francs</li>
+            <li style="padding-bottom: 15px"> The last bidder remaining purchases the tickets
+            </li>
+            <li style="padding-bottom: 15px">The tickets will be exchanged for</li>
+            <ul>
+                <li style="padding-bottom:15px"> {{quantity}}&times;{{Constants.fH}}= {{vH}} francs if the
+                    ticket{{plural}}
+                    {{to_be}} <a style="color:green">green</a> or
+                </li>
+                <li>{{quantity}}&times;{{Constants.fL}}= {{vL}} francs if the ticket{{plural}} {{to_be}} <a
+                        style="color:blue">blue</a>.
+                </li>
+
+            </ul>
+        </ul>
     </div>
 </div>
-
- <button class="btn btn-primary btn-lg btn-danger button2" id = 'exit' style="width:100%;height:81.5px" disabled = true><h3>Exit the auction</h3></button>
-
-
 <hr>
-<div>
-    <center>
-        <h1>History</h1>
-        {% include 'includes/history.html' %}
-    </center>
-</div>
+{% include 'includes/history.html' %}
 
 </body>
 
