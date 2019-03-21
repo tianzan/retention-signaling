@@ -6,11 +6,11 @@
         }
 
         .selected {
-            display: inline !important;
+            display: none !important;
         }
 
-        .enabled {
-            disabled: false;
+        .selected1 {
+            display: inline !important;
         }
 
         .table.no-border tr td, .table.no-border tr th {
@@ -23,18 +23,22 @@
 <button class="b btn btn-primary btn-lg btn-danger button2" id='exit'
         style="width:100%;height:81.5px; border-radius:15px;margin-top: 25px; display:inline"
         disabled=true type="button" onclick='sendmessage()'><h3 id='tminus'>
-    Exit Auction</h3></button>
-
+    The Auction Will Start In: 5</h3></button>
+<button class="b1 btn btn-primary btn-lg btn-danger" id='wait'
+        style="width:100%;height:81.5px; border-radius:15px;margin-top: 25px; display:none"
+        disabled=true type="button"><h3 id='something'>
+    Please Wait</h3></button>
+</body>
 <script>
     $(document).ready(function () {
 
         $('#hi').on('click', function () {
             document.getElementById('hi').innerHTML = 'Hi';
+            $('.b1').toggleClass('selected1');
         })
         $('#exit').on('click', function () {
-            document.getElementById('tminus').innerHTML = 'You have exited the auction; please wait.';
             $('.b').toggleClass('selected');
-            $('.b').prop('disabled', true)
+            $('.b1').toggleClass('selected1');
         })
     });
 </script>

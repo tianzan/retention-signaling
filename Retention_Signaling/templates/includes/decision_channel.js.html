@@ -20,35 +20,34 @@
             var obj = jQuery.parseJSON(event.data);
             var num = obj.num;
             var over = obj.over;
-            var show_button = true;
+            // var show_button = true;
             var message = 'The Auction Will Start In: ' + obj.time_till;
             if (obj.activated){
                 show_button = false;
-                message = 'Exit Auction'
+                message = 'Exit Auction.';
             }
-            var show = ! obj.activated;
-            console.log(over)
             if (obj.accept || over) {
                 $('input#out_of_auction').attr("value", 'False');
                 // $('form').submit();
             }
             else if (!obj.button_activated){
+                console.log('test1')
                 $('#expense').html(obj.expense);
                 $('#tminus').html(message);
                 $('#exit').prop('disabled', show_button);
-                // $('#time_till').html(message);
                 $('#group_price').html(obj.price);
                 $('#num_in_auction').html(obj.num);
                 $('#over').html(obj.over);
+
             }
             else{
+                console.log('test')
                 $('#expense').html(obj.expense);
-                // $('#tminus').html(message);
-                // $('#time_till').html(message);
                 $('#group_price').html(obj.price);
                 $('#test').html(obj.price);
                 $('#num_in_auction').html(obj.num);
                 $('#over').html(obj.over);
+                $('#tminus').html('Exit Auction');
             }
         };
         sendmessage = function(what){
