@@ -1,0 +1,18 @@
+{% extends "global/Page.html" %}
+{% load otree static %}
+
+{% block title %}
+Round {{round_number}}
+{% endblock %}
+
+{% block content %}
+
+{% if role == 'buyer' %}
+{% include 'Retention_Signaling/Bid.html' %}
+{% endif %}
+
+{% if role == 'seller' %}
+{% include 'Retention_Signaling/AuctionWait.html' %}
+{% endif %}
+
+{% endblock %}

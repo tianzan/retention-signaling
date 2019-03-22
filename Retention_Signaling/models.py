@@ -265,10 +265,10 @@ def runEverySecond():
 
         finished_groups = Group.objects.filter(activated=True, auction_over=True)
         for g in finished_groups:
-            if g.move_count < 150:
+            if g.move_count < 10000:
                 g.move_count += 1
                 g.save()
-            if g.move_count == 150:
+            if g.move_count == 10000:
                 print('test')
                 g.move_count += 1
                 g.save()

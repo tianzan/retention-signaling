@@ -32,11 +32,13 @@
                 $('#exit').css('display', 'none');
                 $('#wait').css('display', 'inline');
                 $('#wait').prop('disabled', false);
-                $('#seller_leave').css('display', 'inline')
                 $('#something').html('Auction Over: Click to Proceed');
                 $('#current').html('Final Price:');
-                $('#current').css('color','orangered');
-                $('#group_price').css('color','orangered');
+                $('#current').addClass('text-danger');
+                $('#group_price').addClass('text-danger');
+                $('#seller_leave').addClass('button2');
+                $('#seller_leave').prop('disabled', false);
+                $('#seller_text').html('Auction Over: Click to Proceed');
 
             } else if (!obj.button_activated) {
                 console.log('test1');
@@ -45,6 +47,7 @@
                     $('#tminus').html('Exit Auction');
                 } else {
                     $('#tminus').html('The Auction Will Start In: ' + obj.time_till);
+                    $('#seller_text').html('The Auction Will Start In: ' + obj.time_till);
                     console.log('AAAAAAGHHH')
                 }
                 $('#exit').prop('disabled', show_button);
@@ -60,6 +63,8 @@
                 $('#num_in_auction').html(obj.num);
                 $('#over').html(obj.over);
                 $('#tminus').html('Exit Auction');
+                $('#seller_text').html('Please Wait');
+
             }
         };
         sendmessage = function (what) {

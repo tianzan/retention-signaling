@@ -111,9 +111,9 @@ class Wait(WaitPage):
         self.group.start = True
 
 
-class Bid(Page):
+class Auction(Page):
     def is_displayed(self):
-        return self.player.role() == 'buyer' and self.group.group_quantity > 0
+        return self.group.group_quantity > 0
 
     def vars_for_template(self):
         data = self.session.vars
@@ -126,6 +126,7 @@ class Bid(Page):
             plural = 's'
             pronoun = 'these'
         return {
+            'role': self.player.role(),
             'vH': self.group.group_quantity * Constants.fH,
             'vL': self.group.group_quantity * Constants.fL,
             'quantity': self.player.group.group_quantity,
@@ -136,15 +137,15 @@ class Bid(Page):
             'round_number': self.round_number
         }
 
-    def before_next_page(self):
-        # If there are at least 2 players left in the auction, when one leaves, these commands update the player
-        # field and group field
-        if self.group.num_in_auction > 1 and not self.group.auction_over:
-            self.player.leave_auction()
-            self.group.remaining_bidders()
-        # The auction ends when there is only one bidder left
-        else:
-            self.group.end_auction()
+    # def before_next_page(self):
+    #     # If there are at least 2 players left in the auction, when one leaves, these commands update the player
+    #     # field and group field
+    #     if self.group.num_in_auction > 1 and not self.group.auction_over:
+    #         self.player.leave_auction()
+    #         self.group.remaining_bidders()
+    #     # The auction ends when there is only one bidder left
+    #     else:
+    #         self.group.end_auction()
 
     # def before_next_page(self):
     #     self.group.activated = False
@@ -310,8 +311,7 @@ page_sequence = [
     NoAuction,
     AssignRole,
     Wait,
-    Bid,
-    AuctionWait,
+    Auction,
     SetAuction,
     AuctionFinish,
     # ResultsWaitPage,
