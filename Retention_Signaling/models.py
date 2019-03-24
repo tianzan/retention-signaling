@@ -27,10 +27,10 @@ class Constants(BaseConstants):
     name_in_url = 'Retention_Signaling'
     # Session configuration (mostly for demo purposes)
     players_per_group = 4
-    num_groups = 1
+    num_groups = 2
     # Number of rounds and rounds which pay (experimental design)
-    num_rounds = 1
-    num_payoff_rounds = 1
+    num_rounds = 5
+    num_payoff_rounds = 2
     # Francs to dollars conversion rate
     conversion_rate = 0.06666666666
     # Treatment parameters
@@ -144,7 +144,7 @@ class Group(BaseGroup):
     def set_francs(self):
         for p in self.get_players():
             if p.role() == 'seller':
-                p.francs = p.quantity_choice * self.price + (Constants.Q - p.quantity_choice) * (
+                p.francs = p.quantity_choice * self.price + Constants.delta*(Constants.Q - p.quantity_choice) * (
                         p.seller_type * (Constants.fH - Constants.fL) + Constants.fL)
                 self.seller_payoff = p.francs
             else:
@@ -265,10 +265,10 @@ def runEverySecond():
 
         finished_groups = Group.objects.filter(activated=True, auction_over=True)
         for g in finished_groups:
-            if g.move_count < 10000:
+            if g.move_count < 500:
                 g.move_count += 1
                 g.save()
-            if g.move_count == 10000:
+            if g.move_count == 500:
                 print('test')
                 g.move_count += 1
                 g.save()

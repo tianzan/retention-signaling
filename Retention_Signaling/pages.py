@@ -46,6 +46,8 @@ class NoAuction(Page):
 
     def vars_for_template(self):
         self.group.set_francs()
+        self.player.update_payment()
+
         data = self.session.vars
         if self.group.group_quantity == 1:
             to_be = 'is'
@@ -314,9 +316,9 @@ page_sequence = [
     Auction,
     SetAuction,
     AuctionFinish,
-    # ResultsWaitPage,
-    # AllGroupsWaitPage,
-    # Results,
-    # PerformanceReview,
-    # Payoffs
+    ResultsWaitPage,
+    AllGroupsWaitPage,
+    Results,
+    PerformanceReview,
+    Payoffs
 ]
