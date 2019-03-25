@@ -231,24 +231,28 @@ class AuctionFinish(Page):
 
 
 class ResultsWaitPage(WaitPage):
+    wait_for_all_groups = True
+
     def after_all_players_arrive(self):
-        seller_payoff = self.group.seller_payoff
-        if self.group.group_quantity > 0:
-            price = self.group.price
-            winner_payoff = self.group.winner_payoff
-        else:
-            price = "N/A"
-            winner_payoff = 'N/A'
-        self.session.vars[str(self.round_number) + 'R' +
-                          str(self.group.group_number)] = {
-            'round': self.round_number,
-            'group_number': self.group.group_number,
-            'price': str(price) + ' francs per-ticket',
-            'quantity': self.group.group_quantity,
-            'color': self.group.group_color,
-            'winner_payoff': str(winner_payoff) + ' francs',
-            'seller_payoff': str(seller_payoff) + ' francs',
-        }
+        groups = self.subsession.get_groups()
+        for g in groups:
+            seller_payoff = g.seller_payoff
+            if g.group_quantity > 0:
+                price = g.price
+                winner_payoff = g.winner_payoff
+            else:
+                price = "N/A"
+                winner_payoff = 'N/A'
+            self.session.vars[str(self.round_number) + 'R' +
+                              str(g.group_number)] = {
+                'round': self.round_number,
+                'group_number': g.group_number,
+                'price': str(price) + ' francs per-ticket',
+                'quantity': g.group_quantity,
+                'color': g.group_color,
+                'winner_payoff': str(winner_payoff) + ' francs',
+                'seller_payoff': str(seller_payoff) + ' francs',
+            }
 
 
 class AllGroupsWaitPage(WaitPage):
@@ -280,9 +284,10 @@ class PerformanceReview(Page):
             'francs': self.player.francs
         }
         data = self.session.vars
-        if self.round_number == 1:
+        if self.round_number == 1 and not self.player.dictionary_deleted:
             dict = self.participant.vars
             del dict['payoff_rounds']
+            self.player.dictionary_deleted = True
         else:
             dict = self.participant.vars
         return {
@@ -296,10 +301,9 @@ class Payoffs(Page):
         return self.round_number == Constants.num_rounds
 
     def vars_for_template(self):
-        payoff_rounds = [[p.round_number,p.francs,p.payoff] for p in self.player.in_all_rounds()
+        payoff_rounds = [[p.round_number, p.francs, p.payoff] for p in self.player.in_all_rounds()
                          if p.payoff_round]
         total_payoff = self.participant.payoff_plus_participation_fee()
-
 
         return {
             'payoff_rounds': payoff_rounds,
@@ -317,7 +321,7 @@ page_sequence = [
     SetAuction,
     AuctionFinish,
     ResultsWaitPage,
-    AllGroupsWaitPage,
+    # AllGroupsWaitPage,
     Results,
     PerformanceReview,
     Payoffs

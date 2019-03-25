@@ -26,7 +26,7 @@ def group_model_exists():
 class Constants(BaseConstants):
     name_in_url = 'Retention_Signaling'
     # Session configuration (mostly for demo purposes)
-    players_per_group = 4
+    players_per_group = 3
     num_groups = 2
     # Number of rounds and rounds which pay (experimental design)
     num_rounds = 5
@@ -104,7 +104,7 @@ class Group(BaseGroup):
 
     winner_payoff = models.IntegerField()
 
-    seller_payoff = models.IntegerField()
+    seller_payoff = models.FloatField()
 
     def get_channel_group_name(self):
         return 'auction_group_{}'.format(self.pk)
@@ -146,7 +146,7 @@ class Group(BaseGroup):
             if p.role() == 'seller':
                 p.francs = p.quantity_choice * self.price + Constants.delta*(Constants.Q - p.quantity_choice) * (
                         p.seller_type * (Constants.fH - Constants.fL) + Constants.fL)
-                self.seller_payoff = p.francs
+                self.seller_payoff = int(p.francs)
             else:
                 if not p.auction_winner:
                     p.francs = Constants.buyer_endowment
@@ -165,10 +165,11 @@ class Player(BasePlayer):
     in_auction = models.BooleanField(initial=False)
     leave_price = models.IntegerField()
     auction_winner = models.BooleanField(initial=False)
-    francs = models.IntegerField()
+    francs = models.FloatField()
     payoff_round = models.BooleanField(initial=False)
     payoff_updated = models.BooleanField(initial=False)
     dummy = models.IntegerField(initial=3)
+    dictionary_deleted = models.BooleanField(initial=False)
 
     def get_channel_player_name(self):
         return 'player_{}'.format(self.pk)
