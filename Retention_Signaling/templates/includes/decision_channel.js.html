@@ -20,29 +20,62 @@
             var obj = jQuery.parseJSON(event.data);
             var num = obj.num;
             var over = obj.over;
-            var show_button = true;
-            var message = 'The Auction Will Start In: ' + obj.time_till;
-            if (obj.activated){
-                show_button = false;
-                message = 'Exit Auction'
-            }
-            var show = ! obj.activated;
-            console.log(over)
-            if (obj.accept || num ==1 || over) {
-                $('input#out_of_auction').attr("value", 'False');
+
+            if (obj.accept) {
                 $('form').submit();
             }
-            else {
+
+            if (obj.activated) {
+                show_button = false;
+            }
+            if (over) {
+                $('#exit').css('display', 'none');
+                $('#wait').css('display', 'inline');
+                $('#wait').prop('disabled', false);
+                $('#something').html('Auction Over: Click to Proceed');
+                $('#current').html('Final Price:');
+                $('#current').addClass('text-danger');
+                $('#group_price').addClass('text-danger');
+                $('#seller_leave').addClass('button2');
+                $('#seller_leave').prop('disabled', false);
+                $('#seller_text').html('Auction Over: Click to Proceed');
+
+            } else if (!obj.button_activated) {
+                console.log('test1');
                 $('#expense').html(obj.expense);
-                $('#tminus').html(message);
+                if (obj.dummy == 0) {
+                    $('#tminus').html('Exit Auction');
+                } else {
+                    $('#tminus').html('The Auction Will Start In: ' + obj.time_till);
+                    $('#seller_text').html('The Auction Will Start In: ' + obj.time_till);
+                    console.log('AAAAAAGHHH')
+                }
                 $('#exit').prop('disabled', show_button);
-                $('#time_till').html(message);
                 $('#group_price').html(obj.price);
                 $('#num_in_auction').html(obj.num);
                 $('#over').html(obj.over);
+
+            } else {
+                console.log('Hello');
+                $('#expense').html(obj.expense);
+                $('#group_price').html(obj.price);
+                $('#test').html(obj.price);
+                $('#num_in_auction').html(obj.num);
+                $('#over').html(obj.over);
+                $('#tminus').html('Exit Auction');
+                $('#seller_text').html('Please Wait');
+
             }
         };
-
+        sendmessage = function (what) {
+            var msg = {
+                    'dummy': 0
+                }
+            ;
+            if (wpsocket.readyState === wpsocket.OPEN) {
+                wpsocket.send(JSON.stringify(msg))
+            }
+        }
 
         // Show a disconnected message when the WebSocket is closed.
         wpsocket.onclose = function (event) {

@@ -46,6 +46,8 @@ class NoAuction(Page):
 
     def vars_for_template(self):
         self.group.set_francs()
+        self.player.update_payment()
+
         data = self.session.vars
         if self.group.group_quantity == 1:
             to_be = 'is'
@@ -111,9 +113,9 @@ class Wait(WaitPage):
         self.group.start = True
 
 
-class Bid(Page):
+class Auction(Page):
     def is_displayed(self):
-        return self.player.role() == 'buyer' and self.group.group_quantity > 0
+        return self.group.group_quantity > 0
 
     def vars_for_template(self):
         data = self.session.vars
@@ -126,6 +128,7 @@ class Bid(Page):
             plural = 's'
             pronoun = 'these'
         return {
+            'role': self.player.role(),
             'vH': self.group.group_quantity * Constants.fH,
             'vL': self.group.group_quantity * Constants.fL,
             'quantity': self.player.group.group_quantity,
@@ -136,15 +139,15 @@ class Bid(Page):
             'round_number': self.round_number
         }
 
-    def before_next_page(self):
-        # If there are at least 2 players left in the auction, when one leaves, these commands update the player
-        # field and group field
-        if self.group.num_in_auction > 1 and not self.group.auction_over:
-            self.player.leave_auction()
-            self.group.remaining_bidders()
-        # The auction ends when there is only one bidder left
-        else:
-            self.group.end_auction()
+    # def before_next_page(self):
+    #     # If there are at least 2 players left in the auction, when one leaves, these commands update the player
+    #     # field and group field
+    #     if self.group.num_in_auction > 1 and not self.group.auction_over:
+    #         self.player.leave_auction()
+    #         self.group.remaining_bidders()
+    #     # The auction ends when there is only one bidder left
+    #     else:
+    #         self.group.end_auction()
 
     # def before_next_page(self):
     #     self.group.activated = False
@@ -228,24 +231,28 @@ class AuctionFinish(Page):
 
 
 class ResultsWaitPage(WaitPage):
+    wait_for_all_groups = True
+
     def after_all_players_arrive(self):
-        seller_payoff = self.group.seller_payoff
-        if self.group.group_quantity > 0:
-            price = self.group.price
-            winner_payoff = self.group.winner_payoff
-        else:
-            price = "N/A"
-            winner_payoff = 'N/A'
-        self.session.vars[str(self.round_number) + 'R' +
-                          str(self.group.group_number)] = {
-            'round': self.round_number,
-            'group_number': self.group.group_number,
-            'price': str(price) + ' francs per-ticket',
-            'quantity': self.group.group_quantity,
-            'color': self.group.group_color,
-            'winner_payoff': str(winner_payoff) + ' francs',
-            'seller_payoff': str(seller_payoff) + ' francs',
-        }
+        groups = self.subsession.get_groups()
+        for g in groups:
+            seller_payoff = g.seller_payoff
+            if g.group_quantity > 0:
+                price = g.price
+                winner_payoff = g.winner_payoff
+            else:
+                price = "N/A"
+                winner_payoff = 'N/A'
+            self.session.vars[str(self.round_number) + 'R' +
+                              str(g.group_number)] = {
+                'round': self.round_number,
+                'group_number': g.group_number,
+                'price': str(price) + ' francs per-ticket',
+                'quantity': g.group_quantity,
+                'color': g.group_color,
+                'winner_payoff': str(winner_payoff) + ' francs',
+                'seller_payoff': str(seller_payoff) + ' francs',
+            }
 
 
 class AllGroupsWaitPage(WaitPage):
@@ -277,9 +284,10 @@ class PerformanceReview(Page):
             'francs': self.player.francs
         }
         data = self.session.vars
-        if self.round_number == 1:
+        if self.round_number == 1 and not self.player.dictionary_deleted:
             dict = self.participant.vars
             del dict['payoff_rounds']
+            self.player.dictionary_deleted = True
         else:
             dict = self.participant.vars
         return {
@@ -293,10 +301,9 @@ class Payoffs(Page):
         return self.round_number == Constants.num_rounds
 
     def vars_for_template(self):
-        payoff_rounds = [[p.round_number,p.francs,p.payoff] for p in self.player.in_all_rounds()
+        payoff_rounds = [[p.round_number, p.francs, p.payoff] for p in self.player.in_all_rounds()
                          if p.payoff_round]
         total_payoff = self.participant.payoff_plus_participation_fee()
-
 
         return {
             'payoff_rounds': payoff_rounds,
@@ -310,13 +317,12 @@ page_sequence = [
     NoAuction,
     AssignRole,
     Wait,
-    Bid,
-    AuctionWait,
+    Auction,
     SetAuction,
     AuctionFinish,
-    # ResultsWaitPage,
+    ResultsWaitPage,
     # AllGroupsWaitPage,
-    # Results,
-    # PerformanceReview,
-    # Payoffs
+    Results,
+    PerformanceReview,
+    Payoffs
 ]
