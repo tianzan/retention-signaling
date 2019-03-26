@@ -25,7 +25,7 @@
 <button class="b btn btn-primary btn-lg btn-danger button2" id='exit'
         style="width:100%;height:81.5px; border-radius:15px;margin-top: 25px; display:inline"
         disabled=true type="button" onclick='sendmessage()'><h3 id='tminus'>
-    The Auction Will Start In: 5</h3></button>
+    The Auction Will Start In: {{Constants.time_till}}</h3></button>
 
 <button class="b1 btn btn-primary btn-lg btn-danger" id='wait'
         style="width:100%;height:81.5px; border-radius:15px;margin-top: 25px; display:none"
@@ -44,6 +44,7 @@
         $('#exit').on('click', function () {
             $('.b').toggleClass('selected');
             $('.b1').toggleClass('selected1');
+            $('#remaining_bidders').css('color','red')
         })
     });
 </script>

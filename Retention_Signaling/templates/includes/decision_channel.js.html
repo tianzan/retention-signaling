@@ -54,9 +54,12 @@
                 $('#group_price').html(obj.price);
                 $('#num_in_auction').html(obj.num);
                 $('#over').html(obj.over);
+                $('#remaining_bidders').css('color', 'black')
+
 
             } else {
                 console.log('Hello');
+                $('#exit').prop('disabled', show_button);
                 $('#expense').html(obj.expense);
                 $('#group_price').html(obj.price);
                 $('#test').html(obj.price);
@@ -64,7 +67,7 @@
                 $('#over').html(obj.over);
                 $('#tminus').html('Exit Auction');
                 $('#seller_text').html('Please Wait');
-
+                $('#remaining_bidders').css('color', 'black')
             }
         };
         sendmessage = function (what) {

@@ -15,7 +15,7 @@ SESSION_CONFIGS = [
     {
         'name': 'Retention_Signaling',
         'display_name': 'Lab Experiment',
-        'num_demo_participants': 6,
+        'num_demo_participants': 24,
         'use_browser_bots': False,
         'app_sequence': [
             'Retention_Signaling'
@@ -36,7 +36,7 @@ USE_POINTS = False
 ROOMS = [
     {'name': 'cess',
      'display_name': 'CESS Experiment',
-     'participant_label_file': '_rooms/labels.txt'},
+     },
     {
         'name': 'econ101',
         'display_name': 'Econ 101 class',
