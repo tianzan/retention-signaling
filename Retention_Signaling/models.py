@@ -57,6 +57,7 @@ class Subsession(BaseSubsession):
         # Assigns types
         count = 1
         for group in self.get_groups():
+            group.increment_size = self.session.config['increment_size']
             group.fL = self.session.config['fL']
             group.fH = self.session.config['fH']
             group.buyer_endowment = self.session.config['buyer_endowment']
@@ -85,6 +86,8 @@ class Subsession(BaseSubsession):
 
 
 class Group(BaseGroup):
+    increment_size = models.FloatField()
+
     fL = models.IntegerField()
 
     fH = models.IntegerField()
@@ -252,7 +255,7 @@ def runEverySecond():
             g.save()
             g.remaining_bidders
             if g.price < g.fH and g.num_in_auction > 1:
-                g.price_float += 0.01
+                g.price_float += g.increment_size
                 g.price = round(g.price_float, 2)
                 g.save()
                 channels.Group(
@@ -296,6 +299,6 @@ def runEverySecond():
 
 
 l = task.LoopingCall(runEverySecond)
-l.start(Constants.increment_speed)
+l.start(1)
 if not l.running:
     pass

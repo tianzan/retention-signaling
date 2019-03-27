@@ -21,11 +21,12 @@ SESSION_CONFIGS = [
         'num_payoff_rounds': 1,
         'final_round': 10,
         'conversion_rate': 0.1,
-        'buyer_endowment': 40,
+        'buyer_endowment': 80,
+        'increment_size': 0.1,
         'alpha': 0.75,
         'delta': 0.5,
-        'fL': 6,
-        'fH': 8,
+        'fL': 12,-------
+        'fH': 16,
         'use_browser_bots': False,
         'app_sequence': [
             'Retention_Signaling'
