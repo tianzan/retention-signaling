@@ -41,7 +41,6 @@
                 $('#seller_text').html('Auction Over: Click to Proceed');
 
             } else if (!obj.button_activated) {
-                console.log('test1');
                 $('#expense').html(obj.expense);
                 if (obj.dummy == 0) {
                     $('#tminus').html('Exit Auction');
@@ -58,7 +57,6 @@
 
 
             } else {
-                console.log('Hello');
                 $('#exit').prop('disabled', show_button);
                 $('#expense').html(obj.expense);
                 $('#group_price').html(obj.price);

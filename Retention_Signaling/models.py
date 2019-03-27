@@ -204,7 +204,6 @@ def runEverySecond():
     if group_model_exists():
         deactive_groups = Group.objects.filter(activated=False, start=True)
         for g in deactive_groups:
-            print('test3')
             if g.time_till > 0:
                 g.time_till_float = g.time_till_float - 0.5
                 g.time_till = int(g.time_till_float)
@@ -231,13 +230,11 @@ def runEverySecond():
 
         for g in activated_groups:
             g.button_activated_already = True
-            print('test')
             g.save()
             if g.price < Constants.fH:
-                print('test1')
                 g.price_float += 0.01
                 g.remaining_bidders
-                g.price = round(g.price_float,2)
+                g.price = round(g.price_float, 2)
                 g.save()
                 channels.Group(
                     g.get_channel_group_name()
@@ -254,7 +251,6 @@ def runEverySecond():
                          })}
                 )
             if int(g.price) == Constants.fH or g.num_in_auction == 1:
-                print('auction_over')
                 g.auction_over = True
                 g.save()
                 channels.Group(
@@ -275,13 +271,12 @@ def runEverySecond():
                 g.move_count += 1
                 g.save()
             if g.move_count == 500:
-                print('test')
                 g.move_count += 1
                 g.save()
                 g.advance_participants()
 
 
 l = task.LoopingCall(runEverySecond)
-l.start(0.1)
+l.start(0.9)
 if not l.running:
     pass
