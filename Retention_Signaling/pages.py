@@ -8,6 +8,17 @@ import channels
 import random
 
 
+class Welcome(Page):
+    def is_displayed(self):
+        return self.round_number == 1
+    timeout_seconds = 5
+    pass
+
+
+class StartWait(WaitPage):
+    wait_for_all_groups = True
+
+
 class QuantityChoice(Page):
     form_model = 'player'
     form_fields = ['quantity_choice']
@@ -25,7 +36,7 @@ class QuantityChoice(Page):
                 'round_number': self.round_number
             }
 
-    # timeout_seconds = 60
+    timeout_seconds = 40
 
     def before_next_page(self):
         if self.timeout_happened:
@@ -98,6 +109,8 @@ class AssignRole(Page):
             'pronoun': pronoun,
             'round_number': self.round_number
         }
+
+    timeout_seconds = 30
 
     # Enters buyers into auction
     def before_next_page(self):
@@ -188,6 +201,8 @@ class AuctionFinish(Page):
     def is_displayed(self):
         return self.group.group_quantity > 0
 
+    timeout_seconds = 30
+
     def vars_for_template(self):
         self.group.set_francs()
         self.player.update_payment()
@@ -217,15 +232,15 @@ class AuctionFinish(Page):
             'role': self.player.role(),
             'is_winner': is_winner,
             'francs': self.player.francs,
-            'revenue': revenue,
+            'revenue': round(revenue, 2),
             'tickets_kept': Constants.Q - self.group.group_quantity,
             'keep': Constants.Q - self.group.group_quantity,
-            'retained_earnings': int(Constants.delta * total_value),
-            'ticket_value': ticket_value,
+            'retained_earnings': round(Constants.delta * total_value, 2),
+            'ticket_value': round(ticket_value, 2),
             'buyer_value': buyer_value,
-            'seller_value': int(Constants.delta * ticket_value),
-            'winner_earnings': Constants.buyer_endowment - revenue + self.group.group_quantity * ticket_value,
-            'seller_earnings': revenue + int(Constants.delta * total_value),
+            'seller_value': round(Constants.delta * ticket_value, 2),
+            'winner_earnings': round(Constants.buyer_endowment - revenue + self.group.group_quantity * ticket_value, 2),
+            'seller_earnings': round(revenue + Constants.delta * total_value, 2),
             'round_number': self.round_number
         }
 
@@ -260,17 +275,22 @@ class AllGroupsWaitPage(WaitPage):
 
 
 class Results(Page):
+    timeout_seconds = 40
+
     def vars_for_template(self):
         data = {}
         for g in range(1, Constants.num_groups + 1):
             data['G' + str(g)] = (self.session.vars[str(self.round_number) + 'R' + str(g)])
         return {
+            'group_number': self.group.group_number,
             'data': data,
             'round_number': self.round_number
         }
 
 
 class PerformanceReview(Page):
+    timeout_seconds = 30
+
     def vars_for_template(self):
         self.participant.vars[str(self.round_number) + 'R' + str(self.group.group_number)] = {
             'round': self.round_number,
@@ -312,17 +332,26 @@ class Payoffs(Page):
 
 
 page_sequence = [
+    Welcome,
+    StartWait,
+    # Page 1
     QuantityChoice,
     AssignWait,
     NoAuction,
+    # Page 2
     AssignRole,
     Wait,
+    # Page 3
     Auction,
     SetAuction,
+    # Page 4
     AuctionFinish,
+
     ResultsWaitPage,
     # AllGroupsWaitPage,
+    # Page 5
     Results,
+    # Page 6
     PerformanceReview,
     Payoffs
 ]

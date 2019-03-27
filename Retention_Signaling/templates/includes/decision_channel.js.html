@@ -41,7 +41,6 @@
                 $('#seller_text').html('Auction Over: Click to Proceed');
 
             } else if (!obj.button_activated) {
-                console.log('test1');
                 $('#expense').html(obj.expense);
                 if (obj.dummy == 0) {
                     $('#tminus').html('Exit Auction');
@@ -54,9 +53,11 @@
                 $('#group_price').html(obj.price);
                 $('#num_in_auction').html(obj.num);
                 $('#over').html(obj.over);
+                $('#remaining_bidders').css('color', 'black')
+
 
             } else {
-                console.log('Hello');
+                $('#exit').prop('disabled', show_button);
                 $('#expense').html(obj.expense);
                 $('#group_price').html(obj.price);
                 $('#test').html(obj.price);
@@ -64,7 +65,7 @@
                 $('#over').html(obj.over);
                 $('#tminus').html('Exit Auction');
                 $('#seller_text').html('Please Wait');
-
+                $('#remaining_bidders').css('color', 'black')
             }
         };
         sendmessage = function (what) {

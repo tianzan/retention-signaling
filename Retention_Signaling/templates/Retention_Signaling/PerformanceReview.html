@@ -1,6 +1,12 @@
 {% extends "global/Page.html" %}
 {% load otree static %}
-
+{% block styles %}
+    <style>
+        .otree-timer {
+            display: none;
+        }
+    </style>
+{% endblock %}
 {% block title %}
 Results from All Rounds
 {% endblock %}

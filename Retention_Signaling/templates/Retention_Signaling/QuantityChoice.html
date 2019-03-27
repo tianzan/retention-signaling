@@ -1,6 +1,26 @@
 {% extends "global/Page.html" %}
 {% load otree static %}
 
+{% block styles %}
+    <style>
+        .otree-timer {
+            display: none;
+        }
+    </style>
+{% endblock %}
+
+{% block scripts %}
+    <script>
+        $(function () {
+            $('.otree-timer__time-left').on('update.countdown', function (event) {
+                if (event.offset.totalSeconds === 20) {
+                    $('.otree-timer').show();
+                }
+            });
+        });
+    </script>
+{% endblock %}
+
 {% block title %}
 Round {{round_number}}
 {% endblock %}
@@ -32,11 +52,11 @@ Round {{round_number}}
 
 <div class="row">
     <div class="column">
-        <h2 style="text-align: center;"> Sell</h2>
+        <h2 style="text-align: center;"> Seller</h2>
         <p>If you are selected to be the seller, you will be given
             <a style = "color:{{player.seller_color}}"> <b>5 {{player.seller_color}} </b></a>tickets.</p>
 
-        <p>Please choose the number of tickets you would like to sell if selected to be a seller:</p>
+        <p>Please choose the number of these tickets you would like to sell:</p>
         {% include 'includes/new_buttons.html' %}
     </div>
     <div class="column">
