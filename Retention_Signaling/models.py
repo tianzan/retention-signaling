@@ -26,7 +26,7 @@ def group_model_exists():
 class Constants(BaseConstants):
     name_in_url = 'Retention_Signaling'
     # Session configuration (mostly for demo purposes)
-    players_per_group = 1
+    players_per_group = None
     # Number of rounds and rounds which pay (experimental design)
     num_rounds = 20
     # Treatment parameters
@@ -61,6 +61,7 @@ class Subsession(BaseSubsession):
             group.fH = self.session.config['fH']
             group.buyer_endowment = self.session.config['buyer_endowment']
             players = group.get_players()
+            group.num_in_auction = self.players_per_group - 1
             for p in players:
                 p.seller_type = numpy.random.binomial(1, alpha)
                 if p.seller_type == 1:
@@ -72,7 +73,7 @@ class Subsession(BaseSubsession):
 
         if self.round_number == 1:
             rounds = []
-            for i in range(1, Constants.num_rounds + 1):
+            for i in range(1, self.session.config['final_round'] + 1):
                 rounds.append(i)
 
             for p in self.get_players():
@@ -116,7 +117,7 @@ class Group(BaseGroup):
 
     group_color = models.StringField()
 
-    num_in_auction = models.IntegerField(initial=Constants.players_per_group - 1)
+    num_in_auction = models.IntegerField()
 
     auction_over = models.BooleanField(initial=False)
 

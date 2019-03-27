@@ -16,10 +16,14 @@ class Welcome(Page):
 
 
 class StartWait(WaitPage):
+    def is_displayed(self):
+        return self.round_number <= self.session.config['final_round']
     wait_for_all_groups = True
 
 
 class QuantityChoice(Page):
+    def is_displayed(self):
+        return self.round_number <= self.session.config['final_round']
     form_model = 'player'
     form_fields = ['quantity_choice']
 
@@ -41,6 +45,8 @@ class QuantityChoice(Page):
 
 
 class AssignWait(WaitPage):
+    def is_displayed(self):
+        return self.round_number <= self.session.config['final_round']
     def after_all_players_arrive(self):
         # Gathers relevant info from the group's seller to pass to group
         self.group.get_type()
@@ -50,7 +56,7 @@ class AssignWait(WaitPage):
 
 class NoAuction(Page):
     def is_displayed(self):
-        return self.group.group_quantity == 0
+        return self.group.group_quantity == 0 and self.round_number <= self.session.config['final_round']
 
     def vars_for_template(self):
         fH = self.group.fH
@@ -85,7 +91,7 @@ class NoAuction(Page):
 
 class AssignRole(Page):
     def is_displayed(self):
-        return self.group.group_quantity > 0
+        return self.group.group_quantity > 0 and self.round_number <= self.session.config['final_round']
 
     def vars_for_template(self):
         data = self.session.vars
@@ -123,7 +129,7 @@ class AssignRole(Page):
 
 class Wait(WaitPage):
     def is_displayed(self):
-        return self.group.group_quantity > 0
+        return self.group.group_quantity > 0 and self.round_number <= self.session.config['final_round']
 
     def after_all_players_arrive(self):
         self.group.start = True
@@ -131,7 +137,7 @@ class Wait(WaitPage):
 
 class Auction(Page):
     def is_displayed(self):
-        return self.group.group_quantity > 0
+        return self.group.group_quantity > 0 and self.round_number <= self.session.config['final_round']
 
     def vars_for_template(self):
         data = self.session.vars
@@ -175,7 +181,7 @@ class Auction(Page):
 # Waitpage that bidders see once they leave the auction
 class AuctionWait(Page):
     def is_displayed(self):
-        return self.group.num_in_auction > 1 and not self.group.auction_over and self.group.group_quantity > 0
+        return self.group.num_in_auction > 1 and not self.group.auction_over and self.group.group_quantity > 0 and self.round_number <= self.session.config['final_round']
 
     def vars_for_template(self):
         data = self.session.vars
@@ -197,7 +203,7 @@ class AuctionWait(Page):
 
 class SetAuction(WaitPage):
     def is_displayed(self):
-        return self.group.group_quantity > 0
+        return self.group.group_quantity > 0 and self.round_number <= self.session.config['final_round']
 
     def after_all_players_arrive(self):
         self.group.set_winner()
@@ -205,7 +211,7 @@ class SetAuction(WaitPage):
 
 class AuctionFinish(Page):
     def is_displayed(self):
-        return self.group.group_quantity > 0
+        return self.group.group_quantity > 0 and self.round_number <= self.session.config['final_round']
 
     timeout_seconds = 30
 
@@ -256,6 +262,8 @@ class AuctionFinish(Page):
 
 
 class ResultsWaitPage(WaitPage):
+    def is_displayed(self):
+        return self.round_number <= self.session.config['final_round']
     wait_for_all_groups = True
 
     def after_all_players_arrive(self):
@@ -281,6 +289,8 @@ class ResultsWaitPage(WaitPage):
 
 
 class AllGroupsWaitPage(WaitPage):
+    def is_displayed(self):
+        self.round_number <= self.session.config['final_round']
     wait_for_all_groups = True
 
 
@@ -299,6 +309,8 @@ class Results(Page):
 
 
 class PerformanceReview(Page):
+    def is_displayed(self):
+        return self.round_number <= self.session.config['final_round']
     timeout_seconds = 30
 
     def vars_for_template(self):
@@ -328,7 +340,7 @@ class PerformanceReview(Page):
 
 class Payoffs(Page):
     def is_displayed(self):
-        return self.round_number == Constants.num_rounds
+        return self.round_number == self.session.config['final_round']
 
     def vars_for_template(self):
         payoff_rounds = [[p.round_number, p.francs, p.payoff] for p in self.player.in_all_rounds()
