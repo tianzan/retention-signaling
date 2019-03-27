@@ -26,39 +26,34 @@ def group_model_exists():
 class Constants(BaseConstants):
     name_in_url = 'Retention_Signaling'
     # Session configuration (mostly for demo purposes)
-    players_per_group = 4
-    num_groups = 2
+    players_per_group = 1
     # Number of rounds and rounds which pay (experimental design)
     num_rounds = 20
-    num_payoff_rounds = 1
-    # Francs to dollars conversion rate
-    conversion_rate = 0.06666666666
     # Treatment parameters
     alpha = 0.5
     Q = 5
-    buyer_endowment = 25
-    delta = 0.5
-    fL = 6
-    fH = 8
 
     time_till = 3
     increment_speed = 1
 
 
 class Subsession(BaseSubsession):
-
     num_groups = models.IntegerField()
-
-    increment_speed = models.FloatField()
+    players_per_group = models.IntegerField()
 
     def creating_session(self):
         self.num_groups = self.session.config['num_groups']
-        self.group_randomly()
+        self.players_per_group = self.session.config['players_per_group']
+        num_participants = self.num_groups * self.players_per_group
         alpha = self.session.config['alpha']
         num_payoff_rounds = self.session.config['num_payoff_rounds']
-        self.increment_speed = self.session.config['increment_speed']
-
         # Creates random groups of buyers and sellers every round
+        participants = range(1, num_participants + 1)
+        random_matrix = numpy.random.choice(participants, size=(self.num_groups, self.players_per_group), replace=False)
+        random_matrix_list = random_matrix.tolist()
+        print(random_matrix_list)
+        self.set_group_matrix(random_matrix_list)
+
         # Assigns types
         count = 1
         for group in self.get_groups():

@@ -15,7 +15,8 @@ SESSION_CONFIGS = [
     {
         'name': 'Retention_Signaling',
         'display_name': 'Lab Experiment',
-        'num_demo_participants': 8,
+        'num_demo_participants': 6,
+        'players_per_group': 6,
         'num_payoff_rounds': 1,
         'conversion_rate': 0.1,
         'alpha': 0.75,
