@@ -1,10 +1,8 @@
 from channels.generic.websockets import JsonWebsocketConsumer
 import random
-from Retention_Signaling.models import Constants, Player, Group
+from Retention_Signaling.models import Constants, Player, Group, l
 import json
 import channels
-
-
 
 
 class PriceTracker(JsonWebsocketConsumer):
@@ -34,21 +32,16 @@ class PriceTracker(JsonWebsocketConsumer):
 
     def receive(self, text=None, bytes=None, **kwargs):
         self.clean_kwargs()
-        msg = text['dummy']
         player = self.get_player()
         group = self.get_group()
         player.leave_auction()
         player.save()
         group.remaining_bidders()
         group.save()
-        print(group.num_in_auction)
         channels.Group(
             group.get_channel_group_name()
         ).send(
             {'text': json.dumps(
                 {'num': group.num_in_auction,
-                 'dummy': msg,
                  })}
         )
-
-
