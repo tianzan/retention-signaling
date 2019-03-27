@@ -368,7 +368,6 @@ page_sequence = [
     SetAuction,
     # Page 4
     AuctionFinish,
-
     ResultsWaitPage,
     # AllGroupsWaitPage,
     # Page 5

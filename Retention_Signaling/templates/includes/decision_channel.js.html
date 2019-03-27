@@ -18,7 +18,6 @@
         // Handle messages sent by the server.
         wpsocket.onmessage = function (event) {
             var obj = jQuery.parseJSON(event.data);
-            var num = obj.num;
             var over = obj.over;
 
             if (obj.accept) {
@@ -41,13 +40,13 @@
                 $('#seller_text').html('Auction Over: Click to Proceed');
 
             } else if (!obj.button_activated) {
-                $('#expense').html(obj.expense);
                 if (obj.dummy == 0) {
                     $('#tminus').html('Exit Auction');
                 } else {
                     $('#tminus').html('The Auction Will Start In: ' + obj.time_till);
                     $('#seller_text').html('The Auction Will Start In: ' + obj.time_till);
                 }
+                $('#expense').html(obj.expense);
                 $('#exit').prop('disabled', show_button);
                 $('#group_price').html(obj.price);
                 $('#num_in_auction').html(obj.num);
