@@ -27,7 +27,7 @@ Round {{round_number}}
 
 {% if role == 'buyer' %}
 
-<p> There {{to_be}} <b>{{quantity}} ticket{{plural}}</b> for sale in the auction. You have <b>{{Constants.buyer_endowment}} francs</b>
+<p> There {{to_be}} <b>{{quantity}} ticket{{plural}}</b> for sale in the auction. You have <b>{{group.buyer_endowment}} francs</b>
     to spend in
     the auction.</p>
 
@@ -35,8 +35,8 @@ Round {{round_number}}
     will be exchanged for :</p>
 
 <ul>
-    <li style="padding-bottom:10px"> {{quantity}}&times;{{Constants.fH}}= {{vH}} francs if the ticket{{plural}} {{to_be}} <a style="color:green">green</a> or </li>
-    <li>{{quantity}}&times;{{Constants.fL}}= {{vL}} francs if the ticket{{plural}} {{to_be}} <a style="color:blue">blue</a>.</li>
+    <li style="padding-bottom:10px"> {{quantity}}&times;{{group.fH}}= {{vH}} francs if the ticket{{plural}} {{to_be}} <a style="color:green">green</a> or </li>
+    <li>{{quantity}}&times;{{group.fL}}= {{vL}} francs if the ticket{{plural}} {{to_be}} <a style="color:blue">blue</a>.</li>
 </ul>
 <p>Click "next" to proceed to the auction.</p>
 {% next_button %}

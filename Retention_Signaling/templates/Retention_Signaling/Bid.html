@@ -60,16 +60,16 @@
 
     <div class="column right" style="background-color:lightgray; border-radius:20px;margin:2px">
         <ul>
-            <li style="padding-bottom: 15px;padding-top: 50px">Your budget: {{Constants.buyer_endowment}} francs</li>
+            <li style="padding-bottom: 15px;padding-top: 50px">Your budget: {{group.buyer_endowment}} francs</li>
             <li style="padding-bottom: 15px"> The last bidder remaining purchases the tickets
             </li>
             <li style="padding-bottom: 15px">The tickets will be exchanged for</li>
             <ul>
-                <li style="padding-bottom:15px"> {{quantity}}&times;{{Constants.fH}}= {{vH}} francs if the
+                <li style="padding-bottom:15px"> {{quantity}}&times;{{group.fH}}= {{vH}} francs if the
                     ticket{{plural}}
                     {{to_be}} <a style="color:green">green</a> or
                 </li>
-                <li>{{quantity}}&times;{{Constants.fL}}= {{vL}} francs if the ticket{{plural}} {{to_be}} <a
+                <li>{{quantity}}&times;{{group.fL}}= {{vL}} francs if the ticket{{plural}} {{to_be}} <a
                         style="color:blue">blue</a>.
                 </li>
 

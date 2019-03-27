@@ -26,8 +26,8 @@ def group_model_exists():
 class Constants(BaseConstants):
     name_in_url = 'Retention_Signaling'
     # Session configuration (mostly for demo purposes)
-    players_per_group = 6
-    num_groups = 4
+    players_per_group = 4
+    num_groups = 2
     # Number of rounds and rounds which pay (experimental design)
     num_rounds = 20
     num_payoff_rounds = 1
@@ -42,19 +42,32 @@ class Constants(BaseConstants):
     fH = 8
 
     time_till = 3
+    increment_speed = 1
 
 
 class Subsession(BaseSubsession):
+
+    num_groups = models.IntegerField()
+
+    increment_speed = models.FloatField()
+
     def creating_session(self):
+        self.num_groups = self.session.config['num_groups']
+        self.group_randomly()
+        alpha = self.session.config['alpha']
+        num_payoff_rounds = self.session.config['num_payoff_rounds']
+        self.increment_speed = self.session.config['increment_speed']
 
         # Creates random groups of buyers and sellers every round
-        self.group_randomly()
         # Assigns types
         count = 1
         for group in self.get_groups():
+            group.fL = self.session.config['fL']
+            group.fH = self.session.config['fH']
+            group.buyer_endowment = self.session.config['buyer_endowment']
             players = group.get_players()
             for p in players:
-                p.seller_type = numpy.random.binomial(1, Constants.alpha)
+                p.seller_type = numpy.random.binomial(1, alpha)
                 if p.seller_type == 1:
                     p.seller_color = 'green'
                 else:
@@ -68,7 +81,7 @@ class Subsession(BaseSubsession):
                 rounds.append(i)
 
             for p in self.get_players():
-                p.participant.vars['payoff_rounds'] = random.sample(rounds, Constants.num_payoff_rounds)
+                p.participant.vars['payoff_rounds'] = random.sample(rounds, num_payoff_rounds)
 
         for p in self.get_players():
             if self.round_number in p.participant.vars['payoff_rounds']:
@@ -76,6 +89,14 @@ class Subsession(BaseSubsession):
 
 
 class Group(BaseGroup):
+    fL = models.IntegerField()
+
+    fH = models.IntegerField()
+
+    buyer_endowment = models.IntegerField()
+
+    final_leave_price = models.FloatField(initial=0)
+
     move_count = models.IntegerField(initial=0)
 
     button_activated_already = models.BooleanField(initial=False)
@@ -84,7 +105,7 @@ class Group(BaseGroup):
 
     time_till = models.IntegerField(initial=Constants.time_till)
 
-    time_till_float = models.FloatField(initial=Constants.time_till+0.05)
+    time_till_float = models.FloatField(initial=Constants.time_till + 0.05)
 
     group_number = models.IntegerField()
 
@@ -144,18 +165,20 @@ class Group(BaseGroup):
         winner.auction_winner = True
 
     def set_francs(self):
+        delta = self.session.config['delta']
+        buyer_endowment = self.session.config['buyer_endowment']
         for p in self.get_players():
             if p.role() == 'seller':
-                p.francs = p.quantity_choice * self.price + Constants.delta*(Constants.Q - p.quantity_choice) * (
-                        p.seller_type * (Constants.fH - Constants.fL) + Constants.fL)
-                self.seller_payoff = round(p.francs,2)
+                p.francs = p.quantity_choice * self.price + delta * (Constants.Q - p.quantity_choice) * (
+                        p.seller_type * (self.fH - self.fL) + self.fL)
+                self.seller_payoff = round(p.francs, 2)
             else:
                 if not p.auction_winner:
-                    p.francs = Constants.buyer_endowment
+                    p.francs = buyer_endowment
                 else:
-                    p.francs = round(Constants.buyer_endowment + self.group_quantity * (
-                            self.group_type * (Constants.fH - Constants.fL) + Constants.fL - self.price),2)
-                    self.winner_payoff = round(p.francs,2)
+                    p.francs = round(buyer_endowment + self.group_quantity * (
+                            self.group_type * (self.fH - self.fL) + self.fL - self.price), 2)
+                    self.winner_payoff = round(p.francs, 2)
 
 
 class Player(BasePlayer):
@@ -196,7 +219,7 @@ class Player(BasePlayer):
 
     def update_payment(self):
         if self.payoff_round and not self.payoff_updated:
-            self.payoff += round(self.francs,2) * Constants.conversion_rate
+            self.payoff += round(self.francs, 2) * self.session.config['conversion_rate']
             self.payoff_updated = True
 
 
@@ -231,9 +254,9 @@ def runEverySecond():
         for g in activated_groups:
             g.button_activated_already = True
             g.save()
-            if g.price < Constants.fH:
+            g.remaining_bidders
+            if g.price < g.fH and g.num_in_auction > 1:
                 g.price_float += 0.01
-                g.remaining_bidders
                 g.price = round(g.price_float, 2)
                 g.save()
                 channels.Group(
@@ -241,7 +264,7 @@ def runEverySecond():
                 ).send(
                     {'text': json.dumps(
                         {'price': g.price,
-                         'expense': round(g.price * g.group_quantity,2),
+                         'expense': round(g.price * g.group_quantity, 2),
                          'num': g.num_in_auction,
                          'over': g.auction_over,
                          'activated': g.activated,
@@ -250,7 +273,7 @@ def runEverySecond():
                          'dummy': 1,
                          })}
                 )
-            if int(g.price) == Constants.fH or g.num_in_auction == 1:
+            if int(g.price) == g.fH or g.num_in_auction == 1:
                 g.auction_over = True
                 g.save()
                 channels.Group(
@@ -258,7 +281,7 @@ def runEverySecond():
                 ).send(
                     {'text': json.dumps(
                         {'price': g.price,
-                         'expense': round(g.price * g.group_quantity,2),
+                         'expense': round(g.price * g.group_quantity, 2),
                          'num': g.num_in_auction,
                          'over': g.auction_over,
                          'dummy': 1,
@@ -267,16 +290,16 @@ def runEverySecond():
 
         finished_groups = Group.objects.filter(activated=True, auction_over=True)
         for g in finished_groups:
-            if g.move_count < 500:
+            if g.move_count < 10:
                 g.move_count += 1
                 g.save()
-            if g.move_count == 500:
+            if g.move_count == 10:
                 g.move_count += 1
                 g.save()
                 g.advance_participants()
 
 
 l = task.LoopingCall(runEverySecond)
-l.start(0.9)
+l.start(Constants.increment_speed)
 if not l.running:
     pass

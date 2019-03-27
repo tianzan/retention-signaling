@@ -15,7 +15,17 @@ SESSION_CONFIGS = [
     {
         'name': 'Retention_Signaling',
         'display_name': 'Lab Experiment',
-        'num_demo_participants': 24,
+        'num_demo_participants': 8,
+        'num_payoff_rounds': 1,
+        'conversion_rate': 0.1,
+        'alpha': 0.75,
+        'buyer_endowment': 40,
+        'delta': 0.5,
+        'fL': 6,
+        'fH': 8,
+        'time_till': 3,
+        'num_groups': 2,
+        'increment_speed': 0.9,
         'use_browser_bots': False,
         'app_sequence': [
             'Retention_Signaling'
@@ -48,7 +58,6 @@ ROOMS = [
     },
 ]
 
-
 # AUTH_LEVEL:
 # this setting controls which parts of your site are freely accessible,
 # and which are password protected:
@@ -65,7 +74,6 @@ AUTH_LEVEL = environ.get('OTREE_AUTH_LEVEL')
 ADMIN_USERNAME = 'admin'
 # for security, best to set admin password in an environment variable
 ADMIN_PASSWORD = 'password'
-
 
 # Consider '', None, and '0' to be empty/false
 DEBUG = (environ.get('OTREE_PRODUCTION') in {None, '', '0'})
