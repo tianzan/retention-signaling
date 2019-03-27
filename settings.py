@@ -25,7 +25,7 @@ SESSION_CONFIGS = [
         'increment_size': 0.1,
         'alpha': 0.75,
         'delta': 0.5,
-        'fL': 12,-------
+        'fL': 12,
         'fH': 16,
         'use_browser_bots': False,
         'app_sequence': [
