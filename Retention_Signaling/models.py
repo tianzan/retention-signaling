@@ -51,7 +51,6 @@ class Subsession(BaseSubsession):
         participants = range(1, num_participants + 1)
         random_matrix = numpy.random.choice(participants, size=(self.num_groups, self.players_per_group), replace=False)
         random_matrix_list = random_matrix.tolist()
-        print(random_matrix_list)
         self.set_group_matrix(random_matrix_list)
 
         # Assigns types
