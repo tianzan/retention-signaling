@@ -1,0 +1,18 @@
+{% extends "global/Page.html" %}
+{% load otree static %}
+
+{% block title %}
+    Your Earnings from This Experiment
+{% endblock %}
+
+{% block content %}
+
+<p style="padding-bottom: 10px">The software randomly chose the following rounds to determine your payment:</p>
+<ul>
+{% for round,francs,dollars in payoff_rounds%}
+<li style="padding-bottom: 10px"> In round {{round}}, you earned {{francs}} francs, which converts to {{dollars}} dollars.
+{% endfor %}
+</ul>
+<p>Your total payoff from this session is {{total_payoff}}. </p>
+<p> Thank you for participating.</p>
+{% endblock %}

@@ -7,7 +7,7 @@ from os import environ
 
 SESSION_CONFIG_DEFAULTS = {
     'real_world_currency_per_point': 1.00,
-    'participation_fee': 15.00,
+    'participation_fee': 10.00,
     'doc': "",
 }
 EXTENSION_APPS = ['Retention_Signaling']
@@ -15,7 +15,7 @@ SESSION_CONFIGS = [
     {
         'name': 'Retention_Signaling',
         'display_name': 'Lab Experiment',
-        'num_demo_participants': 8,
+        'num_demo_participants': 24,
         'use_browser_bots': False,
         'app_sequence': [
             'Retention_Signaling'
@@ -34,6 +34,9 @@ REAL_WORLD_CURRENCY_CODE = 'USD'
 USE_POINTS = False
 
 ROOMS = [
+    {'name': 'cess',
+     'display_name': 'CESS Experiment',
+     },
     {
         'name': 'econ101',
         'display_name': 'Econ 101 class',
