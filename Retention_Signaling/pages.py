@@ -132,7 +132,7 @@ class Wait(WaitPage):
         return self.group.group_quantity > 0 and self.round_number <= self.session.config['final_round']
 
     def after_all_players_arrive(self):
-        self.group.start = True
+        self.group.hidden_start = True
 
 
 class Auction(Page):

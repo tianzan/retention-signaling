@@ -36,15 +36,10 @@
 </body>
 <script>
     $(document).ready(function () {
-
-        $('#hi').on('click', function () {
-            document.getElementById('hi').innerHTML = 'Hi';
-            $('.b1').toggleClass('selected1');
-        })
         $('#exit').on('click', function () {
             $('.b').toggleClass('selected');
             $('.b1').toggleClass('selected1');
-            $('#remaining_bidders').css('color','red')
+            // $('#remaining_bidders').css('color','red')
         })
     });
 </script>

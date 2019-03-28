@@ -33,7 +33,8 @@ class Constants(BaseConstants):
     alpha = 0.5
     Q = 5
 
-    time_till = 3
+    hidden_time_till = 2
+    time_till = 4
     increment_speed = 1
 
 
@@ -95,12 +96,14 @@ class Group(BaseGroup):
     # These fields support features of the auction page
     # For before an auction starts
     start = models.BooleanField(initial=False)  # Countdown to auction start begins when start is true
+    hidden_start = models.BooleanField(initial=False)  # To start invisible counter
+    hidden_time_till = models.IntegerField(initial=Constants.hidden_time_till)  # Invisible counter
     time_till = models.IntegerField(initial=Constants.time_till)  # Used for button display
-    time_till_float = models.FloatField(initial=Constants.time_till + 0.05)  # Actual counter (is a float)
+    # time_till_float = models.FloatField(initial=Constants.time_till + 0.05)  # Actual counter (is a float)
 
-    activated = models.BooleanField(initial=False) # Auction is live once activated is true
+    activated = models.BooleanField(initial=False)  # Auction is live once activated is true
     move_count = models.IntegerField(initial=0)
-    button_activated_already = models.BooleanField(initial=False)
+    # button_activated_already = models.BooleanField(initial=False)
 
     price_float = models.FloatField(initial=0)
     num_in_auction = models.IntegerField()
@@ -211,41 +214,56 @@ class Player(BasePlayer):
 
 def runEverySecond():
     if group_model_exists():
-        # Groups are started once all group members reach Wait
-        deactive_groups = Group.objects.filter(activated=False, start=True)
-        for g in deactive_groups:
+        # Groups are hidden started once all group members reach Wait
+        invisible_wait_groups = Group.objects.filter(hidden_start=True)
+        for g in invisible_wait_groups:
+            if g.hidden_time_till > 0:
+                g.hidden_time_till = g.hidden_time_till - 1
+                g.save()
+            else:
+                g.start = True
+                g.hidden_start = False
+                g.save()
+
+        active_wait_groups = Group.objects.filter(activated=False, start=True)
+        for g in active_wait_groups:
             if g.time_till > 0:
-                g.time_till_float = g.time_till_float - 0.5
-                g.time_till = int(g.time_till_float)
+                g.time_till = g.time_till - 1
                 # Save commands are necessary for the database to change
                 g.save()
                 channels.Group(
                     g.get_channel_group_name()
                 ).send(
                     {'text': json.dumps(
-                        {'time_till': g.time_till})}
+                        {'started': g.start,
+                         'activated': g.activated,
+                         'time_till': g.time_till,
+                         'over': False,
+                         'activate_exit': False,
+                         })}
                 )
-            if int(g.time_till) == 0:
+            if g.time_till == 0:
                 # Group is activated once timer hits 0
                 g.activated = True
+                g.start = False
                 g.save()
                 channels.Group(
                     g.get_channel_group_name()
                 ).send(
                     {'text': json.dumps(
-                        {'time_till': g.time_till,
+                        {'started': g.start,
                          'activated': g.activated,
-                         'button_activated': g.button_activated_already,
-                         'leave': 0})}
+                         'time_till': g.time_till,
+                         'activate_exit': True,
+                         'over': False,
+                         })}
                 )
         # The auction is live in activated groups
         activated_groups = Group.objects.filter(activated=True, auction_over=False)
 
         for g in activated_groups:
-            g.button_activated_already = True  # This may need to be in the preceding block of code
-            g.remaining_bidders  # Updates number of bidders in auction: some redundancy with the command in
-            # consumers.py; prevents price from increasing after second-to-last player leaves auction
-
+            g.remaining_bidders
+            g.save()  # May be redundant
             # This block of code is executed if and only if the auction has not maxed out, and there are at least
             # 2 bidders remaining
             if g.price < g.fH and g.num_in_auction > 1:
@@ -259,15 +277,10 @@ def runEverySecond():
                         {'price': g.price,
                          'expense': round(g.price * g.group_quantity, 2),
                          'num': g.num_in_auction,
-                         # seems a bit redundant
-                         'over': g.auction_over,
-                         # seems a bit redundant
-                         'activated': g.activated,
-                         # seems a bit redundant
-                         'button_activated': g.button_activated_already,
-                         'leave': 0,
-                         # This is causing problems, its job is to toggle the button text
-                         'dummy': 1,
+                         'over': False,
+                         'activated': True,
+                         'activate_exit': False,
+                         'started': True
                          })}
                 )
             if int(g.price) == g.fH or g.num_in_auction == 1:
@@ -281,8 +294,10 @@ def runEverySecond():
                          'expense': round(g.price * g.group_quantity, 2),
                          # Sometimes the incorrect number of remaining bidders is displayed for some reason
                          'num': g.num_in_auction,
-                         'over': g.auction_over,
-                         'dummy': 1,
+                         'over': True,
+                         'started': True,
+                         'activated': True,
+                         'activate_exit': False
                          })}
                 )
         # Timer for moving to the next page after an auction concludes
