@@ -235,8 +235,8 @@ def runEverySecond():
                     g.get_channel_group_name()
                 ).send(
                     {'text': json.dumps(
-                        {'started': g.start,
-                         'activated': g.activated,
+                        {'started': True,
+                         'activated': False,
                          'time_till': g.time_till,
                          'over': False,
                          'activate_exit': False,
@@ -251,8 +251,8 @@ def runEverySecond():
                     g.get_channel_group_name()
                 ).send(
                     {'text': json.dumps(
-                        {'started': g.start,
-                         'activated': g.activated,
+                        {'started': True,
+                         'activated': True,
                          'time_till': g.time_till,
                          'activate_exit': True,
                          'over': False,
