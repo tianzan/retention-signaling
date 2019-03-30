@@ -97,10 +97,12 @@
         // Not sure if this is redundant
         sendmessage = function (what) {
             var num  = $('#num_in_auction').text()-1
-            console.log(num)
             var over = false
-            if (num==2){
+            if (num<=2){
                 over = true
+            }
+            else {
+                over = false
             }
             var msg = {
                     'started': true,
