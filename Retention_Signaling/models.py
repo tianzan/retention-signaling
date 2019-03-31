@@ -57,7 +57,10 @@ class Subsession(BaseSubsession):
         # Assigns types
         count = 1
         for group in self.get_groups():
-            group.increment_size = self.session.config['increment_size']
+            group.increment_size1 = self.session.config['increment_size1']
+            group.increment_size2 = self.session.config['increment_size2']
+            group.increment_size = self.session.config['increment_size1']
+            group.start_price = self.session.config['start_price']
             group.fL = self.session.config['fL']
             group.fH = self.session.config['fH']
             group.buyer_endowment = self.session.config['buyer_endowment']
@@ -88,7 +91,10 @@ class Subsession(BaseSubsession):
 class Group(BaseGroup):
     # The following four fields store parameters set in session_configs
     # They are set in the creating_session method
+    increment_size1 = models.FloatField()
+    increment_size2 = models.FloatField()
     increment_size = models.FloatField()
+    start_price = models.FloatField()
     fL = models.IntegerField()
     fH = models.IntegerField()
     buyer_endowment = models.IntegerField()
@@ -247,6 +253,8 @@ def runEverySecond():
                 # Group is activated once timer hits 0
                 g.activated = True
                 g.start = False
+                g.price = g.start_price
+                g.price_float = g.start_price
                 g.save()
                 channels.Group(
                     g.get_channel_group_name()
@@ -264,12 +272,12 @@ def runEverySecond():
 
         for g in activated_groups:
             g.remaining_bidders
-            g.save()  # May be redundant
-            # This block of code is executed if and only if the auction has not maxed out, and there are at least
-            # 2 bidders remaining
+            g.save()
             if g.price < g.fH and g.num_in_auction > 1:
                 g.price_float += g.increment_size
                 g.price = round(g.price_float, 2)
+                if g.price >= g.fL:
+                    g.increment_size = g.increment_size2
                 g.save()
                 channels.Group(
                     g.get_channel_group_name()
