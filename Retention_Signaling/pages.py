@@ -11,17 +11,20 @@ import random
 class Welcome(Page):
     def is_displayed(self):
         return self.round_number == 1
+
     timeout_seconds = 5
     pass
 
+
 class Quiz(Page):
     def is_displayed(self):
-        return self.round_number == 1
+        return self.round_number == 1 and self.session.config['quiz'] == 1
+
     def vars_for_template(self):
         fH = self.group.fH
         fL = self.group.fL
         delta = self.session.config['delta']
-        value = int(delta*(self.player.seller_type)*(fH-fL)+fL)
+        value = int(delta * (self.player.seller_type) * (fH - fL) + fL)
         buyer_endowment = self.session.config['buyer_endowment']
         return {
             'fH': fH,
@@ -31,15 +34,18 @@ class Quiz(Page):
             'buyer_endowment': buyer_endowment
         }
 
+
 class StartWait(WaitPage):
     def is_displayed(self):
         return self.round_number <= self.session.config['final_round']
+
     wait_for_all_groups = True
 
 
 class QuantityChoice(Page):
     def is_displayed(self):
         return self.round_number <= self.session.config['final_round']
+
     form_model = 'player'
     form_fields = ['quantity_choice']
 
@@ -63,6 +69,7 @@ class QuantityChoice(Page):
 class AssignWait(WaitPage):
     def is_displayed(self):
         return self.round_number <= self.session.config['final_round']
+
     def after_all_players_arrive(self):
         # Gathers relevant info from the group's seller to pass to group
         self.group.get_type()
@@ -197,7 +204,8 @@ class Auction(Page):
 # Waitpage that bidders see once they leave the auction
 class AuctionWait(Page):
     def is_displayed(self):
-        return self.group.num_in_auction > 1 and not self.group.auction_over and self.group.group_quantity > 0 and self.round_number <= self.session.config['final_round']
+        return self.group.num_in_auction > 1 and not self.group.auction_over and self.group.group_quantity > 0 and self.round_number <= \
+               self.session.config['final_round']
 
     def vars_for_template(self):
         data = self.session.vars
@@ -280,6 +288,7 @@ class AuctionFinish(Page):
 class ResultsWaitPage(WaitPage):
     def is_displayed(self):
         return self.round_number <= self.session.config['final_round']
+
     wait_for_all_groups = True
 
     def after_all_players_arrive(self):
@@ -307,6 +316,7 @@ class ResultsWaitPage(WaitPage):
 class AllGroupsWaitPage(WaitPage):
     def is_displayed(self):
         self.round_number <= self.session.config['final_round']
+
     wait_for_all_groups = True
 
 
@@ -327,6 +337,7 @@ class Results(Page):
 class PerformanceReview(Page):
     def is_displayed(self):
         return self.round_number <= self.session.config['final_round']
+
     timeout_seconds = 30
 
     def vars_for_template(self):
