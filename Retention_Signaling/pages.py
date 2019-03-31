@@ -14,6 +14,22 @@ class Welcome(Page):
     timeout_seconds = 5
     pass
 
+class Quiz(Page):
+    def is_displayed(self):
+        return self.round_number == 1
+    def vars_for_template(self):
+        fH = self.group.fH
+        fL = self.group.fL
+        delta = self.session.config['delta']
+        value = int(delta*(self.player.seller_type)*(fH-fL)+fL)
+        buyer_endowment = self.session.config['buyer_endowment']
+        return {
+            'fH': fH,
+            'fL': fL,
+            'delta': delta,
+            'value': value,
+            'buyer_endowment': buyer_endowment
+        }
 
 class StartWait(WaitPage):
     def is_displayed(self):
@@ -355,6 +371,7 @@ class Payoffs(Page):
 
 page_sequence = [
     Welcome,
+    Quiz,
     StartWait,
     # Page 1
     QuantityChoice,
