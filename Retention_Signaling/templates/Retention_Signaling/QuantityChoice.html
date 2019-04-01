@@ -6,6 +6,9 @@
         .otree-timer {
             display: none;
         }
+        .otree-body {
+        max-width:1500px
+        }
     </style>
 {% endblock %}
 
@@ -36,6 +39,7 @@ Round {{round_number}}
             float: left;
             width: 50%;
             padding: 10px;
+            height: 800px;
         }
 
         /* Clear floats after the columns */
@@ -61,10 +65,7 @@ Round {{round_number}}
     </div>
     <div class="column">
         <h2 style="text-align: center;">History</h2>
-        <p> {% if roundNumber > 0 %}
-            {% include 'includes/history.html' %}
-            {% endif %}
-        </p>
+        <p>{% include 'includes/history_seller.html' %}</p>
     </div>
 </div>
 

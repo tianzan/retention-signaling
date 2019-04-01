@@ -31,6 +31,11 @@ SESSION_CONFIGS = [
         'delta': 0.5,
         'fL': 12,
         'fH': 16,
+        'Welcome_Time': 5,
+        'Assign_Time': 30,
+        'Auction_Finish_Time': 30,
+        'Results_Time': 40,
+        'Performance_Time': 30,
         'use_browser_bots': False,
         'app_sequence': [
             'Retention_Signaling'

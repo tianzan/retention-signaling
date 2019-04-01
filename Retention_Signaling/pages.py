@@ -12,8 +12,8 @@ class Welcome(Page):
     def is_displayed(self):
         return self.round_number == 1
 
-    timeout_seconds = 5
-    pass
+    def get_timeout_seconds(self):
+        return self.session.config['Welcome_Time']
 
 
 class Quiz(Page):
@@ -142,7 +142,8 @@ class AssignRole(Page):
             'round_number': self.round_number
         }
 
-    timeout_seconds = 30
+    def get_timeout_seconds(self):
+        return self.session.config['Assign_Time']
 
     # Enters buyers into auction
     def before_next_page(self):
@@ -237,7 +238,8 @@ class AuctionFinish(Page):
     def is_displayed(self):
         return self.group.group_quantity > 0 and self.round_number <= self.session.config['final_round']
 
-    timeout_seconds = 30
+    def get_timeout_seconds(self):
+        return self.session.config['Auction_Finish_Time']
 
     def vars_for_template(self):
         fH = self.group.fH
@@ -315,13 +317,14 @@ class ResultsWaitPage(WaitPage):
 
 class AllGroupsWaitPage(WaitPage):
     def is_displayed(self):
-        self.round_number <= self.session.config['final_round']
+        return self.round_number <= self.session.config['final_round']
 
     wait_for_all_groups = True
 
 
 class Results(Page):
-    timeout_seconds = 40
+    def get_timeout_seconds(self):
+        return self.session.config['Results_Time']
 
     def vars_for_template(self):
         data = {}
@@ -338,7 +341,8 @@ class PerformanceReview(Page):
     def is_displayed(self):
         return self.round_number <= self.session.config['final_round']
 
-    timeout_seconds = 30
+    def get_timeout_seconds(self):
+        return self.session.config['Performance_Time']
 
     def vars_for_template(self):
         self.participant.vars[str(self.round_number) + 'R' + str(self.group.group_number)] = {

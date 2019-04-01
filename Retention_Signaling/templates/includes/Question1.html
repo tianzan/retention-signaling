@@ -41,15 +41,15 @@
     var fL = {{fL}};
     var delta = {{delta}};
     var buyer_endowment = {{buyer_endowment}};
-    var price = Math.floor(Math.random()*(fH+1));
+    var price = Math.floor(Math.random()*fH+1);
     var number_tickets = Math.floor(Math.random()*5+1);
     var keep_tickets = 5-number_tickets;
 
     var q0_ans = buyer_endowment;
     var q1_ans = price*number_tickets+delta*(5-number_tickets)*fH;
     var q2_ans = price*number_tickets+delta*(5-number_tickets)*fL;
-    var q3_ans = Math.floor(delta*fH);
-    var q4_ans = Math.floor(delta*fL);
+    var q3_ans = 5*Math.floor(delta*fH);
+    var q4_ans = 5*Math.floor(delta*fL);
     var q5_ans = buyer_endowment + number_tickets*(fH-price);
     var q6_ans = buyer_endowment + number_tickets*(fL-price);
     var q7_ans = fH;
@@ -57,7 +57,7 @@
 
     var current_question = 'no_win_buyer';
     var question_text = '';
-    var question_sequence = [0,1,2];
+    var question_sequence = [0,1,2,3,4,5,6];
     var answer_sequence = [q0_ans,q1_ans,q2_ans];
     var questions_left = question_sequence.length;
     // 0: if a buyer does not win the auction
@@ -84,12 +84,8 @@
 
         else if (try_count>0 && !last_question){
             var new_sequence = question_sequence.slice();
-            console.log('Question sequence before splice ' + question_sequence);
-            console.log('New sequence before splice ' + question_sequence);
             new_sequence.splice(i,1);
             current_question =  new_sequence[Math.floor(Math.random()*new_sequence.length)];
-            console.log('Question sequence' + question_sequence)
-            console.log('New sequence' + new_sequence)
         }
         else {
             current_question = i;
@@ -98,14 +94,14 @@
     }
 
     function reset_random(){
-        price = Math.floor(Math.random()*(fH+1));
-        number_tickets = Math.floor(Math.random()*6);
+        price = Math.floor(Math.random()*fH+1);
+        number_tickets = Math.floor(Math.random()*5+1);
         keep_tickets = 5-number_tickets;
         q1_ans = price*number_tickets+delta*(5-number_tickets)*fH;
         q2_ans = price*number_tickets+delta*(5-number_tickets)*fL;
         q5_ans = buyer_endowment + number_tickets*(fH-price);
         q6_ans = buyer_endowment + number_tickets*(fL-price);
-        answer_sequence = [q0_ans,q1_ans,q2_ans];
+        answer_sequence = [q0_ans,q1_ans,q2_ans,q3_ans,q4_ans,q5_ans,q6_ans];
     }
 
 
@@ -121,6 +117,22 @@
             question_text = 'Suppose that you are a seller with blue tickets and that you choose to sell ' + number_tickets
             + ' tickets for a price of ' + price + ' francs per-ticket.'
         }
+        if (question == 3){
+            question_text = 'Suppose that you are a seller with green tickets and that you choose to sell ' + 0
+            + ' tickets.'
+        }
+        if (question == 4){
+            question_text = 'Suppose that you are a seller with blue tickets and that you choose to sell ' + 0
+            + ' tickets.'
+        }
+        if (question == 5){
+            question_text = 'Suppose that you are a buyer, and you purchase ' + number_tickets
+            + ' tickets for a price of ' + price + ' francs per-ticket. After the auction is over, you learn the tickets are green.'
+        }
+        if (question == 6){
+            question_text = 'Suppose that you are a buyer, and you purchase ' + number_tickets
+            + ' tickets for a price of ' + price + ' francs per-ticket. After the auction is over, you learn the tickets are blue.'
+        }
         $('#question_text').html(question_text);
         correct_answer = answer_sequence[current_question];
         try_count = 0;
@@ -131,19 +143,19 @@
     function check_answer(question){
         var answer = Number($('#answer').val());
         if (answer == correct_answer && questions_left==1 && (try_count==0 || question==0)){
-            alert('Correct! Try count' + try_count);
+            alert('Correct!' );
             $('.q1').toggleClass('selected');
             $('#next').css('display','inline');
             $('#next').prop('disabled',false);
         }
         else if (answer == correct_answer && questions_left==1 && try_count>0 && !(question==0)){
-            alert('Correct! Try count: ' + try_count + '. Questions left: ' +questions_left);
+            alert('Correct!');
             new_question(question,try_count,true);
             display_question(current_question);
 
         }
         else if (answer == correct_answer && questions_left>1){
-            alert('Correct! Try count: ' + try_count + '. Questions left: ' +questions_left);
+            alert('Correct!');
             if(try_count==0){
                 questions_left -=1;
             }
@@ -152,7 +164,7 @@
 
         }
         else{
-            alert('Incorrect. Please try again.' + correct_answer);
+            alert('Incorrect. Please try again. ' + correct_answer );
             try_count += 1;
         }
     }
