@@ -58,7 +58,7 @@
     var current_question = 'no_win_buyer';
     var question_text = '';
     var question_sequence = [0,1,2,3,4,5,6];
-    var answer_sequence = [q0_ans,q1_ans,q2_ans];
+    var answer_sequence = [q0_ans,q1_ans,q2_ans, q3_ans,q4_ans,q5_ans,q6_ans];
     var questions_left = question_sequence.length;
     // 0: if a buyer does not win the auction
     // 1: if a seller sells x>0 green tickets
@@ -164,7 +164,7 @@
 
         }
         else{
-            alert('Incorrect. Please try again. ' + correct_answer );
+            alert('Incorrect. Please try again. ' + answer_sequence );
             try_count += 1;
         }
     }
