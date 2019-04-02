@@ -1,0 +1,119 @@
+<!--&lt;!&ndash;<!DOCTYPE html>&ndash;&gt;-->
+<!--&lt;!&ndash;<html>&ndash;&gt;-->
+<head>
+</head>
+<style>
+
+
+    .fixed_header table {
+        font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+        border-collapse: collapse;
+        width: 100%;
+    }
+
+
+    .fixed_header td, th {
+        border: 1px solid #ddd;
+        padding: 8px;
+        text-align: center;
+    }
+
+
+    .fixed_header tr:nth-child(even) {
+        background-color: #f2f2f2;
+    }
+
+
+    .fixed_header tr:hover {
+        background-color: #ddd;
+    }
+
+
+    .fixed_header th {
+        padding-top: 12px;
+        padding-bottom: 12px;
+        text-align: center;
+        background-color: #C732A4;
+        color: white;
+    }
+
+
+
+    .fixed_header {
+        overflow: hidden;
+    }
+
+    .fixed_header tbody {
+        display: block;
+        overflow-y: auto;
+        height: 350px;
+
+    }
+
+    .fixed_header thead tr {
+        display: block;
+    }
+
+
+    .fixed_header th, .fixed_header td {
+        padding: 5px;
+        width: 400px;
+    }
+
+
+</style>
+<body>
+
+
+<div>
+    <table class=fixed_header>
+        <thead>
+        <tr>
+            <th>Round #</th>
+            <th># of Tickets Offered</th>
+            <th>Winning Price</th>
+            <th>Seller Earnings</th>
+            <th>Ticket Color</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for k,v in data.items %}
+        <tr>
+            <td> {{v.round}}</td>
+            <td> {{v.quantity}}</td>
+            <td> {{v.price}}</td>
+            <td> {{v.seller_payoff}}</td>
+            <td> {{v.color}}</td>
+        </tr>
+        {% endfor %}
+        </tbody>
+
+    </table>
+</div>
+
+</body>
+
+<script>
+    var $table = $('table.fixed_header'),
+        $bodyCells = $table.find('tbody tr:first').children(),
+        colWidth;
+
+    // Get the tbody columns width array
+    colWidth = $bodyCells.map(function () {
+        return $(this).width();
+    }).get();
+
+    // Set the width of thead columns
+    $table.find('thead tr').children().each(function (i, v) {
+        $(v).width(colWidth[i]);
+    });
+    $(function () {
+        $('tbody').each(function (elem, index) {
+            var arr = $.makeArray($("tr", this).detach());
+            arr.reverse();
+            $(this).append(arr);
+        });
+    });
+</script>
+
+<!--</html>-->
