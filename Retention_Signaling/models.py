@@ -141,7 +141,10 @@ class Group(BaseGroup):
 
     def set_quantity(self):
         seller = self.get_player_by_role('seller')
-        self.group_quantity = seller.quantity_choice
+        seller_type = seller.seller_type
+        quantity = seller_type*seller.quantity_choice_green+(1-seller_type)*seller.quantity_choice_blue
+        self.group_quantity = quantity
+        seller.quantity_choice = quantity
 
     def get_type(self):
         seller = self.get_player_by_role('seller')
@@ -183,6 +186,8 @@ class Player(BasePlayer):
     seller_type = models.BooleanField()
     seller_color = models.StringField()
     quantity_choice = models.IntegerField(initial=-1)
+    quantity_choice_blue = models.IntegerField(initial=-1)
+    quantity_choice_green = models.IntegerField(initial=-1)
     in_auction = models.BooleanField(initial=False)
     leave_price = models.FloatField()
     auction_winner = models.BooleanField(initial=False)

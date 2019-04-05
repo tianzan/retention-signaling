@@ -47,20 +47,22 @@ class QuantityChoice(Page):
         return self.round_number <= self.session.config['final_round']
 
     form_model = 'player'
-    form_fields = ['quantity_choice']
+    form_fields = ['quantity_choice_blue', 'quantity_choice_green']
 
     # gathers data to pass to history script
     def vars_for_template(self):
         fH = self.group.fH
         fL = self.group.fL
         delta = self.session.config['delta']
-        value = int(delta * (self.player.seller_type * (fH - fL) + fL))
+        green_value = int(delta * fH)
+        blue_value = int(delta * fL)
         if self.round_number > 0:
             data = self.session.vars
             return {
                 'roundNumber': self.round_number,
                 'data': data,
-                'value': value,
+                'green_value': green_value,
+                'blue_value': blue_value,
                 'color': self.player.seller_color,
                 'round_number': self.round_number
             }
