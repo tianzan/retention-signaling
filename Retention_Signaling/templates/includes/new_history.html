@@ -18,16 +18,17 @@
         text-align: center;
     }
 
-
     .fixed_header tr:nth-child(even) {
         background-color: #f2f2f2;
     }
+
+
 
     .fixed_header th {
         padding-top: 12px;
         padding-bottom: 12px;
         text-align: center;
-        background-color: darkslategray;
+        background-color: lightslategray;
         color: white;
     }
 
@@ -56,9 +57,9 @@
     }
     .fixed_header thead tr th:first-child,
     .fixed_header tbody tr td:first-child {
-        width: 80px;
+      width: 80px;
         min-width: 80px;
-        max-width: 80px;
+    max-width: 80px;
         }
     .fixed_header thead tr th:nth-child(2),
     .fixed_header tbody tr td:nth-child(2){
@@ -70,13 +71,13 @@
 
 
 
+
 </style>
 <body>
 
 
-
 <div>
-    <table align=center class=fixed_header>
+    <table align="center" class=fixed_header>
         <thead>
         <tr>
             <th>Round #</th>
@@ -84,6 +85,7 @@
             <th># of Tickets Offered</th>
             <th>Ticket Color</th>
             <th>Price</th>
+            <th>Seller Earnings</th>
             <th>Purchaser Earnings</th>
         </tr>
         </thead>
@@ -91,12 +93,13 @@
         {% for k,v in data.items %}
         <tr>
             {% if forloop.counter|divisibleby:2 %}
-            <td rowspan="2"> <h2>{{v.round}}</h2></td>
+            <td rowspan="2"> {{v.round}}</td>
                 {% endif %}
             <td data-id={{v.group_number}}> {{v.group_number}}</td>
-            <td> {{v.quantity}}</td>
-            <td style="color:{{v.color}}"> {{v.color}}</td>
-            <td> {{v.price}}</td>
+            <td class="highlight" > {{v.quantity}}</td>
+            <td class="highlight" style="color:{{v.color}}"> {{v.color}}</td>
+            <td class="highlight" > {{v.price}}</td>
+            <td> {{v.seller_payoff}}</td>
             <td> {{v.winner_payoff}}</td>
         </tr>
         {% endfor %}
