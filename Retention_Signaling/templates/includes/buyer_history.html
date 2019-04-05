@@ -1,48 +1,79 @@
 <!--&lt;!&ndash;<!DOCTYPE html>&ndash;&gt;-->
 <!--&lt;!&ndash;<html>&ndash;&gt;-->
 <head>
-    <style>
-
-        #group_instance {
-            font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
-            border-collapse: collapse;
-            width: 100%;
-        }
-
-        #group_instance td, #group_instance th {
-            border: 1px solid #ddd;
-            padding: 8px;
-            text-align: center;
-        }
-
-        #group_instance tr:nth-child(even) {
-            background-color: #f2f2f2;
-        }
-
-        #group_instance tr:hover {
-            background-color: #ddd;
-        }
-
-        #group_instance th {
-            padding-top: 12px;
-            padding-bottom: 12px;
-            text-align: center;
-            background-color: darkslategray;
-            color: white;
-        }
-
-    </style>
 </head>
+<style>
+
+
+    .fixed_header1 table {
+        font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+        border-collapse: collapse;
+        width: 100%;
+    }
+
+
+    .fixed_header1 td, th {
+        border: 1px solid #ddd;
+        padding: 8px;
+        text-align: center;
+    }
+
+
+    .fixed_header1 tr:nth-child(even) {
+        background-color: #f2f2f2;
+    }
+
+
+    .fixed_header1 tr:hover {
+        background-color: #ddd;
+    }
+
+
+    .fixed_header1 th {
+        padding-top: 12px;
+        padding-bottom: 12px;
+        text-align: center;
+        background-color: lightslategray;
+        color: white;
+    }
+
+
+
+    .fixed_header1 {
+        overflow: hidden;
+    }
+
+    .fixed_header1 tbody {
+        display: block;
+        overflow-y: auto;
+        height: 150px;
+
+    }
+
+    .fixed_header1 thead tr {
+        display: block;
+    }
+
+
+    .fixed_header1 th, .fixed_header1 td {
+        padding: 5px;
+        width: 400px;
+    }
+
+
+</style>
 <body>
 
 
-<table id="group_instance">
+<div>
+
+<table class="fixed_header1">
     <thead>
     <tr>
         <th>Round #</th>
-        <th># of Tickets Offered by Seller</th>
+        <th># Tickets for Sale</th>
         <th>Ticket Color</th>
-        <th>Winning Price</th>
+        <th> Price</th>
         <th>Your Earnings</th>
     </tr>
     </thead>
@@ -51,15 +82,38 @@
     <tr>
         <td> {{v.round}}</td>
         <td> {{v.group_quantity}}</td>
-        <td> {{v.group_color}}</td>
+        <td style="color:{{v.group_color}}"> {{v.group_color}}</td>
         <td> {{v.price}}</td>
         <td> {{v.francs}}</td>
     </tr>
     {% endif %}
     {% endfor %}
 </table>
-
+</div>
 
 </body>
+
+<script>
+    var $table = $('table.fixed_header1'),
+        $bodyCells = $table.find('tbody tr:first').children(),
+        colWidth;
+
+    // Get the tbody columns width array
+    colWidth = $bodyCells.map(function () {
+        return $(this).width();
+    }).get();
+
+    // Set the width of thead columns
+    $table.find('thead tr').children().each(function (i, v) {
+        $(v).width(colWidth[i]);
+    });
+    $(function () {
+        $('tbody').each(function (elem, index) {
+            var arr = $.makeArray($("tr", this).detach());
+            arr.reverse();
+            $(this).append(arr);
+        });
+    });
 </script>
 
+<!--</html>-->

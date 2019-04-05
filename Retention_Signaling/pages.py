@@ -64,7 +64,9 @@ class QuantityChoice(Page):
                 'green_value': green_value,
                 'blue_value': blue_value,
                 'color': self.player.seller_color,
-                'round_number': self.round_number
+                'round_number': self.round_number,
+                'group_number': self.group.group_number,
+
             }
 
 
@@ -110,7 +112,8 @@ class NoAuction(Page):
             'to_be': to_be,
             'plural': plural,
             'pronoun': pronoun,
-            'round_number': self.round_number
+            'group_number': self.group.group_number,
+
         }
 
 
@@ -141,7 +144,8 @@ class AssignRole(Page):
             'to_be': to_be,
             'plural': plural,
             'pronoun': pronoun,
-            'round_number': self.round_number
+            'round_number': self.round_number,
+            'group_number': self.group.group_number,
         }
 
     def get_timeout_seconds(self):
@@ -187,7 +191,8 @@ class Auction(Page):
             'plural': plural,
             'pronoun': pronoun,
             'data': data,
-            'round_number': self.round_number
+            'round_number': self.round_number,
+            'group_number': self.group.group_number,
         }
 
     # def before_next_page(self):
@@ -224,7 +229,9 @@ class AuctionWait(Page):
             'to_be': to_be,
             'plural': plural,
             'data': data,
-            'round_number': self.round_number
+            'round_number': self.round_number,
+            'group_number': self.group.group_number,
+
         }
 
 
@@ -285,7 +292,8 @@ class AuctionFinish(Page):
             'seller_value': round(delta * ticket_value, 2),
             'winner_earnings': round(buyer_endowment - revenue + self.group.group_quantity * ticket_value, 2),
             'seller_earnings': round(revenue + delta * total_value, 2),
-            'round_number': self.round_number
+            'round_number': self.round_number,
+
         }
 
 
@@ -356,7 +364,7 @@ class PerformanceReview(Page):
             'price': self.group.price,
             'group_quantity': self.group.group_quantity,
             'group_color': self.group.group_color,
-            'francs': self.player.francs
+            'francs': self.player.francs,
         }
         data = self.session.vars
         if self.round_number == 1 and not self.player.dictionary_deleted:
@@ -367,7 +375,8 @@ class PerformanceReview(Page):
             dict = self.participant.vars
         return {
             'data1': dict,
-            'data': data
+            'data': data,
+            'group_number': self.group.group_number,
         }
 
 
@@ -405,8 +414,7 @@ page_sequence = [
     ResultsWaitPage,
     # AllGroupsWaitPage,
     # Page 5
-    Results,
-    # Page 6
+    # Page 5
     PerformanceReview,
     Payoffs
 ]

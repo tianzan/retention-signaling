@@ -25,7 +25,7 @@
 {% endblock %}
 
 {% block title %}
-Round {{round_number}}
+Round {{round_number}}: Seller
 {% endblock %}
 
 
@@ -51,10 +51,13 @@ Round {{round_number}}
     </style>
 </head>
 
-<div style="width:100%content-box;height:50px;background-color:darkslategray;"></div>
+<div style="width:100%content-box;height:50px;background-color:darkslategray;color:white;padding-bottom: 10px"> </div>
 
 
 {% include 'includes/strategy_choice.html' %}
+<hr style="padding:5px">
+<div align="center" > <h2> Results from Past Rounds </h2></div>
+
 {% include 'includes/history_seller.html' %}
 
 

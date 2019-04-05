@@ -23,17 +23,11 @@
         background-color: #f2f2f2;
     }
 
-
-    .fixed_header tr:hover {
-        background-color: #ddd;
-    }
-
-
     .fixed_header th {
         padding-top: 12px;
         padding-bottom: 12px;
         text-align: center;
-        background-color: #C732A4;
+        background-color: darkslategray;
         color: white;
     }
 
@@ -46,7 +40,7 @@
     .fixed_header tbody {
         display: block;
         overflow-y: auto;
-        height: 350px;
+        height: 200px;
 
     }
 
@@ -57,62 +51,75 @@
 
     .fixed_header th, .fixed_header td {
         padding: 5px;
-        width: 400px;
+        width: 230px;
+
     }
+    .fixed_header thead tr th:first-child,
+    .fixed_header tbody tr td:first-child {
+        width: 80px;
+        min-width: 80px;
+        max-width: 80px;
+        }
+    .fixed_header thead tr th:nth-child(2),
+    .fixed_header tbody tr td:nth-child(2){
+        width: 80px;
+        min-width: 80px;
+        max-width: 80px;
+        }
+
+
 
 
 </style>
 <body>
 
 
+
 <div>
-    <table class=fixed_header>
+    <table align=center class=fixed_header>
         <thead>
         <tr>
             <th>Round #</th>
+            <th>Group #</th>
             <th># of Tickets Offered</th>
-            <th>Winning Price</th>
+            <th>Price</th>
+             <th>Ticket Color</th>
             <th>Seller Earnings</th>
-            <th>Ticket Color</th>
         </tr>
         </thead>
         <tbody>
         {% for k,v in data.items %}
         <tr>
-            <td> {{v.round}}</td>
+            {% if forloop.counter|divisibleby:2 %}
+            <td rowspan="2"> <h2>{{v.round}}</h2></td>
+                {% endif %}
+            <td data-id={{v.group_number}}> {{v.group_number}}</td>
             <td> {{v.quantity}}</td>
             <td> {{v.price}}</td>
+            <td style="color:{{v.color}}"> {{v.color}}</td>
             <td> {{v.seller_payoff}}</td>
-            <td> {{v.color}}</td>
         </tr>
         {% endfor %}
         </tbody>
 
     </table>
 </div>
-
 </body>
 
 <script>
-    var $table = $('table.fixed_header'),
-        $bodyCells = $table.find('tbody tr:first').children(),
-        colWidth;
 
-    // Get the tbody columns width array
-    colWidth = $bodyCells.map(function () {
-        return $(this).width();
-    }).get();
 
-    // Set the width of thead columns
-    $table.find('thead tr').children().each(function (i, v) {
-        $(v).width(colWidth[i]);
-    });
     $(function () {
         $('tbody').each(function (elem, index) {
             var arr = $.makeArray($("tr", this).detach());
             arr.reverse();
             $(this).append(arr);
         });
+        $('td').each(function() {
+            if ($(this).attr("data-id") == {{group_number}}) {
+                $(this).css('color', 'orangered')
+            }
+        })
     });
 </script>
 
