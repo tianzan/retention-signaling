@@ -29,7 +29,7 @@
     </h6>
     <h6 style="padding-left: 10px;">Number of tickets for sale: {{quantity}}</h6>
     <div style="font-size: 80px;text-align: center"><a id="current">Current Price:</a> <span class="label label-success"
-                                                                                            id='group_price'>{{ group.price }}</span>
+                                                                                            id='group_price'>{{ group.start_price }}</span>
     </div>
     <p style="padding: 15px">
         <button class="b1 btn btn-primary btn-lg btn-danger" id='seller_leave'
@@ -44,7 +44,7 @@
 
 <hr>
 
-{% include 'includes/history.html' %}
+{% include 'includes/history_seller.html' %}
 
 </body>
 

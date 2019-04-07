@@ -318,7 +318,7 @@ def runEverySecond():
         finished_groups = Group.objects.filter(activated=True, auction_over=True)
         for g in finished_groups:
             # Could put the max move_count into session_configs
-            if g.move_count < 10:
+            if g.move_count < 1:
                 g.move_count += 1
                 g.save()
             if g.move_count == 10:

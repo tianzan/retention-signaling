@@ -31,6 +31,9 @@
         background-color: lightslategray;
         color: white;
     }
+    .fixed_header tbody tr:nth-child({{num_groups}}n) {
+    border-bottom: 3px solid black;
+    }
 
 
 
@@ -52,7 +55,7 @@
 
     .fixed_header th, .fixed_header td {
         padding: 5px;
-        width: 230px;
+        width: 220px;
 
     }
     .fixed_header thead tr th:first-child,
@@ -78,29 +81,30 @@
 
 <div>
     <table align="center" class=fixed_header>
+        <caption style="caption-side: top; font-size: xx-large;" class="text-center">Results from All Rounds</caption>
         <thead>
         <tr>
-            <th>Round #</th>
-            <th>Group #</th>
-            <th># of Tickets Offered</th>
-            <th>Ticket Color</th>
-            <th>Price</th>
-            <th>Seller Earnings</th>
-            <th>Purchaser Earnings</th>
+            <th style="border-bottom: 2px solid darkslategray">Round #</th>
+            <th style="border-bottom: 2px solid darkslategray">Group #</th>
+            <th style="border-bottom: 2px solid darkslategray"># of Tickets Offered</th>
+            <th style="border-bottom: 2px solid darkslategray">Ticket Color</th>
+            <th style="border-bottom: 2px solid darkslategray">Price (francs per-ticket)</th>
+            <th style="border-bottom: 2px solid darkslategray">Seller Earnings (francs)</th>
+            <th style="border-bottom: 2px solid darkslategray">Purchaser Earnings (francs)</th>
         </tr>
         </thead>
         <tbody>
         {% for k,v in data.items %}
         <tr>
-            {% if forloop.counter|divisibleby:2 %}
-            <td rowspan="2"> {{v.round}}</td>
+            {% if forloop.counter|divisibleby:num_groups %}
+            <td data-id=-1 data-value=-1  rowspan={{num_groups}} style="border-bottom: 3px solid black; border-right: 3px solid black"> <h1>{{v.round}}</h1></td>
                 {% endif %}
-            <td data-id={{v.group_number}}> {{v.group_number}}</td>
-            <td class="highlight" > {{v.quantity}}</td>
-            <td class="highlight" style="color:{{v.color}}"> {{v.color}}</td>
-            <td class="highlight" > {{v.price}}</td>
-            <td> {{v.seller_payoff}}</td>
-            <td> {{v.winner_payoff}}</td>
+            <td data-id={{v.group_number}} data-value={{v.round}}> {{v.group_number}}</td>
+            <td data-id=-1 data-value=-1 > {{v.quantity}}</td>
+            <td data-id=-1 data-value=-1  style="color:{{v.color}}"> {{v.color}}</td>
+            <td data-id=-1 data-value=-1 > {{v.price}}</td>
+            <td data-id=-1 data-value=-1 > {{v.seller_payoff}}</td>
+            <td data-id=-1 data-value=-1 > {{v.winner_payoff}}</td>
         </tr>
         {% endfor %}
         </tbody>
@@ -119,8 +123,10 @@
             $(this).append(arr);
         });
         $('td').each(function() {
-            if ($(this).attr("data-id") == {{group_number}}) {
-                $(this).css('color', 'orangered')
+            var group_numbers = {{group_numbers}};
+            var round_number = $(this).attr('data-value')-1;
+            if (group_numbers[round_number]==$(this).attr('data-id')){
+                $(this).css('color','red');
             }
         })
     });

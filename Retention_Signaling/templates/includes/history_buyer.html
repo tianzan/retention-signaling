@@ -40,7 +40,7 @@
     .fixed_header tbody {
         display: block;
         overflow-y: auto;
-        height: 200px;
+        height: 145px;
 
     }
 
@@ -51,7 +51,7 @@
 
     .fixed_header th, .fixed_header td {
         padding: 5px;
-        width: 230px;
+        width: 220px;
 
     }
     .fixed_header thead tr th:first-child,
@@ -77,37 +77,39 @@
 
 <div>
     <table align=center class=fixed_header>
+        <caption style="caption-side: top; font-size: xx-large;" class="text-center">Results from Past Rounds</caption>
         <thead>
         <tr>
             <th>Round #</th>
             <th>Group #</th>
             <th># of Tickets Offered</th>
             <th>Ticket Color</th>
-            <th>Price</th>
-            <th>Purchaser Earnings</th>
+            <th>Price (francs per-ticket)</th>
+            <th>Purchaser Earnings (francs)</th>
         </tr>
         </thead>
         <tbody>
         {% for k,v in data.items %}
         <tr>
-            {% if forloop.counter|divisibleby:2 %}
-            <td rowspan="2"> <h2>{{v.round}}</h2></td>
+            {% if forloop.counter|divisibleby:num_groups %}
+            <td data-id='-1' data-value='-1' rowspan={{num_groups}}> <h1>{{v.round}}</h1></td>
                 {% endif %}
-            <td data-id={{v.group_number}}> {{v.group_number}}</td>
-            <td> {{v.quantity}}</td>
-            <td style="color:{{v.color}}"> {{v.color}}</td>
-            <td> {{v.price}}</td>
-            <td> {{v.winner_payoff}}</td>
+            <td data-id={{v.group_number}} data-value={{v.round}}> {{v.group_number}}</td>
+            <td data-id='-1' data-value='-1'> {{v.quantity}}</td>
+            <td data-id='-1' data-value='-1' style="color:{{v.color}}"> {{v.color}}</td>
+            <td data-id='-1' data-value='-1'> {{v.price}}</td>
+            <td data-id='-1' data-value='-1'> {{v.winner_payoff}}</td>
         </tr>
         {% endfor %}
         </tbody>
 
     </table>
 </div>
+
 </body>
 
-<script>
 
+<script>
 
     $(function () {
         $('tbody').each(function (elem, index) {
@@ -116,11 +118,12 @@
             $(this).append(arr);
         });
         $('td').each(function() {
-            if ($(this).attr("data-id") == {{group_number}}) {
-                $(this).css('color', 'orangered')
+            var group_numbers = {{group_numbers}};
+            var round_number = $(this).attr('data-value')-1;
+            if (group_numbers[round_number]==$(this).attr('data-id')){
+                $(this).css('color','red');
             }
         })
     });
 </script>
-
 <!--</html>-->

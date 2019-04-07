@@ -57,7 +57,7 @@
 
     .fixed_header1 th, .fixed_header1 td {
         padding: 5px;
-        width: 400px;
+        width: 300px;
     }
 
 
@@ -68,23 +68,25 @@
 <div>
 
 <table class="fixed_header1">
+    <caption style="caption-side: top; font-size: xx-large;" class="text-center">Rounds as a Buyer</caption>
+
     <thead>
     <tr>
         <th>Round #</th>
         <th># Tickets for Sale</th>
         <th>Ticket Color</th>
-        <th> Price</th>
-        <th>Your Earnings</th>
+        <th>Price (francs per-ticket)</th>
+        <th>Your Earnings (francs)</th>
     </tr>
     </thead>
     {% for k,v in data1.items %}
     {% if v.role == 'buyer' %}
     <tr>
-        <td> {{v.round}}</td>
-        <td> {{v.group_quantity}}</td>
-        <td style="color:{{v.group_color}}"> {{v.group_color}}</td>
-        <td> {{v.price}}</td>
-        <td> {{v.francs}}</td>
+        <td data-id=-1 data-value=-1> {{v.round}}</td>
+        <td data-id=-1 data-value=-1> {{v.group_quantity}}</td>
+        <td data-id=-1 data-value=-1 style="color:{{v.group_color}}"> {{v.group_color}}</td>
+        <td data-id=-1 data-value=-1> {{v.price}}</td>
+        <td data-id=-1 data-value=-1> {{v.francs}}</td>
     </tr>
     {% endif %}
     {% endfor %}
