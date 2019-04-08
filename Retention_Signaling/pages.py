@@ -8,6 +8,7 @@ import channels
 import random
 
 
+
 class Welcome(Page):
     def is_displayed(self):
         return self.round_number == 1
@@ -387,11 +388,17 @@ class PerformanceReview(Page):
             self.player.dictionary_deleted = True
         else:
             dict = self.participant.vars
+        roles = {}
+        payoffs = {}
+        for i in dict:
+            roles[i] = dict[i]['role']
+            payoffs[i] = dict[i]['francs']
         group_numbers = []
         for p in self.player.in_all_rounds():
             group_numbers.append(p.group.group_number)
         return {
-            'data1': dict,
+            'roles': roles,
+            'payoffs': payoffs,
             'data': data,
             'group_number': self.group.group_number,
             'num_groups': self.subsession.num_groups,

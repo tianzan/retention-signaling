@@ -1,4 +1,5 @@
 {% extends "global/Page.html" %}
+{% load app_filters %}
 {% load otree static %}
 {% block styles %}
     <style>
@@ -36,15 +37,6 @@ Results from All Rounds
     </style>
 </head>
 
-<div class="row">
-    <div class="column" >
-        {% include 'includes/buyer_history.html' %}
-    </div>
-    <div class="column" >
-        {% include 'includes/seller_history.html' %}
-    </div>
-</div>
-<hr>
         {% include 'includes/new_history.html' %}
 
 <p> {% next_button %} </p>

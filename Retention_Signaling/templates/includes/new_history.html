@@ -55,7 +55,7 @@
 
     .fixed_header th, .fixed_header td {
         padding: 5px;
-        width: 220px;
+        width: 160px;
 
     }
     .fixed_header thead tr th:first-child,
@@ -88,9 +88,11 @@
             <th style="border-bottom: 2px solid darkslategray">Group #</th>
             <th style="border-bottom: 2px solid darkslategray"># of Tickets Offered</th>
             <th style="border-bottom: 2px solid darkslategray">Ticket Color</th>
-            <th style="border-bottom: 2px solid darkslategray">Price (francs per-ticket)</th>
+            <th style="border-bottom: 2px solid darkslategray">Price <br>(francs per-ticket)</th>
             <th style="border-bottom: 2px solid darkslategray">Seller Earnings (francs)</th>
             <th style="border-bottom: 2px solid darkslategray">Purchaser Earnings (francs)</th>
+            <th style="border-bottom: 2px solid darkslategray">Your Role</th>
+            <th style="border-bottom: 2px solid darkslategray">Your Earnings (francs)</th>
         </tr>
         </thead>
         <tbody>
@@ -105,6 +107,8 @@
             <td data-id=-1 data-value=-1 > {{v.price}}</td>
             <td data-id=-1 data-value=-1 > {{v.seller_payoff}}</td>
             <td data-id=-1 data-value=-1 > {{v.winner_payoff}}</td>
+            <td data-id=-1 data-value=-1 > {% if roles|get_item:k != None %} {{roles|get_item:k}} {% else %} --{% endif %}</td>
+            <td data-id=-1 data-value=-1 > {% if payoffs|get_item:k != None %} {{payoffs|get_item:k}} {% else %} --{% endif %}</td>
         </tr>
         {% endfor %}
         </tbody>
