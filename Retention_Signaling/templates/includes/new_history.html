@@ -35,15 +35,13 @@
     border-bottom: 3px solid black;
     }
 
-
-
-    .fixed_header {
-        overflow: hidden;
+    .fixed_header{
+        overflow-y: hidden;
     }
 
     .fixed_header tbody {
         display: block;
-        overflow-y: auto;
+        overflow-y: scroll;
         height: 200px;
 
     }
@@ -61,8 +59,8 @@
     .fixed_header thead tr th:first-child,
     .fixed_header tbody tr td:first-child {
       width: 80px;
-        min-width: 80px;
-    max-width: 80px;
+      min-width: 80px;
+      max-width: 80px;
         }
     .fixed_header thead tr th:nth-child(2),
     .fixed_header tbody tr td:nth-child(2){
@@ -70,6 +68,11 @@
         min-width: 80px;
         max-width: 80px;
         }
+
+    .fixed_header {
+        overflow: hidden;
+    }
+
 
 
 
@@ -133,7 +136,10 @@
                 $(this).css('color','red');
             }
         })
+        $('.fixed_header').css('overflow','hidden')
     });
+
+
 </script>
 
 <!--</html>-->

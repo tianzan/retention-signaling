@@ -9,7 +9,7 @@
 {% endblock %}
 
 {% block title %}
-Round {{round_number}}
+    Round {{round_number}}: Your Earnings
 {% endblock %}
 
 {% block content %}
@@ -37,75 +37,95 @@ Round {{round_number}}
     </style>
 </head>
 <body>
+{% if role == 'seller' %}
 
-<div class="row" style="position: relative; left: 100px;">
-    <div class="column" style="background-color:#aaa;border-radius:20px; margin:2px">
-        <center><h2 style="align-self:center;">Auction Results</h2></center>
-        <ul>
-            <li style="padding-bottom:20px">Number of tickets for sale: {{quantity}}</li>
-            <li style="padding-bottom:20px">Ticket color: <a style="color:{{color}}">{{color}}</a></li>
-            <li style="padding-bottom:20px">Final price: {{price}} francs per-ticket</li>
-            <li style="padding-bottom:20px">Purchaser's earnings from this round: {{winner_earnings}} francs</li>
-            <li style="padding-bottom:10px">Seller's earnings from this round: {{seller_earnings}} francs</li>
-        </ul>
-    </div>
-    <div class="column" style="background-color:#bbb;border-radius:20px; margin:2px">
-        <center><h2 style="align-self:center;">Your Earnings</h2></center>
-        <ul>
-            {% if role == 'seller' %}
-            <li style="padding-bottom:10px">Your role: {{role}}</li>
-            <li style="padding-bottom:10px">You chose to sell {{quantity}} ticket{{plural}} and keep {{keep}}
-                ticket{{kplural}}
-            </li>
-            <li style="padding-bottom:10px">You earned:</li>
-            <ul>
-                <li style="padding-bottom:10px">{{quantity}}&times;{{price}}={{revenue}} francs from the
-                    ticket{{plural}} you
-                    sold
-                </li>
-                <li style="padding-bottom:10px">{{keep}}&times;{{seller_value}}={{retained_earnings}} francs from the
-                    ticket{{kplural}} you kept
-                </li>
-            </ul>
-            <li style="padding-bottom:10px"> In this round, you earned: {{francs}} francs</li>
-            {% endif %}
-            {% if role == 'buyer' %}
-            {% if not player.auction_winner %}
-            <li style="padding-bottom:20px">Your role: {{role}}</li>
-            {% if player.in_auction %}
-            <li style="padding-bottom:20px"> You did not purchase the tickets</li>
-            <li style="padding-bottom:20px"> The auction ended at a price of {{price}} francs per-ticket, and the
-                software randomly chose another one of the remaining buyers to purchase the tickets.
-            </li>
-            <li style="padding-bottom:20px"> In this round, you earned {{player.francs}} francs</li>
-            {% endif %}
-            {% if not player.in_auction %}
-            <li style="padding-bottom:20px"> You did not purchase the tickets</li>
-            <li style="padding-bottom:20px"> You left the auction at a price of {{player.leave_price}} francs
-                per-ticket
-            </li>
-            <li style="padding-bottom:20px"> In this round, you earned {{player.francs}} francs</li>
-            {% endif %}
-            {% endif %}
-            {% if player.auction_winner %}
-            <li style="padding-bottom:10px">Your role: {{role}}</li>
-            <li style="padding-bottom:10px"> You purchased the {{quantity}} ticket{{plural}} at a price of {{price}} francs per-ticket</li>
-            <ul>
-                <li style="padding-bottom:10px"> You started this round with {{group.buyer_endowment}} francs, and you spent {{price}}&times;{{quantity}}={{revenue}} francs in the auction</li>
-                <li style="padding-bottom:10px"> The ticket{{plural}} you purchased have been exchanged for for
-                    {{ticket_value}} francs per-ticket for a total of {{ticket_value}}&times;{{quantity}}={{buyer_value}}
-                    francs
-                </li>
-            </ul>
-            <li style="padding-bottom:10px">Your earnings from this
-                round: {{group.buyer_endowment}}-{{revenue}}+{{buyer_value}}={{francs}} francs
-            </li>
-            {% endif %}
-            {% endif %}
-        </ul>
-    </div>
+{% include 'includes/seller_results.html' %}
 
-</div>
+{% elif is_winner and price < fH %}
+{% include 'includes/winner_no_tie.html' %}
+
+{% elif is_winner and price == fH %}
+{% include 'includes/winner_tie.html' %}
+
+{% elif not player.in_auction %}
+{% include 'includes/left_auction.html' %}
+
+
+{% else %}
+{% include 'includes/lost_tie.html' %}
+
+
+{% endif %}
+
+
+<!--<div class="row" style="position: relative; left: 100px;">-->
+    <!--<div class="column" style="background-color:#aaa;border-radius:20px; margin:2px">-->
+        <!--<center><h2 style="align-self:center;">Auction Results</h2></center>-->
+        <!--<ul>-->
+            <!--<li style="padding-bottom:20px">Number of tickets for sale: {{quantity}}</li>-->
+            <!--<li style="padding-bottom:20px">Ticket color: <a style="color:{{color}}">{{color}}</a></li>-->
+            <!--<li style="padding-bottom:20px">Final price: {{price}} francs per-ticket</li>-->
+            <!--<li style="padding-bottom:20px">Purchaser's earnings from this round: {{winner_earnings}} francs</li>-->
+            <!--<li style="padding-bottom:10px">Seller's earnings from this round: {{seller_earnings}} francs</li>-->
+        <!--</ul>-->
+    <!--</div>-->
+    <!--<div class="column" style="background-color:#bbb;border-radius:20px; margin:2px">-->
+        <!--<center><h2 style="align-self:center;">Your Earnings</h2></center>-->
+        <!--<ul>-->
+            <!--{% if role == 'seller' %}-->
+            <!--<li style="padding-bottom:10px">Your role: {{role}}</li>-->
+            <!--<li style="padding-bottom:10px">You chose to sell {{quantity}} ticket{{plural}} and keep {{keep}}-->
+                <!--ticket{{kplural}}-->
+            <!--</li>-->
+            <!--<li style="padding-bottom:10px">You earned:</li>-->
+            <!--<ul>-->
+                <!--<li style="padding-bottom:10px">{{quantity}}&times;{{price}}={{revenue}} francs from the-->
+                    <!--ticket{{plural}} you-->
+                    <!--sold-->
+                <!--</li>-->
+                <!--<li style="padding-bottom:10px">{{keep}}&times;{{seller_value}}={{retained_earnings}} francs from the-->
+                    <!--ticket{{kplural}} you kept-->
+                <!--</li>-->
+            <!--</ul>-->
+            <!--<li style="padding-bottom:10px"> In this round, you earned: {{francs}} francs</li>-->
+            <!--{% endif %}-->
+            <!--{% if role == 'buyer' %}-->
+            <!--{% if not player.auction_winner %}-->
+            <!--<li style="padding-bottom:20px">Your role: {{role}}</li>-->
+            <!--{% if player.in_auction %}-->
+            <!--<li style="padding-bottom:20px"> You did not purchase the tickets</li>-->
+            <!--<li style="padding-bottom:20px"> The auction ended at a price of {{price}} francs per-ticket, and the-->
+                <!--software randomly chose another one of the remaining buyers to purchase the tickets.-->
+            <!--</li>-->
+            <!--<li style="padding-bottom:20px"> In this round, you earned {{player.francs}} francs</li>-->
+            <!--{% endif %}-->
+            <!--{% if not player.in_auction %}-->
+            <!--<li style="padding-bottom:20px"> You did not purchase the tickets</li>-->
+            <!--<li style="padding-bottom:20px"> You left the auction at a price of {{player.leave_price}} francs-->
+                <!--per-ticket-->
+            <!--</li>-->
+            <!--<li style="padding-bottom:20px"> In this round, you earned {{player.francs}} francs</li>-->
+            <!--{% endif %}-->
+            <!--{% endif %}-->
+            <!--{% if player.auction_winner %}-->
+            <!--<li style="padding-bottom:10px">Your role: {{role}}</li>-->
+            <!--<li style="padding-bottom:10px"> You purchased the {{quantity}} ticket{{plural}} at a price of {{price}} francs per-ticket</li>-->
+            <!--<ul>-->
+                <!--<li style="padding-bottom:10px"> You started this round with {{group.buyer_endowment}} francs, and you spent {{price}}&times;{{quantity}}={{revenue}} francs in the auction</li>-->
+                <!--<li style="padding-bottom:10px"> The ticket{{plural}} you purchased have been exchanged for for-->
+                    <!--{{ticket_value}} francs per-ticket for a total of {{ticket_value}}&times;{{quantity}}={{buyer_value}}-->
+                    <!--francs-->
+                <!--</li>-->
+            <!--</ul>-->
+            <!--<li style="padding-bottom:10px">Your earnings from this-->
+                <!--round: {{group.buyer_endowment}}-{{revenue}}+{{buyer_value}}={{francs}} francs-->
+            <!--</li>-->
+            <!--{% endif %}-->
+            <!--{% endif %}-->
+        <!--</ul>-->
+    <!--</div>-->
+
+<!--</div>-->
 
 <p>{% next_button %}</p>
 </body>

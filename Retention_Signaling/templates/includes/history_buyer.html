@@ -31,17 +31,14 @@
         color: white;
     }
 
-
-
-    .fixed_header {
-        overflow: hidden;
+    .fixed_header{
+        overflow-y: hidden;
     }
 
     .fixed_header tbody {
         display: block;
-        overflow-y: auto;
-        height: 145px;
-
+        height: 300px;
+        overflow-y: scroll;
     }
 
     .fixed_header thead tr {
@@ -67,7 +64,9 @@
         max-width: 80px;
         }
 
-
+    .fixed_header tbody tr:nth-child({{num_groups}}n) {
+    border-bottom: 3px solid black;
+        }
 
 
 </style>
@@ -75,7 +74,7 @@
 
 
 
-<div>
+<div style="resize: vertical">
     <table align=center class=fixed_header>
         <caption style="caption-side: top; font-size: xx-large;" class="text-center">Results from Past Rounds</caption>
         <thead>
@@ -92,7 +91,8 @@
         {% for k,v in data.items %}
         <tr>
             {% if forloop.counter|divisibleby:num_groups %}
-            <td data-id='-1' data-value='-1' rowspan={{num_groups}}> <h1>{{v.round}}</h1></td>
+            <td style="border-bottom: 3px solid black; border-right: 3px solid black"
+                data-id='-1' data-value='-1' rowspan={{num_groups}}> <h1>{{v.round}}</h1></td>
                 {% endif %}
             <td data-id={{v.group_number}} data-value={{v.round}}> {{v.group_number}}</td>
             <td data-id='-1' data-value='-1'> {{v.quantity}}</td>

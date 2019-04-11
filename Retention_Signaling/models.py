@@ -159,10 +159,18 @@ class Group(BaseGroup):
         self.activated = False
 
     def set_winner(self):
+
         potential_winners = [p for p in self.get_players()
                              if p.role() == 'buyer' and p.in_auction]
-        winner = random.choice(potential_winners)
-        winner.auction_winner = True
+        if len(potential_winners) > 0:
+            winner = random.choice(potential_winners)
+            winner.auction_winner = True
+
+        else:
+            potential_winners = [p for p in self.get_players() if p.leave_price >= self.price]
+            winner = random.choice(potential_winners)
+            winner.auction_winner = True
+        winner.save()
 
     def set_francs(self):
         delta = self.session.config['delta']
@@ -179,6 +187,7 @@ class Group(BaseGroup):
                     p.francs = round(buyer_endowment + self.group_quantity * (
                             self.group_type * (self.fH - self.fL) + self.fL - self.price), 2)
                     self.winner_payoff = round(p.francs, 2)
+            p.update_payment
 
 
 class Player(BasePlayer):
@@ -189,7 +198,7 @@ class Player(BasePlayer):
     quantity_choice_blue = models.IntegerField(initial=-1)
     quantity_choice_green = models.IntegerField(initial=-1)
     in_auction = models.BooleanField(initial=False)
-    leave_price = models.FloatField()
+    leave_price = models.FloatField(initial=-5)
     auction_winner = models.BooleanField(initial=False)
     francs = models.FloatField()
     payoff_round = models.BooleanField(initial=False)
@@ -297,7 +306,7 @@ def runEverySecond():
                          'started': True
                          })}
                 )
-            if int(g.price) == g.fH or g.num_in_auction == 1:
+            if int(g.price) == g.fH or g.num_in_auction <= 1:
                 g.auction_over = True
                 g.save()
                 channels.Group(
@@ -318,16 +327,16 @@ def runEverySecond():
         finished_groups = Group.objects.filter(activated=True, auction_over=True)
         for g in finished_groups:
             # Could put the max move_count into session_configs
-            if g.move_count < 1:
+            if g.move_count < 50:
                 g.move_count += 1
                 g.save()
-            if g.move_count == 10:
+            if g.move_count == 50:
                 g.move_count += 1
                 g.save()
                 g.advance_participants()
 
 
 l = task.LoopingCall(runEverySecond)
-l.start(1)
+l.start(3)
 if not l.running:
     pass

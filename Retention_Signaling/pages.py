@@ -55,8 +55,8 @@ class QuantityChoice(Page):
         fH = self.group.fH
         fL = self.group.fL
         delta = self.session.config['delta']
-        green_value = int(delta * fH)
-        blue_value = int(delta * fL)
+        green_value = round(delta * fH, 2)
+        blue_value = round(delta * fL, 2)
         group_numbers = []
         for p in self.player.in_all_rounds():
             group_numbers.append(p.group.group_number)
@@ -107,7 +107,7 @@ class NoAuction(Page):
             plural = 's'
             pronoun = 'these'
         return {
-            'roundNumber': self.round_number,
+            'round_number': self.round_number,
             'data': data,
             'vH': self.group.group_quantity * fH,
             'vL': self.group.group_quantity * fL,
@@ -203,6 +203,7 @@ class Auction(Page):
             'to_be': to_be,
             'plural': plural,
             'pronoun': pronoun,
+            'initial_expense': round(self.group.start_price * self.group.group_quantity, 2),
             'data': data,
             'round_number': self.round_number,
             'group_number': self.group.group_number,
@@ -225,29 +226,29 @@ class Auction(Page):
 
 
 # Waitpage that bidders see once they leave the auction
-class AuctionWait(Page):
-    def is_displayed(self):
-        return self.group.num_in_auction > 1 and not self.group.auction_over and self.group.group_quantity > 0 and self.round_number <= \
-               self.session.config['final_round']
-
-    def vars_for_template(self):
-        data = self.session.vars
-        if self.group.group_quantity == 1:
-            to_be = 'is'
-            plural = ''
-        else:
-            to_be = 'are'
-            plural = 's'
-        return {
-            'quantity': self.player.group.group_quantity,
-            'role': self.player.role(),
-            'to_be': to_be,
-            'plural': plural,
-            'data': data,
-            'round_number': self.round_number,
-            'group_number': self.group.group_number,
-
-        }
+# class AuctionWait(Page):
+#     def is_displayed(self):
+#         return self.group.num_in_auction > 1 and not self.group.auction_over and self.group.group_quantity > 0 and self.round_number <= \
+#                self.session.config['final_round']
+#
+#     def vars_for_template(self):
+#         data = self.session.vars
+#         if self.group.group_quantity == 1:
+#             to_be = 'is'
+#             plural = ''
+#         else:
+#             to_be = 'are'
+#             plural = 's'
+#         return {
+#             'quantity': self.player.group.group_quantity,
+#             'role': self.player.role(),
+#             'to_be': to_be,
+#             'plural': plural,
+#             'data': data,
+#             'round_number': self.round_number,
+#             'group_number': self.group.group_number,
+#
+#         }
 
 
 class SetAuction(WaitPage):
@@ -293,6 +294,8 @@ class AuctionFinish(Page):
             'plural': plural,
             'kplural': kplural,
             'price': self.group.price,
+            'fH': fH,
+            'buyer_endowment': buyer_endowment/10.0*10.0,
             'quantity': self.group.group_quantity,
             'color': self.group.group_color,
             'role': self.player.role(),
@@ -303,7 +306,7 @@ class AuctionFinish(Page):
             'keep': Constants.Q - self.group.group_quantity,
             'retained_earnings': round(delta * total_value, 2),
             'ticket_value': round(ticket_value, 2),
-            'buyer_value': buyer_value,
+            'buyer_value': round(buyer_value*10.0/10,2),
             'seller_value': round(delta * ticket_value, 2),
             'winner_earnings': round(buyer_endowment - revenue + self.group.group_quantity * ticket_value, 2),
             'seller_earnings': round(revenue + delta * total_value, 2),
@@ -321,6 +324,9 @@ class ResultsWaitPage(WaitPage):
     def after_all_players_arrive(self):
         groups = self.subsession.get_groups()
         for g in groups:
+            if g.group_quantity > 0:
+                g.set_winner()
+            g.set_francs()
             seller_payoff = g.seller_payoff
             if g.group_quantity > 0:
                 price = g.price
@@ -347,19 +353,19 @@ class AllGroupsWaitPage(WaitPage):
     wait_for_all_groups = True
 
 
-class Results(Page):
-    def get_timeout_seconds(self):
-        return self.session.config['Results_Time']
-
-    def vars_for_template(self):
-        data = {}
-        for g in range(1, self.subsession.num_groups + 1):
-            data['G' + str(g)] = self.session.vars[str(self.round_number) + 'R' + str(g)]
-        return {
-            'group_number': self.group.group_number,
-            'data': data,
-            'round_number': self.round_number
-        }
+# class Results(Page):
+#     def get_timeout_seconds(self):
+#         return self.session.config['Results_Time']
+#
+#     def vars_for_template(self):
+#         data = {}
+#         for g in range(1, self.subsession.num_groups + 1):
+#             data['G' + str(g)] = self.session.vars[str(self.round_number) + 'R' + str(g)]
+#         return {
+#             'group_number': self.group.group_number,
+#             'data': data,
+#             'round_number': self.round_number
+#         }
 
 
 class PerformanceReview(Page):
