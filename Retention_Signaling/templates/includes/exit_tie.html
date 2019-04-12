@@ -5,30 +5,28 @@
     height :320px;
     }
     .left{
-        width: 400px;
+        width: 470px;
     }
     .right{
-        width: 700px;
+        width: 690px;
     }
 
 </style>
 </head>
 <body>
-<div class="row" style="margin-left: 70px" >
+<div class="row" style="margin-left: 40px" >
     <div class="left" style="padding: 20px;background-color:lightgray; border-radius:20px; margin-top:10px;">
     <h1 style="padding-bottom: 10px;text-align: center"> Summary</h1>
-
     <div style="padding-bottom: 10px"> You were a buyer this round, and the seller offered {{quantity}} ticket{{plural}} for sale.</div>
-    <div style="padding-bottom: 10px"> You purchased  the ticket{{plural}} at a price of
-    {{price}} francs per-ticket.</div>
+        <div style="padding-bottom: 10px"> The auction ended at a price of <b>{{price}} francs per-ticket</b> when you and a different buyer exited
+        simultaneously. <b>You were chosen at random to purchase the ticket{{plural}}.</b></div>
     <div style="padding-bottom: 10px"> The ticket{{plural}} {{to_be}} <a style="color:{{color}}">{{color}}</a>; you received {{ticket_value}} francs per-ticket.</div>
-
     </div>
     <div class="right" style="background-color: goldenrod;border-radius:20px; margin-top:10px; margin-left: 10px; padding: 20px">
 
-    <h1 style="text-align: center"> Your Earnings This Round</h1>
-        <table style="font-size: x-large; ">
-            <tr>
+    <h1 style="padding-bottom: 15px;text-align: center"> Your Earnings This Round</h1>
+        <table style="font-size: x-large;">
+            <tr >
                 <td style="float: end;: center">{{buyer_endowment}} </td>
                 <td></td>
                 <td></td>

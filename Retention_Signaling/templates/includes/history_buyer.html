@@ -31,14 +31,10 @@
         color: white;
     }
 
-    .fixed_header{
-        overflow-y: hidden;
-    }
-
     .fixed_header tbody {
         display: block;
-        height: 300px;
-        overflow-y: scroll;
+        overflow-y: auto;
+        height: 175px;
     }
 
     .fixed_header thead tr {
@@ -48,7 +44,7 @@
 
     .fixed_header th, .fixed_header td {
         padding: 5px;
-        width: 220px;
+        width: 200px;
 
     }
     .fixed_header thead tr th:first-child,
@@ -83,7 +79,7 @@
             <th>Group #</th>
             <th># of Tickets Offered</th>
             <th>Ticket Color</th>
-            <th>Price (francs per-ticket)</th>
+            <th>Price <br> (francs per-ticket)</th>
             <th>Purchaser Earnings (francs)</th>
         </tr>
         </thead>

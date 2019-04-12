@@ -55,8 +55,8 @@ class QuantityChoice(Page):
         fH = self.group.fH
         fL = self.group.fL
         delta = self.session.config['delta']
-        green_value = round(delta * fH, 2)
-        blue_value = round(delta * fL, 2)
+        green_value = int(delta * fH)
+        blue_value = int(delta * fL)
         group_numbers = []
         for p in self.player.in_all_rounds():
             group_numbers.append(p.group.group_number)
@@ -203,7 +203,7 @@ class Auction(Page):
             'to_be': to_be,
             'plural': plural,
             'pronoun': pronoun,
-            'initial_expense': round(self.group.start_price * self.group.group_quantity, 2),
+            'initial_expense': self.group.start_price * self.group.group_quantity,
             'data': data,
             'round_number': self.round_number,
             'group_number': self.group.group_number,
@@ -295,21 +295,21 @@ class AuctionFinish(Page):
             'kplural': kplural,
             'price': self.group.price,
             'fH': fH,
-            'buyer_endowment': buyer_endowment/10.0*10.0,
+            'buyer_endowment': buyer_endowment,
             'quantity': self.group.group_quantity,
             'color': self.group.group_color,
             'role': self.player.role(),
             'is_winner': is_winner,
             'francs': self.player.francs,
-            'revenue': round(revenue, 2),
+            'revenue': revenue,
             'tickets_kept': Constants.Q - self.group.group_quantity,
             'keep': Constants.Q - self.group.group_quantity,
-            'retained_earnings': round(delta * total_value, 2),
-            'ticket_value': round(ticket_value, 2),
-            'buyer_value': round(buyer_value*10.0/10,2),
-            'seller_value': round(delta * ticket_value, 2),
-            'winner_earnings': round(buyer_endowment - revenue + self.group.group_quantity * ticket_value, 2),
-            'seller_earnings': round(revenue + delta * total_value, 2),
+            'retained_earnings': int(delta * total_value),
+            'ticket_value': ticket_value,
+            'buyer_value': buyer_value,
+            'seller_value': int(delta * ticket_value),
+            'winner_earnings': buyer_endowment - revenue + self.group.group_quantity * ticket_value,
+            'seller_earnings': revenue + int(delta * total_value),
             'round_number': self.round_number,
 
         }

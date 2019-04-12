@@ -15,7 +15,7 @@ Round {{round_number}}
 
 {% block content %}
 
-
+<div style="margin-left: 30px">
 {% if role == 'seller' %}
 <h1>You are a <b>SELLER</b> </h1>
 
@@ -46,10 +46,13 @@ Round {{round_number}}
 {% next_button %}
 <div style="padding-bottom:5px "></div>
 <hr style="">
+
+{% if round_number > 1 %}
 {% include 'includes/history_buyer.html' %}
 {% endif %}
+    {% endif %}
 
-
+</div>
 {% endblock %}
 
 

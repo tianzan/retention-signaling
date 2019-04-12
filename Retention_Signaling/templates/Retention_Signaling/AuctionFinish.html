@@ -41,13 +41,16 @@
 
 {% include 'includes/seller_results.html' %}
 
-{% elif is_winner and price < fH %}
+{% elif is_winner and player.in_auction  and price < fH%}
 {% include 'includes/winner_no_tie.html' %}
+
+{% elif is_winner and not player.in_auction %}
+{% include 'includes/exit_tie.html' %}
 
 {% elif is_winner and price == fH %}
 {% include 'includes/winner_tie.html' %}
 
-{% elif not player.in_auction %}
+{% elif not is_winner and not player.in_auction %}
 {% include 'includes/left_auction.html' %}
 
 
