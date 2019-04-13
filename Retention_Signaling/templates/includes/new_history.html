@@ -1,0 +1,140 @@
+<!--&lt;!&ndash;<!DOCTYPE html>&ndash;&gt;-->
+<!--&lt;!&ndash;<html>&ndash;&gt;-->
+<head>
+</head>
+<style>
+
+
+    .fixed_header table {
+        font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+        border-collapse: collapse;
+        width: 90%;
+    }
+
+
+    .fixed_header td, th {
+        border: 1px solid #ddd;
+        padding: 8px;
+        text-align: center;
+    }
+
+    .fixed_header tr:nth-child(even) {
+        background-color: #f2f2f2;
+    }
+
+
+
+    .fixed_header th {
+        padding-top: 12px;
+        padding-bottom: 12px;
+        text-align: center;
+        background-color: lightslategray;
+        color: white;
+    }
+    .fixed_header tbody tr:nth-child({{num_groups}}n) {
+    border-bottom: 3px solid black;
+    }
+
+    .fixed_header tbody {
+        display: block;
+        overflow: auto;
+        height: 200px;
+        padding-right: 1px;
+    }
+
+
+    .fixed_header thead tr {
+        display: block;
+    }
+
+
+    .fixed_header th, .fixed_header td {
+        padding: 5px;
+        width: 160px;
+
+    }
+    .fixed_header thead tr th:first-child,
+    .fixed_header tbody tr td:first-child {
+      width: 80px;
+      min-width: 80px;
+      max-width: 80px;
+        }
+    .fixed_header thead tr th:nth-child(2),
+    .fixed_header tbody tr td:nth-child(2){
+        width: 80px;
+        min-width: 80px;
+        max-width: 80px;
+        }
+
+
+
+</style>
+
+<body>
+
+<div>
+    <table id="history" align="center" class=fixed_header>
+        <caption style="caption-side: top; font-size: xx-large;" class="text-center">Results from All Rounds</caption>
+        <thead>
+        <tr>
+            <th style="border-bottom: 2px solid darkslategray">Round #</th>
+            <th style="border-bottom: 2px solid darkslategray">Group #</th>
+            <th style="border-bottom: 2px solid darkslategray"># of Tickets Offered</th>
+            <th style="border-bottom: 2px solid darkslategray">Ticket Color</th>
+            <th style="border-bottom: 2px solid darkslategray">Price <br>(francs per-ticket)</th>
+            <th style="border-bottom: 2px solid darkslategray">Seller Earnings (francs)</th>
+            <th style="border-bottom: 2px solid darkslategray">Purchaser Earnings (francs)</th>
+            <th style="border-bottom: 2px solid darkslategray">Your Role</th>
+            <th style="border-bottom: 2px solid darkslategray">Your Earnings (francs)</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for k,v in data.items %}
+        <tr>
+            {% if forloop.counter|divisibleby:num_groups %}
+            <td data-id=-1 data-value=-1  rowspan={{num_groups}} style="border-bottom: 3px solid black; border-right: 3px solid black"> <h1>{{v.round}}</h1></td>
+                {% endif %}
+            <td data-id={{v.group_number}} data-value={{v.round}}> {{v.group_number}}</td>
+            <td data-id=-1 data-value=-1 > {{v.quantity}}</td>
+            <td data-id=-1 data-value=-1  style="color:{{v.color}}"> {{v.color}}</td>
+            <td data-id=-1 data-value=-1 > {{v.price}}</td>
+            <td data-id=-1 data-value=-1 > {{v.seller_payoff}}</td>
+            <td data-id=-1 data-value=-1 > {{v.winner_payoff}}</td>
+            <td data-id=-1 data-value=-1 > {% if roles|get_item:k != None %} {{roles|get_item:k}} {% else %} --{% endif %}</td>
+            <td data-id=-1 data-value=-1 > {% if payoffs|get_item:k != None %} {{payoffs|get_item:k}} {% else %} --{% endif %}</td>
+        </tr>
+        {% endfor %}
+        </tbody>
+
+    </table>
+</div>
+</body>
+
+<script>
+$(document).ready(function() {
+    $('#history').DataTable( {
+        "scrollY":        "200px",
+        "scrollCollapse": true,
+        "paging":         false
+    } );
+} );
+
+    $(function () {
+        $('tbody').each(function (elem, index) {
+            var arr = $.makeArray($("tr", this).detach());
+            arr.reverse();
+            $(this).append(arr);
+        });
+        $('td').each(function() {
+            var group_numbers = {{group_numbers}};
+            var round_number = $(this).attr('data-value')-1;
+            if (group_numbers[round_number]==$(this).attr('data-id')){
+                $(this).css('color','red');
+            }
+        })
+    });
+
+
+</script>
+
+<!--</html>-->

@@ -25,7 +25,7 @@
 {% endblock %}
 
 {% block title %}
-Round {{round_number}}
+Round {{round_number}}: Seller
 {% endblock %}
 
 
@@ -51,24 +51,15 @@ Round {{round_number}}
     </style>
 </head>
 
-<div style="width:100%content-box;height:50px;background-color:{{player.seller_color}};"></div>
+<div style="width:100%content-box;height:50px;background-color:darkslategray;color:white;padding-bottom: 10px"> </div>
 
+<h1 align="center"> If you are a seller, your tickets may be <a style="color: green"> green </a> or <a style="color: blue"> blue</a>. </h1>
 
-<div class="row">
-    <div class="column">
-        <h2 style="text-align: center;"> Seller</h2>
-        <p>If you are selected to be the seller, you will be given
-            <a style = "color:{{player.seller_color}}"> <b>5 {{player.seller_color}} </b></a>tickets.</p>
-
-        <p>Please choose the number of these tickets you would like to sell:</p>
-        {% include 'includes/new_buttons.html' %}
-    </div>
-    <div class="column">
-        <h2 style="text-align: center;">History</h2>
-        <p>{% include 'includes/history_seller.html' %}</p>
-    </div>
-</div>
-
+{% include 'includes/strategy_choice.html' %}
+<hr style="padding-top:5px">
+{% if round_number > 1 %}
+{% include 'includes/history_seller.html' %}
+{% endif %}
 
 
 {% endblock %}

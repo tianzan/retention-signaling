@@ -28,7 +28,7 @@
 
         div.relative {
             position: relative;
-            left: 310px;
+            left: 400px;
         }
 
         .button2:hover {
@@ -49,10 +49,10 @@
 <div class="row">
     <div class="column left" style="background-color:darkkhaki; color:black;border-radius:20px; margin:2px">
         <h6> Remaining bidders: <span style="alignment: left;" id='num_in_auction'>{{group.num_in_auction}}</span>
-            <span style="float:right;">Winner pays: <a id='expense'>0</a> francs</span>
+            <span style="float:right;">Purchaser pays: <a id='expense'>{{initial_expense}}</a> francs</span>
         </h6>
         <h6>Number of tickets for sale: {{quantity}}</h6>
-        <center style="font-size: 80px"> <a id="current">Current Price:</a>  <span class="label label-success"
+        <center style="font-size: 80px"> <a id="current">Current Price:</a> <span class="label label-success"
                                                              id='group_price'>{{ group.start_price }}</span></center>
         {% include 'includes/bid_button.html' %}
 
@@ -65,7 +65,7 @@
             </li>
             <li style="padding-bottom: 15px">The tickets will be exchanged for</li>
             <ul>
-                <li style="padding-bottom:15px"> {{quantity}}&times;{{group.fH}}= {{vH}} francs if the
+                <li style="padding-bottom:15px">{{quantity}}&times;{{group.fH}}= {{vH}} francs if the
                     ticket{{plural}}
                     {{to_be}} <a style="color:green">green</a> or
                 </li>
@@ -79,7 +79,13 @@
 </div>
 <hr>
 
-{% include 'includes/history.html' %}
+{% if round_number > 1 %}
+<div id="history">
+{% include 'includes/history_buyer.html' %}
+</div>
+
+{% endif %}
+
 
 </body>
 

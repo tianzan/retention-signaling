@@ -66,6 +66,7 @@
                 $('#seller_leave').prop('disabled', false);
                 $('#seller_text').html('Auction Over: Click to Proceed');
                 $('#num_in_auction').html(obj.num)
+                // $('#history').css('display','none');
                 //
                 //     } else if (!obj.button_activated) {
                 //         if (obj.dummy == 0) {
@@ -96,8 +97,8 @@
         };
         // Not sure if this is redundant
         sendmessage = function (what) {
-            var num  = $('#num_in_auction').text()-1
-            var over = false
+            var num  = $('#num_in_auction').text()-1;
+            var over = false;
             if (num<=2){
                 over = true
             }
@@ -115,7 +116,7 @@
             if (wpsocket.readyState === wpsocket.OPEN) {
                 wpsocket.send(JSON.stringify(msg))
             }
-        }
+        };
 
         // decrease = function (what) {
         //     var num = $('#num_in_auction').text();
