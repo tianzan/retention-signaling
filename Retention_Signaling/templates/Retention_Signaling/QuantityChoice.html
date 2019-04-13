@@ -57,9 +57,9 @@ Round {{round_number}}: Seller
 
 {% include 'includes/strategy_choice.html' %}
 <hr style="padding-top:5px">
-
+{% if round_number > 1 %}
 {% include 'includes/history_seller.html' %}
-
+{% endif %}
 
 
 {% endblock %}

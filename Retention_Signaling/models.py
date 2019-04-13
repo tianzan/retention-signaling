@@ -57,8 +57,6 @@ class Subsession(BaseSubsession):
         # Assigns types
         count = 1
         for group in self.get_groups():
-            group.increment_size1 = self.session.config['increment_size1']
-            group.increment_size2 = self.session.config['increment_size2']
             group.increment_size = self.session.config['increment_size1']
             group.start_price = self.session.config['start_price']
             group.fL = self.session.config['fL']
@@ -91,10 +89,10 @@ class Subsession(BaseSubsession):
 class Group(BaseGroup):
     # The following four fields store parameters set in session_configs
     # They are set in the creating_session method
-    increment_size1 = models.FloatField()
-    increment_size2 = models.FloatField()
-    increment_size = models.FloatField()
-    start_price = models.FloatField()
+    increment_size1 = models.IntegerField()
+    increment_size2 = models.IntegerField()
+    increment_size = models.IntegerField()
+    start_price = models.IntegerField()
     fL = models.IntegerField()
     fH = models.IntegerField()
     buyer_endowment = models.IntegerField()
@@ -111,20 +109,20 @@ class Group(BaseGroup):
     move_count = models.IntegerField(initial=0)
     # button_activated_already = models.BooleanField(initial=False)
 
-    price_float = models.FloatField(initial=0)
+    price_float = models.IntegerField(initial=0)
     num_in_auction = models.IntegerField()
     auction_over = models.BooleanField(initial=False)
 
     # These fields store the key pieces of data in which I am interested
-    price = models.FloatField(initial=0)
+    price = models.IntegerField(initial=0)
     group_quantity = models.IntegerField()
     group_type = models.BooleanField()
     group_color = models.StringField()
 
     # Used to present feedback to subjects
     group_number = models.IntegerField()
-    winner_payoff = models.FloatField()
-    seller_payoff = models.FloatField()
+    winner_payoff = models.IntegerField()
+    seller_payoff = models.IntegerField()
 
     def get_channel_group_name(self):
         return 'auction_group_{}'.format(self.pk)
@@ -159,26 +157,35 @@ class Group(BaseGroup):
         self.activated = False
 
     def set_winner(self):
+
         potential_winners = [p for p in self.get_players()
                              if p.role() == 'buyer' and p.in_auction]
-        winner = random.choice(potential_winners)
-        winner.auction_winner = True
+        if len(potential_winners) > 0:
+            winner = random.choice(potential_winners)
+            winner.auction_winner = True
+
+        else:
+            potential_winners = [p for p in self.get_players() if p.leave_price >= self.price]
+            winner = random.choice(potential_winners)
+            winner.auction_winner = True
+        winner.save()
 
     def set_francs(self):
         delta = self.session.config['delta']
         buyer_endowment = self.session.config['buyer_endowment']
         for p in self.get_players():
             if p.role() == 'seller':
-                p.francs = p.quantity_choice * self.price + delta * (Constants.Q - p.quantity_choice) * (
-                        p.seller_type * (self.fH - self.fL) + self.fL)
-                self.seller_payoff = round(p.francs, 2)
+                p.francs = int(p.quantity_choice * self.price + delta * (Constants.Q - p.quantity_choice) * (
+                        p.seller_type * (self.fH - self.fL) + self.fL))
+                self.seller_payoff = p.francs
             else:
                 if not p.auction_winner:
                     p.francs = buyer_endowment
                 else:
-                    p.francs = round(buyer_endowment + self.group_quantity * (
-                            self.group_type * (self.fH - self.fL) + self.fL - self.price), 2)
-                    self.winner_payoff = round(p.francs, 2)
+                    p.francs = buyer_endowment + self.group_quantity * (
+                            self.group_type * (self.fH - self.fL) + self.fL - self.price)
+                    self.winner_payoff = p.francs
+            p.update_payment
 
 
 class Player(BasePlayer):
@@ -189,9 +196,9 @@ class Player(BasePlayer):
     quantity_choice_blue = models.IntegerField(initial=-1)
     quantity_choice_green = models.IntegerField(initial=-1)
     in_auction = models.BooleanField(initial=False)
-    leave_price = models.FloatField()
+    leave_price = models.IntegerField(initial=-5)
     auction_winner = models.BooleanField(initial=False)
-    francs = models.FloatField()
+    francs = models.IntegerField()
     payoff_round = models.BooleanField(initial=False)
     payoff_updated = models.BooleanField(initial=False)
     dictionary_deleted = models.BooleanField(initial=False)
@@ -229,6 +236,7 @@ def runEverySecond():
         # Groups are hidden started once all group members reach Wait
         invisible_wait_groups = Group.objects.filter(hidden_start=True)
         for g in invisible_wait_groups:
+            print('hello')
             if g.hidden_time_till > 0:
                 g.hidden_time_till = g.hidden_time_till - 1
                 g.save()
@@ -280,16 +288,14 @@ def runEverySecond():
             g.save()
             if g.price < g.fH and g.num_in_auction > 1:
                 g.price_float += g.increment_size
-                g.price = round(g.price_float, 2)
-                if g.price >= g.fL:
-                    g.increment_size = g.increment_size2
+                g.price = g.price_float
                 g.save()
                 channels.Group(
                     g.get_channel_group_name()
                 ).send(
                     {'text': json.dumps(
                         {'price': g.price,
-                         'expense': round(g.price * g.group_quantity, 2),
+                         'expense': g.price * g.group_quantity,
                          'num': g.num_in_auction,
                          'over': False,
                          'activated': True,
@@ -297,7 +303,7 @@ def runEverySecond():
                          'started': True
                          })}
                 )
-            if int(g.price) == g.fH or g.num_in_auction == 1:
+            if int(g.price) == g.fH or g.num_in_auction <= 1:
                 g.auction_over = True
                 g.save()
                 channels.Group(
@@ -305,7 +311,7 @@ def runEverySecond():
                 ).send(
                     {'text': json.dumps(
                         {'price': g.price,
-                         'expense': round(g.price * g.group_quantity, 2),
+                         'expense': g.price * g.group_quantity,
                          # Sometimes the incorrect number of remaining bidders is displayed for some reason
                          'num': g.num_in_auction,
                          'over': True,
@@ -318,10 +324,10 @@ def runEverySecond():
         finished_groups = Group.objects.filter(activated=True, auction_over=True)
         for g in finished_groups:
             # Could put the max move_count into session_configs
-            if g.move_count < 1:
+            if g.move_count < 50:
                 g.move_count += 1
                 g.save()
-            if g.move_count == 10:
+            if g.move_count == 50:
                 g.move_count += 1
                 g.save()
                 g.advance_participants()
