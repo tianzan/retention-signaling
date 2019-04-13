@@ -11,18 +11,17 @@
 </head>
 <body>
 
-<h4> Please answer the following questions. The experiment will begin once all participants have successfully
-answered the questions.</h4>
-
-<h5>Questions Completed: <a id="questions_completed">0</a>/<a id="num_questions"></a></h5>
+<h5> Please answer the following questions. Questions completed:  <a id="questions_completed">0</a>/<a id="num_questions"></a></h5>
 <hr>
 
 
 <div  class = "q1" id="Question" style="display: inline;">
 <a id="question_text"> </a>
     <p style="padding: 20px">
+<form id="my_form">
 <input type="number" id="answer">
-<button type="button" id="submit" onclick="check_answer(current_question)"> Submit</button>
+    <button type="button" id="submit" onclick="check_answer(current_question)" value="Reset form"> Submit</button>
+</form>
     </p>
 </div>
 
@@ -57,6 +56,10 @@ answered the questions.</h4>
     var q2_ans = 5*delta*fL;
     var q3_ans = number_green;
     var q4_ans = number_blue;
+    var q5_ans = 240;
+    var q6_ans = 180;
+    var q7_ans = 160;
+    var q8_ans = 120;
 
     // var q1_ans = price*number_tickets+delta*(5-number_tickets)*fH;
     // var q2_ans = price*number_tickets+delta*(5-number_tickets)*fL;
@@ -64,12 +67,12 @@ answered the questions.</h4>
     // var q4_ans = 5*Math.floor(delta*fL);
     // var q5_ans = buyer_endowment + number_tickets*(fH-price);
     // var q6_ans = buyer_endowment + number_tickets*(fL-price);
-    var q7_ans = fH;
+    // var q7_ans = fH;
 
 
     var current_question = 0;
     var question_text = '';
-    var question_sequence = [0,1,2,3,4,5];
+    var question_sequence = [0,1,2,3,4,5,6,7,8];
     // 0: if a buyer does not win the auction
     // 1: if a seller sells x>0 green tickets
     // 2: if a seller sells x>0 blue tickets
@@ -79,7 +82,7 @@ answered the questions.</h4>
     // 6: if a buyer purchases y>0 blue tickets
     // 7: What is the maximum possible per-ticket price?
     // 8: calculating payments
-    var answer_sequence = [q0_ans,q1_ans,q2_ans,q3_ans,q4_ans];
+    var answer_sequence = [q0_ans,q1_ans,q2_ans,q3_ans,q4_ans,q5_ans,q6_ans,q7_ans,q8_ans];
     var last_question = question_sequence.length-1;
     var questions_completed = 0;
     var correct_answer = answer_sequence[current_question];
@@ -104,7 +107,7 @@ answered the questions.</h4>
             try_count +=1;
             display_hint(question,try_count);
         }
-
+        document.getElementById('answer').value = "";
     }
 
     function next_question(question){
@@ -140,6 +143,22 @@ answered the questions.</h4>
                     + number_blue + ' blue  tickets at stage 1, and you are selected ' +
                     'to be a seller with blue tickets. ' +
                     'How many tickets do you sell in the auction?';
+            }
+           if (question==5){
+                question_text = 'Question 5: Suppose you choose to sell 4 tickets at a price of 60 francs per-ticket.' +
+                    'How many francs do you earn from the auction?';
+            }
+            if (question==6){
+                question_text = 'Question 6: Suppose you choose to sell 3 tickets at a price of 60 francs per-ticket.' +
+                    'How many francs do you earn from the auction?';
+            }
+           if (question==7){
+                question_text = 'Question 7: Suppose you choose to sell 4 tickets at a price of 40 francs per-ticket.' +
+                    'How many francs do you earn from the auction?';
+            }
+           if (question==8){
+                question_text = 'Question 8: Suppose you choose to sell 3 tickets at a price of 40 francs per-ticket.' +
+                    'How many francs do you earn from the auction?';
             }
             display_hint(question,0);
             $('#question_text').html(question_text);

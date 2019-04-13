@@ -1,0 +1,55 @@
+<head>
+<style>
+    .column{
+    height :320px;
+    }
+    .left{
+        width: 400px;
+    }
+    .right{
+        width: 600px;
+    }
+
+</style>
+</head>
+<body>
+
+<div class="row" style="margin-left: 100px" >
+    <div class="left" style="padding: 20px;background-color:lightgray; border-radius:20px; margin-top:10px;">
+    <h1 style="padding-bottom: 10px;text-align: center"> Summary</h1>
+    <div style="padding-bottom: 10px"> You were a seller with <a style="color:{{color}}">{{color}} tickets</a>. You chose to sell {{quantity}} and keep {{keep}}.</div>
+    <div style="padding-bottom: 10px"> The ticket{{plural}} sold for a price of {{price}} francs per-ticket in the auction.</div>
+    </div>
+    <div class="right" style="background-color: goldenrod;border-radius:20px; margin-top:10px; margin-left: 10px; padding: 20px">
+
+    <h1 style="text-align: center"> Your Earnings This Round</h1>
+        <table style="font-size: x-large;">
+            <tr>
+                <td></td>
+                <td>{{retained_earnings}} </td>
+                <td> = </td>
+                <td> {{keep}}&times;{{seller_value}} </td>
+                <td> </td>
+                <td style="color: dimgray; alignment: left">  francs from the ticket{{kplural}} you kept</td>
+            </tr>
+            <tr>
+                <td style="border-bottom: 4px solid black">+</td>
+                <td style="border-bottom: 4px solid black">{{revenue}} </td>
+                <td style="border-bottom: 4px solid black"> = </td>
+                <td style="border-bottom: 4px solid black"> {{quantity}}&times;{{price}}</td>
+                <td></td>
+                <td style="color: dimgray; alignment: left">  francs from the ticket{{plural}} you sold</td>
+            </tr>
+            <tr>
+                <td></td>
+                <td></td>
+                <td> = </td>
+                <td> {{francs}}</td>
+                <td> &nbsp;&nbsp;&nbsp;&nbsp;</td>
+                <td style="font-weight: bold"> francs you earned this round
+        </table>
+    </div>
+</div>
+
+</body>
+</html>

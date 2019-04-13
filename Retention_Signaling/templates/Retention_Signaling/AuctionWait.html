@@ -25,7 +25,7 @@
 
 <div style="background-color:darkkhaki; color:black;border-radius:20px; margin:2px">
     <h6 style="padding:10px" id="remaining_bidders"> Remaining bidders: <span style="alignment: left;" id='num_in_auction'>{{group.num_in_auction}}</span>
-        <span style="float:right;">Earnings from auction: <a id='expense'>0</a> francs</span>
+        <span style="float:right;">Earnings from auction: <a id='expense'>{{initial_expense}}</a> francs</span>
     </h6>
     <h6 style="padding-left: 10px;">Number of tickets for sale: {{quantity}}</h6>
     <div style="font-size: 80px;text-align: center"><a id="current">Current Price:</a> <span class="label label-success"
@@ -44,7 +44,13 @@
 
 <hr>
 
+{% if round_number > 1 %}
+<div id="history">
 {% include 'includes/history_seller.html' %}
+</div>
+{% endif %}
+
+
 
 </body>
 

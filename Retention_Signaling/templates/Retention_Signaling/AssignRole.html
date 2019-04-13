@@ -15,42 +15,44 @@ Round {{round_number}}
 
 {% block content %}
 
-<p> <h1>You have been selected to be a <b>{{role}}</b> for this round. </h1>  </p>
-
+<div style="margin-left: 30px">
 {% if role == 'seller' %}
+<h1>You are a <b>SELLER</b> </h1>
 
-<h3 style="color:{{color}};padding-bottom: 10px"> You have been assigned {{color}} tickets for this round.</h3>
+<h3 style="color:{{color}};padding-bottom: 10px"> You have been assigned {{color}} tickets.</h3>
 
-<p> At the seller stage, you chose to sell <b>{{quantity}}</b> of these tickets in the auction. </p>
+<p style="font-size: x-large;"> At the seller stage, you chose to sell <b>{{quantity}}</b> of these tickets in the auction. </p>
 
-<p>Click "next" to proceed to the auction.</p>
+<p style="font-size: x-large;">Click "next" to proceed to the auction.</p>
 {% next_button %}
 
 {% endif %}
 
 {% if role == 'buyer' %}
+<h1>You are a <b>BUYER</b> </h1>
 
-<p> There {{to_be}} <b>{{quantity}} ticket{{plural}}</b> for sale in the auction. You have <b>{{group.buyer_endowment}} francs</b>
-    to spend in
-    the auction.</p>
 
-<p> The price will start from {{group.start_price}} francs per-ticket and will increase until it reaches {{group.fH}} francs per-ticket. You may exit the auction at any time. </p>
+<p style="font-size: x-large"> There {{to_be}} <b>{{quantity}} ticket{{plural}}</b> for sale in the auction. You have <b>{{group.buyer_endowment}} francs</b>
+    to spend.</p>
 
-<p> If you are the last buyer remaining in the auction, you will purchase the {{quantity}} ticket{{plural}}. At the end of the round, {{pronoun}} {{quantity}} ticket{{plural}}
+<p style="font-size: x-large"> The last buyer remaining purchases the ticket{{plural}}. After the auction, {{pronoun}} {{quantity}} ticket{{plural}}
     will be exchanged for:</p>
 
-<ul>
+<ul style="font-size: x-large">
     <li style="padding-bottom:10px"> {{quantity}}&times;{{group.fH}}= {{vH}} francs if the ticket{{plural}} {{to_be}} <a style="color:green">green</a> or </li>
     <li>{{quantity}}&times;{{group.fL}}= {{vL}} francs if the ticket{{plural}} {{to_be}} <a style="color:blue">blue</a>.</li>
 </ul>
-<p>Click "Next" to proceed to the auction.</p>
+<p style="font-size: x-large">Click "Next" to proceed to the auction.</p>
 {% next_button %}
 <div style="padding-bottom:5px "></div>
 <hr style="">
+
+{% if round_number > 1 %}
 {% include 'includes/history_buyer.html' %}
 {% endif %}
+    {% endif %}
 
-
+</div>
 {% endblock %}
 
 

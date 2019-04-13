@@ -62,8 +62,16 @@
     <div style="padding-bottom:10px"> Your earnings from this round will be the sum of </div>
 <div>
     <ul>
-        <li style="padding-bottom:10px">Francs from tickets you keep: {{green_value}} &times; <a class="green-text b-text" id="green_retain" style="display:none"> </a> = <a class="green-text b-text" id="green_calc" style="display:none"></a></li>
-        <li>Francs from tickets you sell: (auction price) &times; <a class="green-text b-text" id="green_keep" style="display:none"> </a></li>
+        <li style="padding-bottom:10px">Francs from the <a class="empty_space_green" style="color:white;border-bottom: 2px black dashed">&nbsp;&nbsp;</a>
+            <a id="green_retain2" class="green-text b-text" style="display:none;font-weight: bold;">   </a> ticket<a id="gks">s</a> you keep: {{green_value}} &times;
+            <a class="empty_space_green" style="border-bottom: 2px black dashed">&nbsp;&nbsp;</a>
+            <a class="green-text b-text" id="green_retain" style="display:none;">   </a> =
+            <a class="green-text b-text" id="green_calc" style="display:none"></a></li>
+        <li>Francs from the <a class="empty_space_green"  style="border-bottom: 2px black dashed"> &nbsp;&nbsp;</a>
+            <a class="green-text b-text" id="green_sell" style="display:none;font-weight: bold"> </a>
+            ticket<a id="gs">s</a> you sell:
+            (auction price) &times;  <a class="empty_space_green" style="color:white;border-bottom: 2px black dashed">&nbsp;&nbsp;</a>
+            <a class="green-text b-text" id="green_keep" style="display:none"> </a></li>
     </ul>
 </div>
 
@@ -116,11 +124,18 @@
 <div style="padding-bottom:10px"> Your earnings from this round will be the sum of </div>
 <div>
     <ul>
-        <li style="padding-bottom:10px">Francs from tickets you keep: {{blue_value}} &times; <a class="blue-text b-text" id="blue_retain" style="display:none"> </a> = <a class="blue-text b-text" id="blue_calc" style="display:none"></a></li>
-        <li>Francs from tickets you sell: (auction price) &times; <a class="blue-text b-text" id="blue_keep" style="display:none"> </a></li>
+        <li style="padding-bottom:10px">Francs from the <a class="empty_space_blue" style="color:white;border-bottom: 2px black dashed">&nbsp;&nbsp;</a>
+            <a id="blue_retain2" class="blue-text b-text" style="display:none;font-weight: bold">   </a> ticket<a id="bks">s</a> you keep: {{blue_value}} &times;
+            <a class="empty_space_blue" style="border-bottom: 2px black dashed">&nbsp;&nbsp;</a>
+            <a class="blue-text b-text" id="blue_retain" style="display:none;">   </a> =
+            <a class="blue-text b-text" id="blue_calc" style="display:none"></a></li>
+        <li>Francs from the <a class="empty_space_blue"  style="border-bottom: 2px black dashed"> &nbsp;&nbsp;</a>
+            <a class="blue-text b-text" id="blue_sell" style="display:none;font-weight: bold"> </a>
+            ticket<a id="bs">s</a> you sell:
+            (auction price) &times;  <a class="empty_space_blue" style="color:white;border-bottom: 2px black dashed">&nbsp;&nbsp;</a>
+            <a class="blue-text b-text" id="blue_keep" style="display:none"> </a></li>
     </ul>
 </div>
-
 
 </div>
 
@@ -147,12 +162,26 @@
         $('.green').hover(function () {
             var id = $(this).attr('data-id');
             var num = {{Constants.Q}}-id;
-            document.getElementById('green_retain').innerHTML = {{Constants.Q}}-id;
+            document.getElementById('green_sell').innerHTML = id;
+            document.getElementById('green_retain2').innerHTML = num;
+            document.getElementById('green_retain').innerHTML = num;
             document.getElementById('green_keep').innerHTML = id;
             document.getElementById('green_calc').innerHTML = num*{{green_value}};
+            $('.empty_space_green').hide();
             $('.green-text').show();
+            if (num == 1){
+                $('#gks').hide()
+            }
+            if (num==4){
+                $('#gs').hide()
+            }
         }, function () {
-            if (!green_clicked){$('.green-text').hide();}
+            if (!green_clicked){
+                $('.green-text').hide();
+                $('.empty_space_green').show();
+                $('#gks').show();
+                $('#gs').show();
+            }
         }).on('click', function () {
             if (!green_clicked){
                 var id = $(this).attr('data-id');
@@ -187,12 +216,26 @@
         $('.blue').hover(function () {
             var id = $(this).attr('data-id');
             var num = {{Constants.Q}}-id;
+            document.getElementById('blue_sell').innerHTML = id;
+            document.getElementById('blue_retain2').innerHTML = num;
             document.getElementById('blue_retain').innerHTML = {{Constants.Q}}-id;
             document.getElementById('blue_keep').innerHTML = id;
             document.getElementById('blue_calc').innerHTML = num*{{blue_value}};
+            $('#empty_space_blue').hide();
             $('.blue-text').show();
+            $('.empty_space_blue').hide();
+            if (num == 1){
+                $('#bks').hide()
+            }
+            if (num==4){
+                $('#bs').hide()
+            }
         }, function () {
-            if (!blue_clicked){$('.blue-text').hide();}
+            if (!blue_clicked){
+                $('.empty_space_blue').show();
+                $('.blue-text').hide();
+                $('#bks').show();
+                $('#bs').show();}
         }).on('click', function () {
             if (!blue_clicked){
                 var id = $(this).attr('data-id');
