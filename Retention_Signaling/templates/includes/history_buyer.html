@@ -34,8 +34,11 @@
     .fixed_header tbody {
         display: block;
         overflow-y: auto;
-        height: 175px;
+        overflow-x: hidden;
+        height: 141px;
+        padding-right: 1px;
     }
+
 
     .fixed_header thead tr {
         display: block;
@@ -44,9 +47,11 @@
 
     .fixed_header th, .fixed_header td {
         padding: 5px;
-        width: 200px;
-
+        width: 220px;
+        min-width: 220px;
+        max-width: 220px;
     }
+
     .fixed_header thead tr th:first-child,
     .fixed_header tbody tr td:first-child {
         width: 80px;
@@ -71,15 +76,15 @@
 
 
 <div style="resize: vertical">
-    <table align=center class=fixed_header>
-        <caption style="caption-side: top; font-size: xx-large;" class="text-center">Results from Past Rounds</caption>
+    <table style="border-bottom: 1px solid black" align=center class=fixed_header>
+        <caption style="caption-side: top; font-size: xx-large; padding: 5px" class="text-center">Results from Past Rounds</caption>
         <thead>
         <tr>
             <th>Round #</th>
             <th>Group #</th>
             <th># of Tickets Offered</th>
             <th>Ticket Color</th>
-            <th>Price <br> (francs per-ticket)</th>
+            <th>Price (francs per-ticket)</th>
             <th>Purchaser Earnings (francs)</th>
         </tr>
         </thead>

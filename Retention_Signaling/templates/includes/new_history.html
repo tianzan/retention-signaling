@@ -3,7 +3,14 @@
 <head>
 </head>
 <style>
-
+    .btn-primary{
+        border-radius: 5px;
+        margin-top: 10px;
+        width: 95.5%;
+    }
+    .btn-primary:hover {
+        box-shadow: 0 12px 16px 0 rgba(0, 0, 0, 0.24), 0 17px 50px 0 rgba(0, 0, 0, 0.19);
+    }
 
     .fixed_header table {
         font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
@@ -37,8 +44,9 @@
 
     .fixed_header tbody {
         display: block;
-        overflow: auto;
-        height: 200px;
+        overflow-y: auto;
+        overflow-x: hidden;
+        height: 428px;
         padding-right: 1px;
     }
 
@@ -50,9 +58,11 @@
 
     .fixed_header th, .fixed_header td {
         padding: 5px;
-        width: 160px;
-
+        width: 140px;
+        min-width: 150px;
+        max-width: 150px;
     }
+
     .fixed_header thead tr th:first-child,
     .fixed_header tbody tr td:first-child {
       width: 80px;
@@ -88,7 +98,7 @@
             <th style="border-bottom: 2px solid darkslategray">Your Earnings (francs)</th>
         </tr>
         </thead>
-        <tbody>
+        <tbody style="border-bottom: 1px solid black">
         {% for k,v in data.items %}
         <tr>
             {% if forloop.counter|divisibleby:num_groups %}
@@ -107,6 +117,7 @@
         </tbody>
 
     </table>
+    <div style="text-align: center"> <button class="btn btn-primary btn-lg">Click to Begin Next Round</button></div>
 </div>
 </body>
 
