@@ -5,7 +5,7 @@
     height :320px;
     }
     .left{
-        width: 430px;
+        width: 450px;
     }
     .right{
         width: 700px;
@@ -14,11 +14,11 @@
 </style>
 </head>
 <body>
-<div class="row" style="margin-left: 70px;" >
+<div class="row" style="margin-left: 60px;" >
     <div class="left" style="padding: 20px;background-color:lightgray; border-radius:20px; margin-top:10px;">
     <h1 style="padding-bottom: 10px;text-align: center"> Summary</h1>
-    <h5 style="padding-bottom: 10px"> You were a buyer this round, and the seller offered {{quantity}} ticket{{plural}} for sale.</h5>
-    <h5 style="padding-bottom: 10px"> The auction ended at a price of {{price}} francs per-ticket, and you were chosen at random to purchase the ticket{{plural}}.</h5>
+        <h5 style="padding-bottom: 10px"> You were a <b>buyer</b> this round, and the seller offered <b>{{quantity}}</b> ticket{{plural}} for sale.</h5>
+        <h5 style="padding-bottom: 10px"> The auction ended at a price of <b>{{price}}</b> francs per-ticket, and <b> you were chosen to purchase the ticket{{plural}}</b>.</h5>
     <h5 style="padding-bottom: 10px"> The ticket{{plural}} {{to_be}} <a style="color:{{color}}">{{color}}</a>; you received {{ticket_value}} francs per-ticket.</h5>
     </div>
     <div class="right" style="background-color: goldenrod;border-radius:20px; margin-top:10px; margin-left: 10px; padding: 20px">

@@ -14,7 +14,10 @@ class Welcome(Page):
         return self.round_number == 1
 
     def get_timeout_seconds(self):
-        return self.session.config['Welcome_Time']
+        if self.session.config['TimeOut'] == 1:
+            return self.session.config['Wait']
+        else:
+            return 1000000
 
 
 class Quiz(Page):
@@ -159,7 +162,10 @@ class AssignRole(Page):
         }
 
     def get_timeout_seconds(self):
-        return self.session.config['Assign_Time']
+        if self.session.config['TimeOut'] == 1:
+            return self.session.config['Wait']
+        else:
+            return 1000000
 
     # Enters buyers into auction
     def before_next_page(self):
@@ -264,7 +270,10 @@ class AuctionFinish(Page):
         return self.group.group_quantity > 0 and self.round_number <= self.session.config['final_round']
 
     def get_timeout_seconds(self):
-        return self.session.config['Auction_Finish_Time']
+        if self.session.config['TimeOut'] == 1:
+            return self.session.config['Wait']
+        else:
+            return 1000000
 
     def vars_for_template(self):
         fH = self.group.fH
@@ -373,7 +382,10 @@ class PerformanceReview(Page):
         return self.round_number <= self.session.config['final_round']
 
     def get_timeout_seconds(self):
-        return self.session.config['Performance_Time']
+        if self.session.config['TimeOut'] == 1:
+            return self.session.config['Wait']
+        else:
+            return 1000000
 
     def vars_for_template(self):
         self.participant.vars[str(self.round_number) + 'R' + str(self.group.group_number)] = {
@@ -429,7 +441,7 @@ class Payoffs(Page):
 
 page_sequence = [
     Welcome,
-    Quiz,
+    # Quiz,
     StartWait,
     # Page 1
     QuantityChoice,

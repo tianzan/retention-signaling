@@ -6,9 +6,6 @@
         .otree-timer {
             display: none;
         }
-        .otree-body {
-        max-width:1500px
-        }
     </style>
 {% endblock %}
 
@@ -51,12 +48,12 @@ Round {{round_number}}: Seller
     </style>
 </head>
 
-<!--<div style="width:100%content-box;height:20px;background-color:darkslategray;color:white;padding-bottom: 10px"> </div>-->
+<div style="width:100%content-box;height:50px;background-color:darkslategray;color:white;padding-top:0"> </div>
 
 <h3  style="margin-bottom: 0" align="center"> If you are a seller, your tickets may be <a style="color: green"> green </a> or <a style="color: blue"> blue</a>. </h3>
 
 {% include 'includes/strategy_choice.html' %}
-{% if round_number > 0 %}
+{% if round_number > 1 %}
 {% include 'includes/history_seller.html' %}
 {% endif %}
 

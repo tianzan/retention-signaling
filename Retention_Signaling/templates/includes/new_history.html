@@ -46,7 +46,7 @@
         display: block;
         overflow-y: auto;
         overflow-x: hidden;
-        height: 428px;
+        max-height: 428px;
         padding-right: 1px;
     }
 
@@ -98,7 +98,7 @@
             <th style="border-bottom: 2px solid darkslategray">Your Earnings (francs)</th>
         </tr>
         </thead>
-        <tbody style="border-bottom: 1px solid black">
+        <tbody>
         {% for k,v in data.items %}
         <tr>
             {% if forloop.counter|divisibleby:num_groups %}
