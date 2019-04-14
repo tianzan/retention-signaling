@@ -226,8 +226,7 @@ class Player(BasePlayer):
 
     def update_payment(self):
         if self.payoff_round and not self.payoff_updated:
-            self.payoff += round(round(self.francs, 2) * self.session.config['conversion_rate'] * (
-                        1 + self.is_seller * self.session.config['seller_scaling']),2)
+            self.payoff += round(self.francs * self.session.config['conversion_rate'], 2)
             self.payoff_updated = True
 
 

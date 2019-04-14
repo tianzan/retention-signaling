@@ -1,25 +1,5 @@
 {% extends "global/Page.html" %}
-{% load otree static %}
-
-{% block styles %}
-    <style>
-        .otree-timer {
-            display: none;
-        }
-    </style>
-{% endblock %}
-
-{% block scripts %}
-    <script>
-        $(function () {
-            $('.otree-timer__time-left').on('update.countdown', function (event) {
-                if (event.offset.totalSeconds === 20) {
-                    $('.otree-timer').show();
-                }
-            });
-        });
-    </script>
-{% endblock %}
+{% load otree staticfiles otree_tags %}
 
 {% block title %}
 Round {{round_number}}: Seller

@@ -93,6 +93,12 @@ class NoAuction(Page):
     def is_displayed(self):
         return self.group.group_quantity == 0 and self.round_number <= self.session.config['final_round']
 
+    def get_timeout_seconds(self):
+        if self.session.config['TimeOut'] == 1:
+            return self.session.config['Wait']
+        else:
+            return 1000000
+
     def vars_for_template(self):
         fH = self.group.fH
         fL = self.group.fL
