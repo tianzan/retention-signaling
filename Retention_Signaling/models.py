@@ -226,8 +226,7 @@ class Player(BasePlayer):
 
     def update_payment(self):
         if self.payoff_round and not self.payoff_updated:
-            self.payoff += round(round(self.francs, 2) * self.session.config['conversion_rate'] * (
-                        1 + self.is_seller * self.session.config['seller_scaling']),2)
+            self.payoff += round(self.francs * self.session.config['conversion_rate'], 2)
             self.payoff_updated = True
 
 
@@ -236,7 +235,6 @@ def runEverySecond():
         # Groups are hidden started once all group members reach Wait
         invisible_wait_groups = Group.objects.filter(hidden_start=True)
         for g in invisible_wait_groups:
-            print('hello')
             if g.hidden_time_till > 0:
                 g.hidden_time_till = g.hidden_time_till - 1
                 g.save()
@@ -324,10 +322,10 @@ def runEverySecond():
         finished_groups = Group.objects.filter(activated=True, auction_over=True)
         for g in finished_groups:
             # Could put the max move_count into session_configs
-            if g.move_count < 50:
+            if g.move_count < 10:
                 g.move_count += 1
                 g.save()
-            if g.move_count == 50:
+            if g.move_count == 10:
                 g.move_count += 1
                 g.save()
                 g.advance_participants()
