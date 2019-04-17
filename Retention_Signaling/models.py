@@ -124,6 +124,9 @@ class Group(BaseGroup):
     winner_payoff = models.IntegerField()
     seller_payoff = models.IntegerField()
 
+    # Used to track whether data has been loaded into session vars
+    data_updated = models.BooleanField()
+
     def get_channel_group_name(self):
         return 'auction_group_{}'.format(self.pk)
 
