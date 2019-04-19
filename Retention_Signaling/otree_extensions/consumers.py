@@ -1,6 +1,6 @@
 from channels.generic.websockets import JsonWebsocketConsumer
 import random
-from Retention_Signaling.models import Constants, Player, Group, l
+from Retention_Signaling.models import Constants, Player, Group
 import json
 import channels
 

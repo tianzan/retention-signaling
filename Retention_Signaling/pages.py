@@ -6,12 +6,12 @@ from .models import Constants
 import json
 import channels
 import random
+from .models import loop, runEverySecond
 
 
 class Welcome(Page):
     def is_displayed(self):
         return self.round_number == 1
-
 
 
 class Quiz(Page):
@@ -88,7 +88,6 @@ class AssignWait(WaitPage):
         self.group.get_color()
         self.group.set_quantity()
         if self.group.group_quantity == 0:
-            self.group.set_francs()
             self.group.set_francs()
             seller_payoff = self.group.seller_payoff
             temp = dict()

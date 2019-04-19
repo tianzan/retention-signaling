@@ -16,9 +16,6 @@ Trading game with asymmetric information and retention.
 """
 
 
-# def group_model_exists():
-#     return 'retention-signaling_group' in connection.introspection.table_names()
-
 def group_model_exists():
     return 'Retention_Signaling_group' in connection.introspection.table_names()
 
@@ -41,8 +38,6 @@ class Constants(BaseConstants):
 class Subsession(BaseSubsession):
     num_groups = models.IntegerField()
     players_per_group = models.IntegerField()
-    dictionary_created = models.BooleanField()
-    dictionary_updated = models.BooleanField()
 
     def creating_session(self):
         self.session.vars['past_rounds'] = {}
@@ -84,7 +79,7 @@ class Subsession(BaseSubsession):
             group.num_in_auction = self.players_per_group - 1
             group.group_number = count
             for p in players:
-                p.participant.vars['roles'][str(p.round_number)+'R'+str(group.group_number)] = p.role()
+                p.participant.vars['roles'][str(p.round_number) + 'R' + str(group.group_number)] = p.role()
                 p.participant.vars['group_numbers'].append(group.group_number)
                 p.seller_type = numpy.random.binomial(1, alpha)
                 if p.seller_type == 1:
@@ -95,7 +90,6 @@ class Subsession(BaseSubsession):
                 if self.round_number in p.participant.vars['payoff_rounds']:
                     p.payoff_round = True
             count = count + 1
-
 
 
 class Group(BaseGroup):
@@ -153,7 +147,7 @@ class Group(BaseGroup):
     def set_quantity(self):
         seller = self.get_player_by_role('seller')
         seller_type = seller.seller_type
-        quantity = seller_type*seller.quantity_choice_green+(1-seller_type)*seller.quantity_choice_blue
+        quantity = seller_type * seller.quantity_choice_green + (1 - seller_type) * seller.quantity_choice_blue
         self.group_quantity = quantity
         seller.quantity_choice = quantity
 
@@ -198,7 +192,7 @@ class Group(BaseGroup):
                     p.francs = buyer_endowment + self.group_quantity * (
                             self.group_type * (self.fH - self.fL) + self.fL - self.price)
                     self.winner_payoff = p.francs
-            p.participant.vars['francs'][str(self.round_number)+'R'+str(self.group_number)] = p.francs
+            p.participant.vars['francs'][str(self.round_number) + 'R' + str(self.group_number)] = p.francs
 
 
 class Player(BasePlayer):
@@ -213,8 +207,6 @@ class Player(BasePlayer):
     auction_winner = models.BooleanField(initial=False)
     francs = models.IntegerField()
     payoff_round = models.BooleanField(initial=False)
-    payoff_updated = models.BooleanField(initial=False)
-    dictionary_deleted = models.BooleanField(initial=False)
 
     def get_channel_player_name(self):
         return 'player_{}'.format(self.pk)
@@ -238,10 +230,8 @@ class Player(BasePlayer):
         self.auction_winner = False
 
     def update_payment(self):
-        if self.payoff_round and not self.payoff_updated:
+        if self.payoff_round:
             self.payoff += round(self.francs * self.session.config['conversion_rate'], 2)
-            self.payoff_updated = True
-
 
 
 def runEverySecond():
@@ -299,7 +289,7 @@ def runEverySecond():
             g.remaining_bidders()
             g.save()
             if g.price < g.fH and g.num_in_auction > 1:
-                g.price  += g.increment_size
+                g.price += g.increment_size
                 g.save()
                 channels.Group(
                     g.get_channel_group_name()
@@ -338,13 +328,11 @@ def runEverySecond():
             if g.move_count < 10:
                 g.move_count += 1
                 g.save()
-            if g.move_count >= 10:
+            if 10 <= g.move_count:
                 g.move_count += 1
                 g.save()
                 g.advance_participants()
 
 
-l = task.LoopingCall(runEverySecond)
-l.start(1)
-if not l.running:
-    pass
+loop = task.LoopingCall(runEverySecond)
+loop.start(1)
