@@ -35,7 +35,7 @@
         display: block;
         overflow-y: auto;
         overflow-x: hidden;
-        max-height: 141px;
+        max-height: 160px;
         padding-right: 1px;
     }
 
@@ -76,7 +76,7 @@
 
 
 <div style="resize: vertical">
-    <table style="border-bottom: 1px solid black" align=center class=fixed_header>
+    <table  align=center class=fixed_header>
         <caption style="caption-side: top; font-size: xx-large; padding: 5px" class="text-center">Results from Past Rounds</caption>
         <thead>
         <tr>
@@ -90,14 +90,14 @@
         </thead>
         <tbody>
         {% for k,v in data.items %}
-        <tr>
+        <tr style="font-size: large">
             {% if forloop.counter|divisibleby:num_groups %}
             <td style="border-bottom: 3px solid black; border-right: 3px solid black"
                 data-id='-1' data-value='-1' rowspan={{num_groups}}> <h1>{{v.round}}</h1></td>
                 {% endif %}
             <td data-id={{v.group_number}} data-value={{v.round}}> {{v.group_number}}</td>
             <td data-id='-1' data-value='-1'> {{v.quantity}}</td>
-            <td data-id='-1' data-value='-1' style="color:{{v.color}}"> {{v.color}}</td>
+            <td data-id='-1' data-value='-1' style="color:{{v.color}};font-weight: bold"> {{v.color}}</td>
             <td data-id='-1' data-value='-1'> {{v.price}}</td>
             <td data-id='-1' data-value='-1'> {{v.winner_payoff}}</td>
         </tr>
@@ -123,6 +123,7 @@
             var round_number = $(this).attr('data-value')-1;
             if (group_numbers[round_number]==$(this).attr('data-id')){
                 $(this).css('color','red');
+                $(this).css('font-weight','bold');
             }
         })
     });

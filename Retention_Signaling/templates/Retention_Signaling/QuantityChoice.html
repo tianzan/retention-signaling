@@ -1,6 +1,12 @@
 {% extends "global/Page.html" %}
 {% load otree staticfiles otree_tags %}
-
+{% block styles %}
+    <style>
+        .otree-timer {
+            display: none;
+        }
+    </style>
+{% endblock %}
 {% block title %}
 Round {{round_number}}: Seller
 {% endblock %}

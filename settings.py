@@ -25,13 +25,15 @@ SESSION_CONFIGS = [
         'conversion_rate': 0.012,
         'buyer_endowment': 300,
         'start_price': 0,
-        'increment_size1': 1,
+        'increment_size': 1,
         'alpha': 0.75,
         'delta': 0.5,
         'fL': 40,
         'fH': 60,
         'TimeOut': 0,
         'Wait': 30,
+        'hidden_time_till': 4,
+        'time_till': 5,
         'use_browser_bots': False,
         'app_sequence': [
             'Retention_Signaling'

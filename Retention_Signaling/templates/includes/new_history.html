@@ -100,13 +100,13 @@
         </thead>
         <tbody>
         {% for k,v in data.items %}
-        <tr>
+        <tr style="font-size: large">
             {% if forloop.counter|divisibleby:num_groups %}
             <td data-id=-1 data-value=-1  rowspan={{num_groups}} style="border-bottom: 3px solid black; border-right: 3px solid black"> <h1>{{v.round}}</h1></td>
                 {% endif %}
             <td data-id={{v.group_number}} data-value={{v.round}}> {{v.group_number}}</td>
             <td data-id=-1 data-value=-1 > {{v.quantity}}</td>
-            <td data-id=-1 data-value=-1  style="color:{{v.color}}"> {{v.color}}</td>
+            <td data-id=-1 data-value=-1  style="color:{{v.color}};font-weight: bold"> {{v.color}}</td>
             <td data-id=-1 data-value=-1 > {{v.price}}</td>
             <td data-id=-1 data-value=-1 > {{v.seller_payoff}}</td>
             <td data-id=-1 data-value=-1 > {{v.winner_payoff}}</td>
@@ -141,6 +141,7 @@ $(document).ready(function() {
             var round_number = $(this).attr('data-value')-1;
             if (group_numbers[round_number]==$(this).attr('data-id')){
                 $(this).css('color','red');
+                $(this).css('font-weight','bold');
             }
         })
     });

@@ -41,8 +41,12 @@ class Constants(BaseConstants):
 class Subsession(BaseSubsession):
     num_groups = models.IntegerField()
     players_per_group = models.IntegerField()
+    dictionary_created = models.BooleanField()
+    dictionary_updated = models.BooleanField()
 
     def creating_session(self):
+        self.session.vars['past_rounds'] = {}
+        self.session.vars['current_round'] = {}
         self.num_groups = self.session.config['num_groups']
         self.players_per_group = self.session.config['players_per_group']
         num_participants = self.num_groups * self.players_per_group
@@ -54,25 +58,6 @@ class Subsession(BaseSubsession):
         random_matrix_list = random_matrix.tolist()
         self.set_group_matrix(random_matrix_list)
 
-        # Assigns types
-        count = 1
-        for group in self.get_groups():
-            group.increment_size = self.session.config['increment_size1']
-            group.start_price = self.session.config['start_price']
-            group.fL = self.session.config['fL']
-            group.fH = self.session.config['fH']
-            group.buyer_endowment = self.session.config['buyer_endowment']
-            players = group.get_players()
-            group.num_in_auction = self.players_per_group - 1
-            for p in players:
-                p.seller_type = numpy.random.binomial(1, alpha)
-                if p.seller_type == 1:
-                    p.seller_color = 'green'
-                else:
-                    p.seller_color = 'blue'
-            group.group_number = count
-            count = count + 1
-
         if self.round_number == 1:
             rounds = []
             for i in range(1, self.session.config['final_round'] + 1):
@@ -80,17 +65,42 @@ class Subsession(BaseSubsession):
 
             for p in self.get_players():
                 p.participant.vars['payoff_rounds'] = random.sample(rounds, num_payoff_rounds)
+                p.participant.vars['roles'] = {}
+                p.participant.vars['francs'] = {}
+                p.participant.vars['group_numbers'] = []
 
-        for p in self.get_players():
-            if self.round_number in p.participant.vars['payoff_rounds']:
-                p.payoff_round = True
+        # Assigns numbers to groups and seller types to players; draws payoff rounds for participants as well
+        # Creates and fills in the dictionaries used to track group/role for participants
+        count = 1
+        for group in self.get_groups():
+            group.time_till = self.session.config['time_till']
+            group.hidden_time_till = self.session.config['hidden_time_till']
+            group.increment_size = self.session.config['increment_size']
+            group.start_price = self.session.config['start_price']
+            group.fL = self.session.config['fL']
+            group.fH = self.session.config['fH']
+            group.buyer_endowment = self.session.config['buyer_endowment']
+            players = group.get_players()
+            group.num_in_auction = self.players_per_group - 1
+            group.group_number = count
+            for p in players:
+                p.participant.vars['roles'][str(p.round_number)+'R'+str(group.group_number)] = p.role()
+                p.participant.vars['group_numbers'].append(group.group_number)
+                p.seller_type = numpy.random.binomial(1, alpha)
+                if p.seller_type == 1:
+                    p.seller_color = 'green'
+                else:
+                    p.seller_color = 'blue'
+
+                if self.round_number in p.participant.vars['payoff_rounds']:
+                    p.payoff_round = True
+            count = count + 1
+
 
 
 class Group(BaseGroup):
     # The following four fields store parameters set in session_configs
     # They are set in the creating_session method
-    increment_size1 = models.IntegerField()
-    increment_size2 = models.IntegerField()
     increment_size = models.IntegerField()
     start_price = models.IntegerField()
     fL = models.IntegerField()
@@ -101,8 +111,8 @@ class Group(BaseGroup):
     # For before an auction starts
     start = models.BooleanField(initial=False)  # Countdown to auction start begins when start is true
     hidden_start = models.BooleanField(initial=False)  # To start invisible counter
-    hidden_time_till = models.IntegerField(initial=Constants.hidden_time_till)  # Invisible counter
-    time_till = models.IntegerField(initial=Constants.time_till)  # Used for button display
+    hidden_time_till = models.IntegerField()  # Invisible counter
+    time_till = models.IntegerField()  # Used for button display
     # time_till_float = models.FloatField(initial=Constants.time_till + 0.05)  # Actual counter (is a float)
 
     activated = models.BooleanField(initial=False)  # Auction is live once activated is true
@@ -188,7 +198,7 @@ class Group(BaseGroup):
                     p.francs = buyer_endowment + self.group_quantity * (
                             self.group_type * (self.fH - self.fL) + self.fL - self.price)
                     self.winner_payoff = p.francs
-            p.update_payment
+            p.participant.vars['francs'][str(self.round_number)+'R'+str(self.group_number)] = p.francs
 
 
 class Player(BasePlayer):
@@ -285,7 +295,6 @@ def runEverySecond():
         activated_groups = Group.objects.filter(activated=True, auction_over=False)
 
         for g in activated_groups:
-            g.remaining_bidders
             g.save()
             if g.price < g.fH and g.num_in_auction > 1:
                 g.price_float += g.increment_size
@@ -328,7 +337,7 @@ def runEverySecond():
             if g.move_count < 10:
                 g.move_count += 1
                 g.save()
-            if g.move_count == 10:
+            if g.move_count >= 10:
                 g.move_count += 1
                 g.save()
                 g.advance_participants()
