@@ -323,7 +323,6 @@ class PerformanceReview(Page):
         self.player.update_payment()
 
 
-
 class Payoffs(Page):
     def is_displayed(self):
         return self.round_number == self.session.config['final_round']

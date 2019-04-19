@@ -243,6 +243,7 @@ class Player(BasePlayer):
             self.payoff_updated = True
 
 
+
 def runEverySecond():
     if group_model_exists():
         # Groups are hidden started once all group members reach Wait
@@ -295,10 +296,10 @@ def runEverySecond():
         activated_groups = Group.objects.filter(activated=True, auction_over=False)
 
         for g in activated_groups:
+            g.remaining_bidders()
             g.save()
             if g.price < g.fH and g.num_in_auction > 1:
-                g.price_float += g.increment_size
-                g.price = g.price_float
+                g.price  += g.increment_size
                 g.save()
                 channels.Group(
                     g.get_channel_group_name()

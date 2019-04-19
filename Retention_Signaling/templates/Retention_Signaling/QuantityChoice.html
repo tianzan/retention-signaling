@@ -22,6 +22,7 @@ Round {{round_number}}: Seller
             float: left;
             width: 50%;
             padding: 10px;
+            padding-top: 0px;
             height: 800px;
         }
 
@@ -36,7 +37,7 @@ Round {{round_number}}: Seller
 
 <div style="width:100%content-box;height:30px;background-color:darkslategray;color:white;padding-top:0"> </div>
 
-<h3  style="margin-bottom: 0" align="center"> If you are a seller, your tickets may be <a style="color: green"> green </a> or <a style="color: blue"> blue</a>. </h3>
+<h3  style="margin-bottom: 0" align="center"> <i> If you are a seller, your tickets may be <a style="color: green"> green </a> or <a style="color: blue"> blue</a>. </i>    </h3>
 
 {% include 'includes/strategy_choice.html' %}
 {% if round_number > 1 %}

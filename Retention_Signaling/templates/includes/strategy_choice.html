@@ -1,29 +1,34 @@
 <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css" rel="stylesheet"/>
+<style>
+
+    .button2:hover {
+        box-shadow: 0 12px 16px 0 rgba(0, 0, 0, 0.24), 0 17px 50px 0 rgba(0, 0, 0, 0.19);
+    }
+
+    .table.no-border tr td, .table.no-border tr th {
+        border-width: 0;
+    }
+    .column{
+        height: auto;
+    }
+    .container-fluid {
+        height: 140px;
+        margin-bottom: 5px;
+        padding-left: 0px;
+    }
+    .choice-text{
+        margin-bottom: 0;
+        margin-top: 15px
+    }
+    .page-header{
+        margin-bottom: 0;
+    }
+    .button-container{
+        margin-bottom: 15px;
+        margin-top: 15px;
+    }
+</style>
 <head>
-    <style>
-
-        .button2:hover {
-            box-shadow: 0 12px 16px 0 rgba(0, 0, 0, 0.24), 0 17px 50px 0 rgba(0, 0, 0, 0.19);
-        }
-
-        .table.no-border tr td, .table.no-border tr th {
-         border-width: 0;
-        }
-        .column{
-            height: auto;
-        }
-        .container-fluid {
-            height: 140px;
-            margin-bottom: 5px;
-        }
-        .choice-text{
-            margin-bottom: 0;
-        }
-        .page-header{
-            margin-bottom: 0;
-        }
-
-    </style>
 
 </head>
 <body>
@@ -32,7 +37,7 @@
     <div class="column">
         <h3 class="choice-text"> Choose the number of <a style="color:green">green</a> tickets to sell. </h3>
 <div class="container-fluid text-center">
-    <hr>
+    <hr class="button-container">
     <table class="table no-border">
         <tr>
             <th>
@@ -67,7 +72,7 @@
             </th>
         </tr>
     </table>
-    <hr>
+    <hr class="button-container">
     </div>
 
     <div style="padding-bottom:10px"> Your earnings from this round will be the sum of </div>
@@ -95,7 +100,7 @@
 
 <div class="container-fluid text-center">
 
-    <hr>
+    <hr class="button-container" >
     <table class="table no-border">
         <tr>
             <th>
@@ -130,7 +135,7 @@
             </th>
         </tr>
     </table>
-    <hr>
+    <hr class="button-container">
 </div>
 <div style="padding-bottom:10px"> Your earnings from this round will be the sum of </div>
 <div>
