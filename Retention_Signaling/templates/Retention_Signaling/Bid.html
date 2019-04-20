@@ -53,7 +53,7 @@
         </h6>
         <h6>Number of Tickets for Sale: {{quantity}}</h6>
         <center style="font-size: 80px"> <a id="current">Current Price:</a> <span class="label label-success"
-                                                             id='group_price'>{{ group.start_price }}</span></center>
+                                                             id='group_price'>0</span></center>
         {% include 'includes/bid_button.html' %}
 
     </div>
@@ -91,7 +91,7 @@
 
 
 {% block scripts %}
-{% include 'includes/decision_channel.js.html' %}
+{% include 'includes/Bid_script.html' %}
 {% endblock %}
 
 

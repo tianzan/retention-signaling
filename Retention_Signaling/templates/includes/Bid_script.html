@@ -1,0 +1,167 @@
+<script>
+
+    var start = document.getElementById('start_timer');
+    var stop = document.getElementById('Exit');
+    var pre_time ;
+    var time;
+
+    // before_auction();
+    //
+    // function before_auction() {
+    //     var countDownDate = new Date().getTime();
+    //     pre_time = setInterval(function () {
+    //         var now = new Date().getTime();
+    //
+    //         // Find the distance between now and the count down date
+    //         var distance = now - countDownDate;
+    //         //
+    //         var seconds = 5-Math.floor(distance / 1000);
+    //
+    //         // Display the result in the element with id="demo"
+    //         if (seconds>=0){
+    //             document.getElementById("t-minus").innerHTML = seconds;
+    //         }
+    //         if (seconds <0)
+    //         {
+    //             message();
+    //         }
+    //         }, 1000)
+    // }
+
+    function timer() {
+        var countDownDate = new Date().getTime();
+        time = setInterval(function () {
+            var now = new Date().getTime();
+
+            // Find the distance between now and the count down date
+            var distance = now - countDownDate;
+            //
+            var seconds = Math.floor(distance / 1000);
+
+            // Display the result in the element with id="demo"
+            document.getElementById("group_price").innerHTML = seconds;
+            if (seconds == {{group.fH}})
+            {
+                expire();
+                stopTime()
+            }
+        }, 1000)
+    }
+
+    function stopTime() {
+        clearInterval(time)
+    }
+
+    function clickHandler() {
+        $('#Enter').toggle();
+        $('#Exit').toggle()
+    }
+
+    function clickExit() {
+        $('#Exit').toggle();
+        exit($('#group_price').html());
+    }
+
+    $(document).ready(function () {
+        $('#Enter').on('click', clickHandler);
+        $('#Exit').on('click', clickExit);
+    });
+
+    window.onload = function () {
+        var ws_scheme = window.location.protocol == "https:" ? "wss" : "ws";
+        var wpsocket = new WebSocket(ws_scheme + '://' + window.location.host + "/price_increase/{{player.pk}}/{{ group.pk }}");
+
+        // Handle any errors that occur.
+        wpsocket.onerror = function (error) {
+            console.log('WebSocket Error: ' + error);
+        };
+
+        // Show a connected message when the WebSocket is opened.
+        wpsocket.onopen = function (event) {
+
+            console.log('connected to oTree');
+        };
+
+        wpsocket.onclose = function (event) {
+            console.log('disconnected from oTree');
+        };
+
+        wpsocket.onmessage = function (event) {
+            var obj = jQuery.parseJSON(event.data);
+            var start_timer = obj.start_timer;
+            var stop_timer = obj.stop_timer;
+            var auction_expired = obj.auction_expired;
+            var price = obj.price;
+
+            if (start_timer) {
+                timer();
+                $('#exit-text').html('Exit');
+                $('#seller_text').html('Please Wait');
+                $('#Exit').prop('disabled', false);
+                clearInterval(pre_time)
+
+            }
+            if (stop_timer) {
+                stopTime();
+                $('#Exit').hide();
+                $('#Next').show().prop('disabled', false);
+                $('#proceed').html('Auction Over: Click to Proceed');
+                $('#current').html('Final Price:').addClass('text-danger');
+                $('#group_price').addClass('text-danger').html(price);
+                $('#seller_button').prop('disabled', false);
+                $('#seller_text').html('Auction Over: Click to Proceed');
+            }
+
+            if (auction_expired) {
+                stopTime();
+                $('#Exit').hide();
+                $('#Next').show().prop('disabled', false);
+                $('#proceed').html('Auction Over: Click to Proceed');
+                $('#current').html('Final Price:').addClass('text-danger');
+                $('#group_price').addClass('text-danger').html({{group.fH}});
+                $('#seller_button').prop('disabled', false);
+                $('#seller_text').html('Auction Over: Click to Proceed');
+            }
+        };
+
+        expire = function () {
+            var msg = {
+                'stop': true,
+                'enter': false,
+                'exit': false,
+                'price': {{group.fH}}
+            };
+            if (wpsocket.readyState === wpsocket.OPEN) {
+                wpsocket.send(JSON.stringify(msg))
+            }
+        };
+
+        message = function (what) {
+            console.log('enter');
+            var msg = {
+                    'enter': true,
+                    'exit': false,
+                    'stop': false
+                }
+            ;
+            if (wpsocket.readyState === wpsocket.OPEN) {
+                wpsocket.send(JSON.stringify(msg))
+            }
+        };
+        exit = function (price) {
+            console.log(price);
+            var msg = {
+                    'stop': false,
+                    'exit': true,
+                    'enter': false,
+                    'price': price
+                }
+            ;
+            if (wpsocket.readyState === wpsocket.OPEN) {
+                wpsocket.send(JSON.stringify(msg))
+            }
+        };
+    };
+
+
+</script>

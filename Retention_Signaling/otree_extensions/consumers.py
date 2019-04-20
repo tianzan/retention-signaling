@@ -34,14 +34,68 @@ class PriceTracker(JsonWebsocketConsumer):
         self.clean_kwargs()
         player = self.get_player()
         group = self.get_group()
-        player.leave_auction()
-        player.save()
-        group.remaining_bidders()
-        group.save()
-        channels.Group(
-            group.get_channel_group_name()
-        ).send(
-            {'text': json.dumps(
-                {'num': group.num_in_auction,
-                 })}
-        )
+        msg = text
+
+        if msg['stop']:
+            channels.Group(group.get_channel_group_name()).send(
+                {'text':
+                    json.dumps(
+                        {
+                            'auction_expired': True,
+                            'price': group.fH
+                        }
+                    )
+                }
+            )
+            group.price = int(msg['price'])
+            group.save()
+
+        if msg['enter']:
+            player.in_auction = 1
+            player.save()
+            if group.started_auction < group.num_buyers:
+                group.started_auction += 1
+                group.save()
+            if group.started_auction >= group.num_buyers:
+                channels.Group(group.get_channel_group_name()).send(
+                    {'text':
+                        json.dumps(
+                            {
+                                'start_timer': True
+                            }
+                        )
+                    }
+                )
+        if msg['exit']:
+            group.started_auction -= 1
+            group.save()
+            player.in_auction = 0
+            player.leave_price = int(msg['price'])
+            player.save()
+            if group.started_auction == 1:
+                channels.Group(group.get_channel_group_name()).send(
+                    {'text':
+                        json.dumps(
+                            {
+                                'stop_timer': True,
+                                'price': int(msg['price'])
+                            }
+                        )
+                    }
+                )
+                group.price = int(msg['price'])
+                group.save()
+
+# player = self.get_player()
+# group = self.get_group()
+# player.leave_auction()
+# player.save()
+# group.remaining_bidders()
+# group.save()
+# channels.Group(
+#     group.get_channel_group_name()
+# ).send(
+#     {'text': json.dumps(
+#         {'num': group.num_in_auction,
+#          })}
+# )

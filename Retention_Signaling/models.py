@@ -68,10 +68,7 @@ class Subsession(BaseSubsession):
         # Creates and fills in the dictionaries used to track group/role for participants
         count = 1
         for group in self.get_groups():
-            group.time_till = self.session.config['time_till']
-            group.hidden_time_till = self.session.config['hidden_time_till']
-            group.increment_size = self.session.config['increment_size']
-            group.start_price = self.session.config['start_price']
+            group.num_buyers = self.session.config['players_per_group']-1
             group.fL = self.session.config['fL']
             group.fH = self.session.config['fH']
             group.buyer_endowment = self.session.config['buyer_endowment']
@@ -93,29 +90,16 @@ class Subsession(BaseSubsession):
 
 
 class Group(BaseGroup):
+    started_auction = models.IntegerField(initial=0)
+    num_buyers = models.IntegerField()
+
     # The following four fields store parameters set in session_configs
     # They are set in the creating_session method
-    increment_size = models.IntegerField()
-    start_price = models.IntegerField()
     fL = models.IntegerField()
     fH = models.IntegerField()
     buyer_endowment = models.IntegerField()
 
-    # These fields support features of the auction page
-    # For before an auction starts
-    start = models.BooleanField(initial=False)  # Countdown to auction start begins when start is true
-    hidden_start = models.BooleanField(initial=False)  # To start invisible counter
-    hidden_time_till = models.IntegerField()  # Invisible counter
-    time_till = models.IntegerField()  # Used for button display
-    # time_till_float = models.FloatField(initial=Constants.time_till + 0.05)  # Actual counter (is a float)
-
-    activated = models.BooleanField(initial=False)  # Auction is live once activated is true
-    move_count = models.IntegerField(initial=0)
-    # button_activated_already = models.BooleanField(initial=False)
-
-    price_float = models.IntegerField(initial=0)
     num_in_auction = models.IntegerField()
-    auction_over = models.BooleanField(initial=False)
 
     # These fields store the key pieces of data in which I am interested
     price = models.IntegerField(initial=0)
@@ -128,21 +112,10 @@ class Group(BaseGroup):
     winner_payoff = models.IntegerField()
     seller_payoff = models.IntegerField()
 
-    # Used to track whether data has been loaded into session vars
-    data_updated = models.BooleanField()
 
     def get_channel_group_name(self):
         return 'auction_group_{}'.format(self.pk)
 
-    def remaining_bidders(self):
-        num = 0
-        for p in self.get_players():
-            num = num + p.in_auction
-        self.num_in_auction = num
-
-    def advance_participants(self):
-        channels.Group(self.get_channel_group_name()).send(
-            {'text': json.dumps({'accept': True})})
 
     def set_quantity(self):
         seller = self.get_player_by_role('seller')
@@ -158,10 +131,6 @@ class Group(BaseGroup):
     def get_color(self):
         seller = self.get_player_by_role('seller')
         self.group_color = seller.seller_color
-
-    def end_auction(self):
-        self.auction_over = True
-        self.activated = False
 
     def set_winner(self):
 
@@ -219,120 +188,7 @@ class Player(BasePlayer):
             self.is_seller = 0
             return 'buyer'
 
-    def enter_auction(self):
-        self.in_auction = True
-
-    def leave_auction(self):
-        self.in_auction = False
-        # Captures price at which bidder leaves auction
-        self.leave_price = self.group.price
-        # A bidder does not win the auction if he/she leaves
-        self.auction_winner = False
-
     def update_payment(self):
         if self.payoff_round:
             self.payoff += round(self.francs * self.session.config['conversion_rate'], 2)
 
-
-def runEverySecond():
-    if group_model_exists():
-        # Groups are hidden started once all group members reach Wait
-        invisible_wait_groups = Group.objects.filter(hidden_start=True)
-        for g in invisible_wait_groups:
-            if g.hidden_time_till > 0:
-                g.hidden_time_till = g.hidden_time_till - 1
-                g.save()
-            else:
-                g.start = True
-                g.hidden_start = False
-                g.save()
-
-        active_wait_groups = Group.objects.filter(activated=False, start=True)
-        for g in active_wait_groups:
-            if g.time_till > 0:
-                g.time_till = g.time_till - 1
-                # Save commands are necessary for the database to change
-                g.save()
-                channels.Group(
-                    g.get_channel_group_name()
-                ).send(
-                    {'text': json.dumps(
-                        {'started': True,
-                         'activated': False,
-                         'time_till': g.time_till,
-                         'over': False,
-                         'activate_exit': False,
-                         })}
-                )
-            if g.time_till == 0:
-                # Group is activated once timer hits 0
-                g.activated = True
-                g.start = False
-                g.price = g.start_price
-                g.price_float = g.start_price
-                g.save()
-                channels.Group(
-                    g.get_channel_group_name()
-                ).send(
-                    {'text': json.dumps(
-                        {'started': True,
-                         'activated': True,
-                         'time_till': g.time_till,
-                         'activate_exit': True,
-                         'over': False,
-                         })}
-                )
-        # The auction is live in activated groups
-        activated_groups = Group.objects.filter(activated=True, auction_over=False)
-
-        for g in activated_groups:
-            g.remaining_bidders()
-            g.save()
-            if g.price < g.fH and g.num_in_auction > 1:
-                g.price += g.increment_size
-                g.save()
-                channels.Group(
-                    g.get_channel_group_name()
-                ).send(
-                    {'text': json.dumps(
-                        {'price': g.price,
-                         'expense': g.price * g.group_quantity,
-                         'num': g.num_in_auction,
-                         'over': False,
-                         'activated': True,
-                         'activate_exit': False,
-                         'started': True
-                         })}
-                )
-            if int(g.price) == g.fH or g.num_in_auction <= 1:
-                g.auction_over = True
-                g.save()
-                channels.Group(
-                    g.get_channel_group_name()
-                ).send(
-                    {'text': json.dumps(
-                        {'price': g.price,
-                         'expense': g.price * g.group_quantity,
-                         # Sometimes the incorrect number of remaining bidders is displayed for some reason
-                         'num': g.num_in_auction,
-                         'over': True,
-                         'started': True,
-                         'activated': True,
-                         'activate_exit': False
-                         })}
-                )
-        # Timer for moving to the next page after an auction concludes
-        finished_groups = Group.objects.filter(activated=True, auction_over=True)
-        for g in finished_groups:
-            # Could put the max move_count into session_configs
-            if g.move_count < 10:
-                g.move_count += 1
-                g.save()
-            if 10 <= g.move_count:
-                g.move_count += 1
-                g.save()
-                g.advance_participants()
-
-
-loop = task.LoopingCall(runEverySecond)
-loop.start(1)

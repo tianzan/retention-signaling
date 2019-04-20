@@ -28,13 +28,12 @@
     </h6>
     <h6 style="padding-left: 10px;">Number of Tickets for Sale: {{quantity}}</h6>
     <div style="font-size: 80px;text-align: center"><a id="current">Current Price:</a> <span class="label label-success"
-                                                                                            id='group_price'>{{ group.start_price }}</span>
+                                                                                            id='group_price'>0</span>
     </div>
     <p style="padding: 15px">
-        <button class="b1 btn btn-primary btn-lg btn-danger" id='seller_leave'
-                style="width:100%;height:81.5px; border-radius:15px;margin-top: 25px;" disabled=true><h3
-                id="seller_text"> The Auction Will
-            Start In: {{Constants.time_till}}</h3>
+        <button class="b1 btn btn-primary btn-lg btn-danger" id='seller_button'
+                style="width:100%;height:81.5px; border-radius:15px;margin-top: 25px;" disabled="true"><h3
+                id="seller_text"> Waiting for Auction to Begin</h3>
         </button>
     </p>
 </div>
@@ -55,7 +54,7 @@
 
 
 {% block scripts %}
-{% include 'includes/decision_channel.js.html' %}
+{% include 'includes/Bid_script.html' %}
 {% endblock %}
 
 

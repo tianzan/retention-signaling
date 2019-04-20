@@ -6,38 +6,11 @@ from .models import Constants
 import json
 import channels
 import random
-from .models import loop, runEverySecond
 
 
 class Welcome(Page):
     def is_displayed(self):
         return self.round_number == 1
-
-
-class Quiz(Page):
-    def is_displayed(self):
-        return self.round_number == 1 and self.session.config['quiz'] == 1
-
-    def vars_for_template(self):
-        fH = self.group.fH
-        fL = self.group.fL
-        delta = self.session.config['delta']
-        value = int(delta * self.player.seller_type * (fH - fL) + fL)
-        buyer_endowment = self.session.config['buyer_endowment']
-        return {
-            'fH': fH,
-            'fL': fL,
-            'delta': delta,
-            'value': value,
-            'buyer_endowment': buyer_endowment
-        }
-
-
-class StartWait(WaitPage):
-    def is_displayed(self):
-        return self.round_number <= self.session.config['final_round']
-
-    wait_for_all_groups = True
 
 
 class QuantityChoice(Page):
@@ -74,8 +47,8 @@ class QuantityChoice(Page):
 
     def before_next_page(self):
         if self.timeout_happened:
-            self.player.quantity_choice_blue = random.choice([0, 1, 2, 3, 3, 4, 5])
-            self.player.quantity_choice_green = random.choice([0, 1, 2, 3, 3, 4, 5])
+            self.player.quantity_choice_blue = random.choice([0,1,2,3,4,5])
+            self.player.quantity_choice_green = random.choice([0,1,2,3,4,5])
 
 
 class AssignWait(WaitPage):
@@ -159,23 +132,16 @@ class AssignRole(Page):
         else:
             return 1000000
 
-    # Enters buyers into auction
-    def before_next_page(self):
-        if self.player.role() == 'buyer':
-            self.player.enter_auction()
 
-
-class Wait(WaitPage):
-    def is_displayed(self):
-        return self.group.group_quantity > 0 and self.round_number <= self.session.config['final_round']
-
-    def after_all_players_arrive(self):
-        self.group.hidden_start = True
-
+class BeforeAuction(WaitPage):
+    pass
 
 class Auction(Page):
     def is_displayed(self):
         return self.group.group_quantity > 0 and self.round_number <= self.session.config['final_round']
+    def get_timeout_seconds(self):
+        if self.session.config['TimeOut'] == 1:
+            return self.group.fH+10
 
     def vars_for_template(self):
         data = self.session.vars['past_rounds']
@@ -197,7 +163,7 @@ class Auction(Page):
             'to_be': to_be,
             'plural': plural,
             'pronoun': pronoun,
-            'initial_expense': self.group.start_price * self.group.group_quantity,
+            'initial_expense': 0, #self.group.start_price * self.group.group_quantity,
             'data': data,
             'round_number': self.round_number,
             'group_number': self.group.group_number,
@@ -237,8 +203,6 @@ class AuctionFinish(Page):
     def get_timeout_seconds(self):
         if self.session.config['TimeOut'] == 1:
             return self.session.config['Wait']
-        else:
-            return 1000000
 
     def vars_for_template(self):
         fH = self.group.fH
@@ -338,12 +302,13 @@ class Payoffs(Page):
 
 
 page_sequence = [
-    Welcome,
+    # Welcome,
+    # Timer,
     QuantityChoice,
     AssignWait,
     NoAuction,
     AssignRole,
-    Wait,
+    BeforeAuction,
     Auction,
     SetAuction,
     AuctionFinish,

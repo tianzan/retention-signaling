@@ -96,6 +96,15 @@
             }
         };
         // Not sure if this is redundant
+        enterAuction = function(what){
+            var msg = {
+                'enter': 1
+            };
+            if (wpsocket.readyState === wpsocket.OPEN) {
+                wpsocket.send(JSON.stringify(msg))
+            }
+        };
+
         sendmessage = function (what) {
             var num  = $('#num_in_auction').text()-1;
             var over = false;

@@ -1,0 +1,64 @@
+<script>
+    window.onload = function () {
+        var ws_scheme = window.location.protocol == "https:" ? "wss" : "ws";
+        var wpsocket = new WebSocket(ws_scheme + '://' + window.location.host + "/price_increase/{{player.pk}}/{{ group.pk }}");
+
+        // Handle any errors that occur.
+        wpsocket.onerror = function (error) {
+            console.log('WebSocket Error: ' + error);
+        };
+
+        // Show a connected message when the WebSocket is opened.
+        wpsocket.onopen = function (event) {
+
+            console.log('connected to oTree');
+        };
+
+        wpsocket.onclose = function (event) {
+            console.log('disconnected from oTree');
+        };
+
+        wpsocket.onmessage = function (event) {
+            var obj = jQuery.parseJSON(event.data);
+            var start_timer = obj.start_timer;
+            var stop_timer = obj.stop_timer;
+
+            if (start_timer){
+                timer();
+            }
+            if (stop_timer) {
+                stopTime();
+                $('#Exit').hide();
+                $('#Next').show();
+
+            }
+        };
+
+
+        message = function (what) {
+            console.log('enter');
+            var msg = {
+                    'enter': true,
+                    'exit': false
+                }
+            ;
+            if (wpsocket.readyState === wpsocket.OPEN) {
+                wpsocket.send(JSON.stringify(msg))
+            }
+        };
+        exit = function (price) {
+            console.log(price);
+            var msg = {
+                    'exit': true,
+                    'enter': false,
+                    'price': price
+                }
+            ;
+            if (wpsocket.readyState === wpsocket.OPEN) {
+                wpsocket.send(JSON.stringify(msg))
+            }
+        };
+    };
+
+
+</script>

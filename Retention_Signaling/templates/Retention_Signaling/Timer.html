@@ -1,0 +1,81 @@
+{% extends "global/Page.html" %}
+{% load staticfiles otree_tags %}
+{% block styles %}
+<style>
+    .btn {
+        display: inline;
+    }
+</style>
+{% endblock %}
+
+{% block title %}
+Timer
+{% endblock %}
+
+
+{% block content %}
+<!-- Display the countdown timer in an element -->
+<p id="demo"></p>
+<p id="num_buyers">3</p>
+
+<button id="start_timer" type="button"> Start Timer</button>
+
+<button class="btn" id="Enter" type="button" onclick="message()"> Enter</button>
+<button id="Exit" type="button" style="display: none"> Exit</button>
+<button id="Next"> Auction Over: Click to Proceed</button>
+
+
+
+<script>
+
+    var start = document.getElementById('start_timer');
+    var stop = document.getElementById('Exit');
+    var time;
+
+
+    function timer() {
+        var countDownDate = new Date().getTime();
+        time = setInterval(function () {
+            var now = new Date().getTime();
+
+            // Find the distance between now and the count down date
+            var distance = now - countDownDate;
+            //
+            var seconds = Math.floor(distance/1000);
+
+            // Display the result in the element with id="demo"
+            document.getElementById("demo").innerHTML = seconds;
+        }, 1000)
+    }
+
+    function stopTime() {
+        clearInterval(time)
+    }
+
+    function clickHandler() {
+        $('#Enter').toggle();
+        $('#Exit').toggle()
+    }
+
+    function clickExit(){
+        $('#Exit').toggle();
+        exit($('#demo').html())
+    }
+
+    $(document).ready(function () {
+        $('#Exit').hide();
+        $('#Next').hide();
+        $('#Enter').on('click', clickHandler);
+        $('#Exit').on('click',clickExit);
+    });
+
+</script>
+{% endblock %}
+
+{% block scripts %}
+{% include 'includes/timer_script.js.html' %}
+{% endblock %}
+
+
+
+
