@@ -56,12 +56,25 @@ class PriceTracker(JsonWebsocketConsumer):
             if group.started_auction < group.num_buyers:
                 group.started_auction += 1
                 group.save()
+                channels.Group(group.get_channel_group_name()).send(
+                    {'text':
+                        json.dumps(
+                            {
+                                'change_count': True,
+                                'count': group.started_auction
+                            }
+                        )
+                    }
+                )
             if group.started_auction >= group.num_buyers:
                 channels.Group(group.get_channel_group_name()).send(
                     {'text':
                         json.dumps(
                             {
-                                'start_timer': True
+                                'start_timer': True,
+                                'change_count': True,
+                                'count': group.started_auction
+
                             }
                         )
                     }
@@ -72,13 +85,27 @@ class PriceTracker(JsonWebsocketConsumer):
             player.in_auction = 0
             player.leave_price = int(msg['price'])
             player.save()
+
+            if group.started_auction > 1:
+                channels.Group(group.get_channel_group_name()).send(
+                    {'text':
+                        json.dumps(
+                            {
+                                'change_count': True,
+                                'count': group.started_auction
+                            }
+                        )
+                    }
+                )
             if group.started_auction == 1:
                 channels.Group(group.get_channel_group_name()).send(
                     {'text':
                         json.dumps(
                             {
                                 'stop_timer': True,
-                                'price': int(msg['price'])
+                                'price': int(msg['price']),
+                                'change_count': True,
+                                'count': 1
                             }
                         )
                     }

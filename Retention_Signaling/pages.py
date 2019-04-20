@@ -13,6 +13,9 @@ class Welcome(Page):
         return self.round_number == 1
 
 
+class Timer(Page):
+    pass
+
 class QuantityChoice(Page):
     def is_displayed(self):
         return self.round_number <= self.session.config['final_round']
@@ -136,12 +139,10 @@ class AssignRole(Page):
 class BeforeAuction(WaitPage):
     pass
 
+
 class Auction(Page):
     def is_displayed(self):
         return self.group.group_quantity > 0 and self.round_number <= self.session.config['final_round']
-    def get_timeout_seconds(self):
-        if self.session.config['TimeOut'] == 1:
-            return self.group.fH+10
 
     def vars_for_template(self):
         data = self.session.vars['past_rounds']

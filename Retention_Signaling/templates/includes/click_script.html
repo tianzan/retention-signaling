@@ -1,0 +1,23 @@
+<script>
+    var seconds = Math.random() * 10000;
+    window.onload = function () {
+        var delayInMilliseconds = seconds; //1 second
+
+        setTimeout(function () {
+            document.getElementById('Enter').click()
+        }, delayInMilliseconds);
+
+    };
+    display = function () {
+        $('#demo').toggle().html('Success after ' + seconds + ' seconds');
+    };
+
+    exit_auction = function () {
+        var exit_time = Math.random() * 70000;
+        setTimeout(function () {
+            document.getElementById('Exit').click()
+        }, exit_time);
+
+    };
+
+</script>

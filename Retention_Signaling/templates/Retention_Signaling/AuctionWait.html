@@ -23,15 +23,15 @@
 <body>
 
 <div style="background-color:darkkhaki; color:black;border-radius:20px; margin:2px">
-    <h6 style="padding:10px" id="remaining_bidders"> Buyers Remaining: <span style="alignment: left;" id='num_in_auction'>{{group.num_in_auction}}</span>
+    <h6 style="padding:10px" id="remaining_bidders"> Buyers in Auction: <span style="alignment: left;" id='num_in_auction'>0</span>
         <span style="float:right;">Earnings from Auction: <a id='expense'>{{initial_expense}}</a> francs</span>
     </h6>
-    <h6 style="padding-left: 10px;">Number of Tickets for Sale: {{quantity}}</h6>
+    <h6 style="padding-left: 10px;">Tickets for Sale: {{quantity}}</h6>
     <div style="font-size: 80px;text-align: center"><a id="current">Current Price:</a> <span class="label label-success"
                                                                                             id='group_price'>0</span>
     </div>
     <p style="padding: 15px">
-        <button class="b1 btn btn-primary btn-lg btn-danger" id='seller_button'
+        <button class="b1 btn btn-primary btn-lg btn-danger" id='Next'
                 style="width:100%;height:81.5px; border-radius:15px;margin-top: 25px;" disabled="true"><h3
                 id="seller_text"> Waiting for Auction to Begin</h3>
         </button>

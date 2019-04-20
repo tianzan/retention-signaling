@@ -2,7 +2,6 @@
 
     var start = document.getElementById('start_timer');
     var stop = document.getElementById('Exit');
-    var pre_time ;
     var time;
 
     // before_auction();
@@ -37,9 +36,11 @@
             var distance = now - countDownDate;
             //
             var seconds = Math.floor(distance / 1000);
+            var expense = seconds * {{quantity}};
 
             // Display the result in the element with id="demo"
             document.getElementById("group_price").innerHTML = seconds;
+            document.getElementById("expense").innerHTML = expense;
             if (seconds == {{group.fH}})
             {
                 expire();
@@ -60,14 +61,39 @@
     function clickExit() {
         $('#Exit').toggle();
         exit($('#group_price').html());
+        $('#Next').show()
     }
 
     $(document).ready(function () {
         $('#Enter').on('click', clickHandler);
         $('#Exit').on('click', clickExit);
     });
+    var seconds = Math.random() * 10000;
+    exit_auction = function () {
+        var exit_time = Math.random() * 70000+3000;
+        setTimeout(function () {
+            document.getElementById('Exit').click()
+        }, exit_time);
+
+    };
+    next_page = function(){
+          var randTime = Math.random() * 10000+1000;
+        setTimeout(function () {
+            document.getElementById('Next').click();
+            document.getElementById('seller_button').click();
+            }, randTime);
+
+    };
 
     window.onload = function () {
+        console.log('Test1')
+        var delayInMilliseconds = seconds; //1 second
+
+        setTimeout(function () {
+            document.getElementById('Enter').click()
+        }, delayInMilliseconds);
+
+
         var ws_scheme = window.location.protocol == "https:" ? "wss" : "ws";
         var wpsocket = new WebSocket(ws_scheme + '://' + window.location.host + "/price_increase/{{player.pk}}/{{ group.pk }}");
 
@@ -92,15 +118,21 @@
             var stop_timer = obj.stop_timer;
             var auction_expired = obj.auction_expired;
             var price = obj.price;
+            var change_count = obj.change_count;
 
             if (start_timer) {
                 timer();
                 $('#exit-text').html('Exit');
                 $('#seller_text').html('Please Wait');
                 $('#Exit').prop('disabled', false);
-                clearInterval(pre_time)
+                exit_auction()
 
             }
+
+            if (change_count) {
+                $('#num_in_auction').html(obj.count);
+            }
+
             if (stop_timer) {
                 stopTime();
                 $('#Exit').hide();
@@ -108,8 +140,8 @@
                 $('#proceed').html('Auction Over: Click to Proceed');
                 $('#current').html('Final Price:').addClass('text-danger');
                 $('#group_price').addClass('text-danger').html(price);
-                $('#seller_button').prop('disabled', false);
                 $('#seller_text').html('Auction Over: Click to Proceed');
+                next_page()
             }
 
             if (auction_expired) {
@@ -119,8 +151,8 @@
                 $('#proceed').html('Auction Over: Click to Proceed');
                 $('#current').html('Final Price:').addClass('text-danger');
                 $('#group_price').addClass('text-danger').html({{group.fH}});
-                $('#seller_button').prop('disabled', false);
                 $('#seller_text').html('Auction Over: Click to Proceed');
+                next_page();
             }
         };
 
@@ -130,7 +162,8 @@
                 'enter': false,
                 'exit': false,
                 'price': {{group.fH}}
-            };
+        }
+            ;
             if (wpsocket.readyState === wpsocket.OPEN) {
                 wpsocket.send(JSON.stringify(msg))
             }
