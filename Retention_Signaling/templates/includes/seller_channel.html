@@ -32,16 +32,13 @@
 
             // Only executes when auction group is waiting to begin
             if (start && !activated) {
-                $('#tminus').html('The Auction Will Start In ' + obj.time_till);
                 $('#seller_text').html('The Auction Will Start In ' + obj.time_till);
             }
 
             // Activates auction exit button
             if (activated && activate_exit) {
-                $('#tminus').html('Exit Auction');
                 $('#exit').prop('disabled', false);
                 $('#seller_text').html('Please Wait');
-                exit();
             }
 
             // Code to increment prices and update number of bidders remaining
@@ -49,18 +46,12 @@
                 $('#expense').html(obj.expense)
                 $('#group_price').html(obj.price)
                 $('#num_in_auction').html(obj.num)
-                $('#tminus').html('Exit Auction');
-                $('#exit').prop('disabled', false);
                 $('#seller_text').html('Please Wait');
             }
 
             // Hides and disables exit button; shows and activates proceed button
             if (over) {
                 next();
-                $('#exit').css('display', 'none');
-                $('#wait').css('display', 'inline');
-                $('#wait').prop('disabled', false);
-                $('#something').html('Auction Over: Click to Proceed');
                 $('#current').html('Final Price:');
                 $('#current').addClass('text-danger');
                 $('#group_price').addClass('text-danger');

@@ -321,17 +321,6 @@ def runEverySecond():
                          'activate_exit': False
                          })}
                 )
-        # Timer for moving to the next page after an auction concludes
-        finished_groups = Group.objects.filter(activated=True, auction_over=True)
-        for g in finished_groups:
-            # Could put the max move_count into session_configs
-            if g.move_count < 10:
-                g.move_count += 1
-                g.save()
-            if 10 <= g.move_count:
-                g.move_count += 1
-                g.save()
-                g.advance_participants()
 
 
 loop = task.LoopingCall(runEverySecond)

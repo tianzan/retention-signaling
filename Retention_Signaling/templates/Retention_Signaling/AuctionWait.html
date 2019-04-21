@@ -49,13 +49,23 @@
 </div>
 {% endif %}
 
+<script>
+    var push = {{push}};
 
+    next = function () {
+        if (push) {
+            setTimeout(function () {
+                document.getElementById('seller_leave').click()
+            }, Math.random() *5000);
+        }
+    };
+</script>
 
 </body>
 
 
 {% block scripts %}
-{% include 'includes/decision_channel.js.html' %}
+{% include 'includes/seller_channel.html' %}
 {% endblock %}
 
 

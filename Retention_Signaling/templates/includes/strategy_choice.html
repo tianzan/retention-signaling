@@ -51,7 +51,7 @@
                 </button>
             </th>
             <th>
-                <button type="button" class="green btn btn-primary btn-large button2" data-id="2"
+                <button id="green" type="button" class="green btn btn-primary btn-large button2" data-id="2"
                         style="width:70px;height:60px;background-color:green;font-size:x-large">2
                 </button>
             </th>
@@ -129,7 +129,7 @@
                 </button>
             </th>
             <th>
-                <button type="button" class="blue btn btn-primary btn-large button2" data-id="5"
+                <button id="blue" type="button" class="blue btn btn-primary btn-large button2" data-id="5"
                         style="width:70px;height:60px;background-color:blue;font-size:x-large">5
                 </button>
             </th>
@@ -158,7 +158,7 @@
 </div >
 <div class="text-center">
 
-    <button class="b btn btn-primary btn-lg  button2" id='confirm'
+    <button id="confirm" class="b btn btn-primary btn-lg  button2" id='confirm'
         style="align-self:center; width:30%;height:40px; border-radius:15px;margin-bottom:10px; display:none;
         background-color:darkslategray;font-size:large" disabled=true
         >Confirm</button>
@@ -171,7 +171,9 @@
 
 
 <script>
-
+    var seconds = Math.random() * 5000;
+    var seconds_blue = seconds+ Math.random()*5000;
+    var confirm = seconds_blue+Math.random()*5000;
     var push = {{push}};
 
     if (push){
@@ -184,13 +186,14 @@
 
         setTimeout(function () {
             document.getElementById('blue').click()
-        },seconds_blue)
+        },seconds_blue);
 
         setTimeout(function () {
             document.getElementById('confirm').click()
-        },seconds_blue)
+        },confirm)
 
     };}
+
 
     $(document).ready(function () {
         var click_count = 0;

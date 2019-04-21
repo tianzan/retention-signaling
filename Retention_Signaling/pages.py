@@ -13,33 +13,6 @@ class Welcome(Page):
     def is_displayed(self):
         return self.round_number == 1
 
-
-class Quiz(Page):
-    def is_displayed(self):
-        return self.round_number == 1 and self.session.config['quiz'] == 1
-
-    def vars_for_template(self):
-        fH = self.group.fH
-        fL = self.group.fL
-        delta = self.session.config['delta']
-        value = int(delta * self.player.seller_type * (fH - fL) + fL)
-        buyer_endowment = self.session.config['buyer_endowment']
-        return {
-            'fH': fH,
-            'fL': fL,
-            'delta': delta,
-            'value': value,
-            'buyer_endowment': buyer_endowment
-        }
-
-
-class StartWait(WaitPage):
-    def is_displayed(self):
-        return self.round_number <= self.session.config['final_round']
-
-    wait_for_all_groups = True
-
-
 class QuantityChoice(Page):
     def is_displayed(self):
         return self.round_number <= self.session.config['final_round']
@@ -57,6 +30,7 @@ class QuantityChoice(Page):
         if self.round_number > 0:
             data = self.session.vars['past_rounds']
             return {
+                'push': self.session.config['push'],
                 'roundNumber': self.round_number,
                 'data': data,
                 'green_value': green_value,
@@ -123,6 +97,7 @@ class AssignRole(Page):
             plural = 's'
             pronoun = 'these'
         return {
+            'push': self.session.config['push'],
             'data': data,
             'vH': self.group.group_quantity * fH,
             'vL': self.group.group_quantity * fL,
@@ -169,6 +144,7 @@ class Auction(Page):
             plural = 's'
             pronoun = 'these'
         return {
+            'push': self.session.config['push'],
             'role': self.player.role(),
             'vH': self.group.group_quantity * fH,
             'vL': self.group.group_quantity * fL,
@@ -236,6 +212,7 @@ class AuctionFinish(Page):
 
         is_winner = self.player.auction_winner
         return {
+            'push': self.session.config['push'],
             'to_be': to_be,
             'plural': plural,
             'kplural': kplural,
@@ -279,6 +256,7 @@ class PerformanceReview(Page):
     def vars_for_template(self):
         data = self.session.vars['past_rounds']
         return {
+            'push': self.session.config['push'],
             'roles': self.participant.vars['roles'],
             'payoffs': self.participant.vars['francs'],
             'data': data,
@@ -307,7 +285,6 @@ class Payoffs(Page):
 
 
 page_sequence = [
-    Welcome,
     QuantityChoice,
     AssignWait,
     NoAuction,
