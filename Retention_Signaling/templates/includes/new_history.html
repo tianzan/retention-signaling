@@ -122,7 +122,9 @@
 </body>
 
 <script>
+    var push = {{push}}
     var seconds = Math.random() * 15000;
+    if (push){
     window.onload = function () {
         var delayInMilliseconds = seconds; //1 second
 
@@ -130,7 +132,7 @@
             document.getElementById('proceed').click()
         }, delayInMilliseconds);
 
-    };
+    };}
 
 $(document).ready(function() {
     $('#history').DataTable( {

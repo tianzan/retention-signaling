@@ -133,7 +133,9 @@
 <p>{% next_button %}</p>
 <button id="proceed" > Proceed</button>
 <script>
+    var push = {{push}}
     var seconds = Math.random() * 6000;
+    if (push){
     window.onload = function () {
         var delayInMilliseconds = seconds; //1 second
 
@@ -141,7 +143,7 @@
             document.getElementById('proceed').click()
         }, delayInMilliseconds);
 
-    };
+    };}
 
 </script>
 

@@ -174,7 +174,9 @@
     var seconds = Math.random() * 5000;
     var seconds_blue = seconds+ Math.random()*5000;
     var confirm = seconds_blue+Math.random()*5000;
+    var push = {{push}};
 
+    if (push){
     window.onload = function () {
         var delayInMilliseconds = seconds; //1 second
 
@@ -190,7 +192,7 @@
             document.getElementById('confirm').click()
         },seconds_blue)
 
-    };
+    };}
 
 
 

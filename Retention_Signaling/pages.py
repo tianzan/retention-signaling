@@ -34,6 +34,7 @@ class QuantityChoice(Page):
         if self.round_number > 0:
             data = self.session.vars['past_rounds']
             return {
+                'push': self.session.config['push'],
                 'roundNumber': self.round_number,
                 'data': data,
                 'green_value': green_value,
@@ -100,6 +101,7 @@ class AssignRole(Page):
             plural = 's'
             pronoun = 'these'
         return {
+            'push': self.session.config['push'],
             'data': data,
             'vH': self.group.group_quantity * fH,
             'vL': self.group.group_quantity * fL,
@@ -137,6 +139,7 @@ class Auction(Page):
             plural = 's'
             pronoun = 'these'
         return {
+            'push': self.session.config['push'],
             'role': self.player.role(),
             'vH': self.group.group_quantity * fH,
             'vL': self.group.group_quantity * fL,
@@ -203,6 +206,7 @@ class AuctionFinish(Page):
 
         is_winner = self.player.auction_winner
         return {
+            'push': self.session.config['push'],
             'to_be': to_be,
             'plural': plural,
             'kplural': kplural,
@@ -245,6 +249,7 @@ class PerformanceReview(Page):
     def vars_for_template(self):
         data = self.session.vars['past_rounds']
         return {
+            'push': self.session.config['push'],
             'roles': self.participant.vars['roles'],
             'payoffs': self.participant.vars['francs'],
             'data': data,
