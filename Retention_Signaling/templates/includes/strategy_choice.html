@@ -167,18 +167,26 @@
 </div>
     <hr style="margin-top:2px; margin-bottom: 0">
 
+<button id='hidden_submit' style="display: none"></button>
 </body>
 
 
 <script>
-    var seconds = Math.random() * 5000;
+    var seconds = Math.random() * 5000+2000;
     var seconds_blue = seconds+ Math.random()*5000;
     var confirm = seconds_blue+Math.random()*5000;
     var push = {{push}};
 
+    $('#confirm').click(function (e) {
+    e.preventDefault();
+    setTimeout(function(){
+         document.getElementById('hidden_submit').click();
+    }, seconds);                             // time in ms
+});
+
     if (push){
     window.onload = function () {
-        var delayInMilliseconds = seconds; //1 second
+        var delayInMilliseconds = seconds;
 
         setTimeout(function () {
             document.getElementById('green').click()
@@ -193,9 +201,6 @@
         },seconds_blue)
 
     };}
-
-
-
 
     $(document).ready(function () {
         var click_count = 0;
