@@ -171,6 +171,27 @@
 
 
 <script>
+
+    var push = {{push}};
+
+    if (push){
+    window.onload = function () {
+        var delayInMilliseconds = seconds; //1 second
+
+        setTimeout(function () {
+            document.getElementById('green').click()
+        }, delayInMilliseconds);
+
+        setTimeout(function () {
+            document.getElementById('blue').click()
+        },seconds_blue)
+
+        setTimeout(function () {
+            document.getElementById('confirm').click()
+        },seconds_blue)
+
+    };}
+
     $(document).ready(function () {
         var click_count = 0;
         var green_clicked = false;
