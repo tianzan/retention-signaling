@@ -68,12 +68,12 @@ class Subsession(BaseSubsession):
         # Creates and fills in the dictionaries used to track group/role for participants
         count = 1
         for group in self.get_groups():
-            group.num_buyers = self.session.config['players_per_group']-1
+            group.num_in_auction = self.session.config['players_per_group']-1
             group.fL = self.session.config['fL']
             group.fH = self.session.config['fH']
             group.buyer_endowment = self.session.config['buyer_endowment']
             players = group.get_players()
-            group.num_in_auction = self.players_per_group - 1
+            group.num_buyers = self.players_per_group - 1
             group.group_number = count
             for p in players:
                 p.participant.vars['roles'][str(p.round_number) + 'R' + str(group.group_number)] = p.role()
@@ -90,8 +90,6 @@ class Subsession(BaseSubsession):
 
 
 class Group(BaseGroup):
-    started_auction = models.IntegerField(initial=0)
-    num_buyers = models.IntegerField()
 
     # The following four fields store parameters set in session_configs
     # They are set in the creating_session method
@@ -100,6 +98,7 @@ class Group(BaseGroup):
     buyer_endowment = models.IntegerField()
 
     num_in_auction = models.IntegerField()
+    num_buyers = models.IntegerField()
 
     # These fields store the key pieces of data in which I am interested
     price = models.IntegerField(initial=0)

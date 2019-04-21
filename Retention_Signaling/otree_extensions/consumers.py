@@ -37,67 +37,54 @@ class PriceTracker(JsonWebsocketConsumer):
         msg = text
 
         if msg['stop']:
+            group.price = group.fH
+            group.save()
+
+        if msg['enter']:
             channels.Group(group.get_channel_group_name()).send(
                 {'text':
                     json.dumps(
                         {
-                            'auction_expired': True,
-                            'price': group.fH
+                            'count_down': True,
+                            'change_count': False,
                         }
                     )
                 }
             )
-            group.price = int(msg['price'])
-            group.save()
 
-        if msg['enter']:
-            player.in_auction = 1
-            player.save()
-            if group.started_auction < group.num_buyers:
-                group.started_auction += 1
-                group.save()
-                channels.Group(group.get_channel_group_name()).send(
-                    {'text':
-                        json.dumps(
-                            {
-                                'change_count': True,
-                                'count': group.started_auction
-                            }
-                        )
-                    }
-                )
-            if group.started_auction >= group.num_buyers:
-                channels.Group(group.get_channel_group_name()).send(
-                    {'text':
-                        json.dumps(
-                            {
-                                'start_timer': True,
-                                'change_count': True,
-                                'count': group.started_auction
-
-                            }
-                        )
-                    }
-                )
+        if msg['startAuction']:
+            print('hary')
+            channels.Group(group.get_channel_group_name()).send(
+                {'text':
+                    json.dumps(
+                        {
+                            'start_timer': True,
+                            'change_count': False,
+                        }
+                    )
+                }
+            )
         if msg['exit']:
-            group.started_auction -= 1
+            group.num_in_auction -= 1
             group.save()
             player.in_auction = 0
             player.leave_price = int(msg['price'])
             player.save()
 
-            if group.started_auction > 1:
+            if group.num_in_auction > 1:
                 channels.Group(group.get_channel_group_name()).send(
                     {'text':
                         json.dumps(
                             {
                                 'change_count': True,
-                                'count': group.started_auction
+                                'count': group.num_in_auction
                             }
                         )
                     }
                 )
-            if group.started_auction == 1:
+            if group.num_in_auction == 1:
+                group.price = int(msg['price'])
+                group.save()
                 channels.Group(group.get_channel_group_name()).send(
                     {'text':
                         json.dumps(
@@ -110,8 +97,6 @@ class PriceTracker(JsonWebsocketConsumer):
                         )
                     }
                 )
-                group.price = int(msg['price'])
-                group.save()
 
 # player = self.get_player()
 # group = self.get_group()

@@ -16,6 +16,7 @@ class Welcome(Page):
 class Timer(Page):
     pass
 
+
 class QuantityChoice(Page):
     def is_displayed(self):
         return self.round_number <= self.session.config['final_round']
@@ -50,8 +51,8 @@ class QuantityChoice(Page):
 
     def before_next_page(self):
         if self.timeout_happened:
-            self.player.quantity_choice_blue = random.choice([0,1,2,3,4,5])
-            self.player.quantity_choice_green = random.choice([0,1,2,3,4,5])
+            self.player.quantity_choice_blue = random.choice([0, 1, 2, 3, 4, 5])
+            self.player.quantity_choice_green = random.choice([0, 1, 2, 3, 4, 5])
 
 
 class AssignWait(WaitPage):
@@ -129,11 +130,9 @@ class AssignRole(Page):
             'group_numbers': self.participant.vars['group_numbers']
         }
 
-    def get_timeout_seconds(self):
-        if self.session.config['TimeOut'] == 1:
-            return self.session.config['Wait']
-        else:
-            return 1000000
+    def before_next_page(self):
+        if self.player.role() == 'buyer':
+            self.player.in_auction = 1
 
 
 class BeforeAuction(WaitPage):
@@ -157,6 +156,7 @@ class Auction(Page):
             plural = 's'
             pronoun = 'these'
         return {
+            'player_id': self.player.id_in_group,
             'role': self.player.role(),
             'vH': self.group.group_quantity * fH,
             'vL': self.group.group_quantity * fL,
@@ -164,7 +164,7 @@ class Auction(Page):
             'to_be': to_be,
             'plural': plural,
             'pronoun': pronoun,
-            'initial_expense': 0, #self.group.start_price * self.group.group_quantity,
+            'initial_expense': 0,  # self.group.start_price * self.group.group_quantity,
             'data': data,
             'round_number': self.round_number,
             'group_number': self.group.group_number,
