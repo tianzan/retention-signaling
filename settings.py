@@ -30,7 +30,6 @@ SESSION_CONFIGS = [
         'delta': 0.5,
         'fL': 40,
         'fH': 60,
-        'TimeOut': 0,
         'Wait': 30,
         'hidden_time_till': 4,
         'time_till': 5,
