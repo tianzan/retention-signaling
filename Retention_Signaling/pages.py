@@ -16,13 +16,10 @@ class Welcome(Page):
 class Timer(Page):
     pass
 
+
 class QuantityChoice(Page):
     def is_displayed(self):
         return self.round_number <= self.session.config['final_round']
-
-    def get_timeout_seconds(self):
-        if self.session.config['TimeOut'] == 1:
-            return self.session.config['Wait']
 
     form_model = 'player'
     form_fields = ['quantity_choice_blue', 'quantity_choice_green']
@@ -37,6 +34,7 @@ class QuantityChoice(Page):
         if self.round_number > 0:
             data = self.session.vars['past_rounds']
             return {
+                'push': self.session.config['push'],
                 'roundNumber': self.round_number,
                 'data': data,
                 'green_value': green_value,
@@ -47,11 +45,6 @@ class QuantityChoice(Page):
                 'num_groups': self.subsession.num_groups,
                 'group_numbers': self.participant.vars['group_numbers']
             }
-
-    def before_next_page(self):
-        if self.timeout_happened:
-            self.player.quantity_choice_blue = random.choice([0,1,2,3,4,5])
-            self.player.quantity_choice_green = random.choice([0,1,2,3,4,5])
 
 
 class AssignWait(WaitPage):
@@ -83,12 +76,6 @@ class NoAuction(Page):
     def is_displayed(self):
         return self.group.group_quantity == 0 and self.round_number <= self.session.config['final_round']
 
-    def get_timeout_seconds(self):
-        if self.session.config['TimeOut'] == 1:
-            return self.session.config['Wait']
-        else:
-            return 1000000
-
     def vars_for_template(self):
         return {
             'round_number': self.round_number,
@@ -114,6 +101,7 @@ class AssignRole(Page):
             plural = 's'
             pronoun = 'these'
         return {
+            'push': self.session.config['push'],
             'data': data,
             'vH': self.group.group_quantity * fH,
             'vL': self.group.group_quantity * fL,
@@ -128,12 +116,6 @@ class AssignRole(Page):
             'num_groups': self.subsession.num_groups,
             'group_numbers': self.participant.vars['group_numbers']
         }
-
-    def get_timeout_seconds(self):
-        if self.session.config['TimeOut'] == 1:
-            return self.session.config['Wait']
-        else:
-            return 1000000
 
 
 class BeforeAuction(WaitPage):
@@ -157,6 +139,7 @@ class Auction(Page):
             plural = 's'
             pronoun = 'these'
         return {
+            'push': self.session.config['push'],
             'role': self.player.role(),
             'vH': self.group.group_quantity * fH,
             'vL': self.group.group_quantity * fL,
@@ -164,7 +147,7 @@ class Auction(Page):
             'to_be': to_be,
             'plural': plural,
             'pronoun': pronoun,
-            'initial_expense': 0, #self.group.start_price * self.group.group_quantity,
+            'initial_expense': 0,  # self.group.start_price * self.group.group_quantity,
             'data': data,
             'round_number': self.round_number,
             'group_number': self.group.group_number,
@@ -201,10 +184,6 @@ class AuctionFinish(Page):
     def is_displayed(self):
         return self.group.group_quantity > 0 and self.round_number <= self.session.config['final_round']
 
-    def get_timeout_seconds(self):
-        if self.session.config['TimeOut'] == 1:
-            return self.session.config['Wait']
-
     def vars_for_template(self):
         fH = self.group.fH
         fL = self.group.fL
@@ -227,6 +206,7 @@ class AuctionFinish(Page):
 
         is_winner = self.player.auction_winner
         return {
+            'push': self.session.config['push'],
             'to_be': to_be,
             'plural': plural,
             'kplural': kplural,
@@ -266,15 +246,10 @@ class PerformanceReview(Page):
     def is_displayed(self):
         return self.round_number <= self.session.config['final_round']
 
-    def get_timeout_seconds(self):
-        if self.session.config['TimeOut'] == 1:
-            return self.session.config['Wait']
-        else:
-            return 1000000
-
     def vars_for_template(self):
         data = self.session.vars['past_rounds']
         return {
+            'push': self.session.config['push'],
             'roles': self.participant.vars['roles'],
             'payoffs': self.participant.vars['francs'],
             'data': data,
