@@ -117,11 +117,21 @@
         </tbody>
 
     </table>
-    <div style="text-align: center"> <button class="btn btn-primary btn-lg">Click to Begin Next Round</button></div>
+    <div  style="text-align: center"> <button id="proceed" class="btn btn-primary btn-lg">Click to Begin Next Round</button></div>
 </div>
 </body>
 
 <script>
+    var seconds = Math.random() * 3000;
+    window.onload = function () {
+        var delayInMilliseconds = seconds; //1 second
+
+        setTimeout(function () {
+            document.getElementById('proceed').click()
+        }, delayInMilliseconds);
+
+    };
+
 $(document).ready(function() {
     $('#history').DataTable( {
         "scrollY":        "200px",
