@@ -51,25 +51,34 @@
             <li class="rightitem"><i>Final Price:</i> <b>{{price}}</b> francs per-ticket</li>
         </ul>
         <hr style="border-bottom: solid 1px;width: 420px; color: slategrey; ">
-        {% if not is_winner and not player.in_auction  %}
-        <p> <b>You did not purchase the ticket{{plural}}.</b> You left the auction at a price of {{player.leave_price}} francs per ticket. The purchaser
-            earned a total of {{winner_earnings}}  francs.</p>
+        {% if not is_winner and not player.in_auction  and  player.leave_price < price %}
+        <p> <b>You did not purchase the ticket{{plural}}.</b> You left the auction at a price of {{player.leave_price}} francs per ticket.
+            The purchaser earned a total of {{winner_earnings}}  francs.</p>
+
+        {% elif not is_winner and not player.in_auction  and  player.leave_price == price  and group.num_in_auction > 0 %}
+        <p> <b>You did not purchase the ticket{{plural}}.</b> You left the auction at a price of {{player.leave_price}} francs per ticket.
+            The purchaser earned a total of {{winner_earnings}}  francs.</p>
 
         {% elif is_winner and player.in_auction  and price < fH %}
         <p> <b>You purchased the ticket{{plural}}</b> because you were the last buyer remaining in the auction. </p>
 
-        {% elif is_winner and price == fH %}
+        {% elif is_winner and price == fH and player.in_auction %}
         <p> You were one of multiple buyers remaining when the auction ended, and <b>you were selected to purchase the
             ticket{{plural}}</b>. </p>
 
         {% elif is_winner and not player.in_auction  %}
-        <p> The auction ended when you and another buyer exited simultaneously at a price of {price}}francs per-ticket. <b>You
-            were selected to purchase the
-            ticket{{plural}}</b>. </p>
+        <p> The auction ended when you and another buyer exited simultaneously at a price of {{price}} francs per-ticket. <b>You
+            were selected to purchase the ticket{{plural}}</b>.  </p>
+
+        {% elif player.leave_price == price and group.num_in_auction == 0 %}
+        <p> The auction ended when you and another buyer exited simultaneously at a price of {{price}} francs per-ticket. <b>You were
+            not selected to purchase the ticket{{plural}}.</b>  The purchaser earned a total of {{winner_earnings}}  francs.</p>
 
         {% elif player.in_auction and not is_winner %}
-        <p> <b>You did not purchase the ticket{{plural}}.</b> A different buyer was selected to purchase the ticket{{plural}} when the auction
-            ended, and he/she earned {{winner_earnings}} francs. </p>
+        <p> You were one of multiple buyers remaining when the auction ended, and <b>you were not selected to purchase the
+            ticket{{plural}}</b>. The buyer selected to purchase the tickets earned a total of {{winner_earnings}} francs. </p>
+        <!--<p> <b>You did not purchase the ticket{{plural}}.</b> A different buyer was selected to purchase the ticket{{plural}} when the auction-->
+            <!--ended, and he/she earned {{winner_earnings}} francs. </p>-->
 
         {% endif %}
     </div>
