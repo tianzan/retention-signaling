@@ -20,6 +20,7 @@
             -moz-columns: 2;
             column-gap: 0;
             width: 380px;
+            list-style-type:circle
         }
 
         li {
@@ -69,10 +70,6 @@
         {% elif player.in_auction and not is_winner %}
         <p> You did not purchase the ticket{{plural}} A different buyer was selected to purchase the ticket{{plural}} when the auction
             ended, and he/she earned {{winner_earnings}} francs. </p>
-
-        {% else %}
-        <p> The auction ended when you and another buyer exited simultaneously at a price of {{price}} francs per-ticket. You
-            were not selected to purchase the ticket{{plural}}. The purchaser earned a total of {{winner_earnings}}  francs.</p>
 
         {% endif %}
     </div>

@@ -8,13 +8,16 @@ import channels
 import random
 from .models import loop, runEverySecond
 
+
 class Welcome(Page):
     def is_displayed(self):
         return self.round_number == 1
+
     def vars_for_template(self):
         return {
             'push': self.session.config['push']
         }
+
 
 class QuantityChoice(Page):
     def is_displayed(self):
@@ -58,8 +61,7 @@ class AssignWait(WaitPage):
         if self.group.group_quantity == 0:
             self.group.set_francs()
             seller_payoff = self.group.seller_payoff
-            temp = dict()
-            temp[str(self.round_number) + 'R' + str(self.group.group_number)] = {
+            self.session.vars['current_round'][str(self.round_number) + 'R' + str(self.group.group_number)] = {
                 'round': self.round_number,
                 'group_number': self.group.group_number,
                 'price': 'N/A',
@@ -68,7 +70,6 @@ class AssignWait(WaitPage):
                 'winner_payoff': 'N/A',
                 'seller_payoff': seller_payoff,
             }
-            self.session.vars['current_round'].update(temp)
 
 
 class NoAuction(Page):
@@ -175,8 +176,7 @@ class SetAuction(WaitPage):
         seller_payoff = self.group.seller_payoff
         price = self.group.price
         winner_payoff = self.group.winner_payoff
-        temp = dict()
-        temp[str(self.round_number) + 'R' +
+        self.session.vars['current_round'][str(self.round_number) + 'R' +
              str(self.group.group_number)] = {
             'round': self.round_number,
             'group_number': self.group.group_number,
@@ -186,13 +186,11 @@ class SetAuction(WaitPage):
             'winner_payoff': winner_payoff,
             'seller_payoff': seller_payoff,
         }
-        self.session.vars['current_round'].update(temp)
 
 
 class AuctionFinish(Page):
     def is_displayed(self):
         return self.group.group_quantity > 0 and self.round_number <= self.session.config['final_round']
-
 
     def vars_for_template(self):
         fH = self.group.fH
@@ -250,12 +248,14 @@ class ResultsWaitPage(WaitPage):
     def after_all_players_arrive(self):
         self.session.vars['past_rounds'].update(self.session.vars['current_round'])
         self.session.vars['current_round'] = {}
+        for i in range(1, self.session.config['num_groups']+1):
+            r = self.round_number + 1
+            self.session.vars['current_round'].update({str(r) + 'R' + str(i): 1})
 
 
 class PerformanceReview(Page):
     def is_displayed(self):
         return self.round_number <= self.session.config['final_round']
-
 
     def vars_for_template(self):
         data = self.session.vars['past_rounds']

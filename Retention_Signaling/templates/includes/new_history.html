@@ -46,7 +46,7 @@
         display: block;
         overflow-y: auto;
         overflow-x: hidden;
-        max-height: 428px;
+        max-height: 617px;
         padding-right: 1px;
     }
 
@@ -84,7 +84,7 @@
 
 <div>
     <table id="history" align="center" class=fixed_header>
-        <caption style="caption-side: top; font-size: xx-large;" class="text-center">Results from All Rounds</caption>
+        <caption style="caption-side: top; font-size: xx-large; padding-top: 0" class="text-center">Results from All Rounds</caption>
         <thead>
         <tr>
             <th style="border-bottom: 2px solid darkslategray">Round #</th>
@@ -98,7 +98,7 @@
             <th style="border-bottom: 2px solid darkslategray">Your Earnings (francs)</th>
         </tr>
         </thead>
-        <tbody>
+        <tbody id="dataTable">
         {% for k,v in data.items %}
         <tr style="font-size: large">
             {% if forloop.counter|divisibleby:num_groups %}
@@ -122,6 +122,16 @@
 </body>
 
 <script>
+    var num_groups = {{num_groups}};
+
+    if (num_groups==3){
+        $('#dataTable').css('height',465)
+    }
+    if (num_groups==2){
+        $('#dataTable').css('height',313)
+    }
+
+
     var seconds = Math.random() * 5000;
     var push = {{push}};
 

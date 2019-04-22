@@ -35,7 +35,7 @@
         display: block;
         overflow-y: auto;
         overflow-x: hidden;
-        height: 147px;
+        height: 151px;
         padding-right: 1px;
     }
 
@@ -90,7 +90,7 @@
             <th>Seller Earnings (francs)</th>
         </tr>
         </thead>
-        <tbody>
+        <tbody id="dataTable">
         {% for k,v in data.items %}
         <tr style="font-size: large">
             {% if forloop.counter|divisibleby:num_groups %}
@@ -113,6 +113,16 @@
 
 
 <script>
+    var num_groups = {{num_groups}};
+
+    if (num_groups==3){
+        $('#dataTable').css('height',113)
+    }
+    if (num_groups==2){
+        $('#dataTable').css('height',83)
+    }
+
+
 
     $(function () {
         $('tbody').each(function (elem, index) {

@@ -41,7 +41,6 @@ class Subsession(BaseSubsession):
 
     def creating_session(self):
         self.session.vars['past_rounds'] = {}
-        self.session.vars['current_round'] = {}
         self.num_groups = self.session.config['num_groups']
         self.players_per_group = self.session.config['players_per_group']
         num_participants = self.num_groups * self.players_per_group
@@ -54,6 +53,10 @@ class Subsession(BaseSubsession):
         self.set_group_matrix(random_matrix_list)
 
         if self.round_number == 1:
+            self.session.vars['current_round'] = {}
+            for i in range(1, self.session.config['num_groups']+1):
+                self.session.vars['current_round'].update({str(1) + 'R' + str(i): 1})
+
             rounds = []
             for i in range(1, self.session.config['final_round'] + 1):
                 rounds.append(i)
