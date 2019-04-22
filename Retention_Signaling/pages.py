@@ -12,6 +12,10 @@ from .models import loop, runEverySecond
 class Welcome(Page):
     def is_displayed(self):
         return self.round_number == 1
+    def vars_for_template(self):
+        return {
+            'push': self.session.config['push']
+        }
 
 class QuantityChoice(Page):
     def is_displayed(self):
@@ -74,6 +78,7 @@ class NoAuction(Page):
 
     def vars_for_template(self):
         return {
+            'push': self.session.config['push'],
             'round_number': self.round_number,
             'role': self.player.role(),
             'color': self.group.group_color,
@@ -285,6 +290,7 @@ class Payoffs(Page):
 
 
 page_sequence = [
+    Welcome,
     QuantityChoice,
     AssignWait,
     NoAuction,

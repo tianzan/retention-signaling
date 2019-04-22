@@ -41,32 +41,32 @@
     <table class="table no-border">
         <tr>
             <th>
-                <button type="button" class="green btn btn-primary btn-large button2" data-id="0"
+                <button id="green0" type="button" class="green btn btn-primary btn-large button2" data-id="0"
                         style="width:70px;height:60px;background-color:green; font-size:x-large">0
                 </button>
             </th>
             <th>
-                <button type="button" class="green btn btn-primary btn-large button2" data-id="1"
+                <button id="green1" type="button" class="green btn btn-primary btn-large button2" data-id="1"
                         style="width:70px;height:60px;background-color:green;font-size:x-large">1
                 </button>
             </th>
             <th>
-                <button id="green" type="button" class="green btn btn-primary btn-large button2" data-id="2"
+                <button id="green2" type="button" class="green btn btn-primary btn-large button2" data-id="2"
                         style="width:70px;height:60px;background-color:green;font-size:x-large">2
                 </button>
             </th>
             <th>
-                <button type="button" class="green btn btn-primary btn-large button2" data-id="3"
+                <button id="green3" type="button" class="green btn btn-primary btn-large button2" data-id="3"
                         style="width:70px;height:60px;background-color:green;font-size:x-large">3
                 </button>
             </th>
             <th>
-                <button type="button" class="green btn btn-primary btn-large button2" data-id="4"
+                <button id="green4" type="button" class="green btn btn-primary btn-large button2" data-id="4"
                         style="width:70px;height:60px;background-color:green;font-size:x-large">4
                 </button>
             </th>
             <th>
-                <button type="button" class="green btn btn-primary btn-large button2" data-id="5"
+                <button id="green5" type="button" class="green btn btn-primary btn-large button2" data-id="5"
                         style="width:70px;height:60px;background-color:green;font-size:x-large">5
                 </button>
             </th>
@@ -104,32 +104,32 @@
     <table class="table no-border">
         <tr>
             <th>
-                <button type="button" class="blue btn btn-primary btn-large button2" data-id="0"
+                <button id="blue0" type="button" class="blue btn btn-primary btn-large button2" data-id="0"
                         style="width:70px;height:60px;background-color:blue;font-size:x-large">0
                 </button>
             </th>
             <th>
-                <button type="button" class="blue btn btn-primary btn-large button2" data-id="1"
+                <button id="blue1" type="button" class="blue btn btn-primary btn-large button2" data-id="1"
                         style="width:70px;height:60px;background-color:blue;font-size:x-large">1
                 </button>
             </th>
             <th>
-                <button type="button" class="blue btn btn-primary btn-large button2" data-id="2"
+                <button id="blue2" type="button" class="blue btn btn-primary btn-large button2" data-id="2"
                         style="width:70px;height:60px;background-color:blue;font-size:x-large">2
                 </button>
             </th>
             <th>
-                <button type="button" class="blue btn btn-primary btn-large button2" data-id="3"
+                <button id="blue3" type="button" class="blue btn btn-primary btn-large button2" data-id="3"
                         style="width:70px;height:60px;background-color:blue;font-size:x-large">3
                 </button>
             </th>
             <th>
-                <button type="button" class="blue btn btn-primary btn-large button2" data-id="4"
+                <button id="blue4" type="button" class="blue btn btn-primary btn-large button2" data-id="4"
                         style="width:70px;height:60px;background-color:blue;font-size:x-large">4
                 </button>
             </th>
             <th>
-                <button id="blue" type="button" class="blue btn btn-primary btn-large button2" data-id="5"
+                <button id="blue5" type="button" class="blue btn btn-primary btn-large button2" data-id="5"
                         style="width:70px;height:60px;background-color:blue;font-size:x-large">5
                 </button>
             </th>
@@ -179,13 +179,17 @@
     if (push){
     window.onload = function () {
         var delayInMilliseconds = seconds; //1 second
+        var gr=  Math.floor(Math.random() * 6);
+        var gb=  Math.floor(Math.random() * 6);
+        var gbutton = 'green'+ gr.toString();
+        var bbutton = 'blue'+ gb.toString();
 
         setTimeout(function () {
-            document.getElementById('green').click()
+            document.getElementById(gbutton).click()
         }, delayInMilliseconds);
 
         setTimeout(function () {
-            document.getElementById('blue').click()
+            document.getElementById(bbutton).click()
         },seconds_blue);
 
         setTimeout(function () {
