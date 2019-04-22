@@ -39,23 +39,11 @@
 <body>
 {% if role == 'seller' %}
 
-{% include 'includes/seller_results.html' %}
-
-{% elif is_winner and player.in_auction  and price < fH%}
-{% include 'includes/winner_no_tie.html' %}
-
-{% elif is_winner and not player.in_auction %}
-{% include 'includes/exit_tie.html' %}
-
-{% elif is_winner and price == fH %}
-{% include 'includes/winner_tie.html' %}
-
-{% elif not is_winner and not player.in_auction %}
-{% include 'includes/left_auction.html' %}
-
+{% include 'includes/seller_finish.html' %}
 
 {% else %}
-{% include 'includes/lost_tie.html' %}
+
+{% include 'includes/buyer_finish.html' %}
 
 
 {% endif %}

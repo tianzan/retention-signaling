@@ -1,0 +1,162 @@
+<head>
+
+    <style>
+        .column {
+            height: 320px;
+        }
+
+        .left {
+            width: 450px;
+        }
+
+        .right {
+            width: 680px;
+        }
+
+        ul {
+            padding-left: 20px;
+            columns: 2;
+            -webkit-columns: 2;
+            -moz-columns: 2;
+            column-gap: 0;
+            width: 380px;
+        }
+
+        li {
+            padding-top: 10px;
+        }
+
+        .leftitem {
+            width: 250px;
+        }
+
+        .rightitem {
+            margin-left: 0;
+            width: 250px;
+        }
+        td {
+            padding-top: 2px;
+        }
+    </style>
+</head>
+<body>
+<div class="row" style="margin-left: 60px;">
+    <div class="left" style="padding: 20px;background-color:lightgray; border-radius:20px; margin-top:10px;">
+        <h1 style="text-align: center"> Summary</h1>
+        <ul>
+            <li class="leftitem"><i> Your Role:</i> <b> buyer </b></li>
+            <li class="leftitem"><i> Ticket Color:</i>  <a style="color:{{color}}; font-weight: bold">{{color}}</a></li>
+            <li class="rightitem"><i># of Ticket{{plural}} for Sale:</i> <b>{{quantity}}</b></li>
+            <li class="rightitem"><i>Final Price:</i> <b>{{price}}</b> francs per-ticket</li>
+        </ul>
+        <hr style="border-bottom: solid 1px;width: 420px; color: slategrey; ">
+        {% if not is_winner and not player.in_auction  %}
+        <p>You did not purchase the ticket{{plural}}. You left the auction at a price of {{player.leave_price}} francs per ticket. The purchaser
+            earned a total of {{winner_earnings}}  francs.</p>
+
+        {% elif is_winner and player.in_auction  and price < fH %}
+        <p> You purchased the ticket{{plural}} because you were the last buyer remaining in the auction. </p>
+
+        {% elif is_winner and price == fH %}
+        <p> You were one of multiple buyers remaining when the auction ended, and you were selected to purchase the
+            ticket{{plural}}. </p>
+
+        {% elif is_winner and not player.in_auction  %}
+        <p> The auction ended when you and another buyer exited simultaneously at a price of {price}}francs per-ticket. You
+            were selected to purchase the
+            ticket{{plural}}. </p>
+
+        {% elif player.in_auction and not is_winner %}
+        <p> You did not purchase the ticket{{plural}} A different buyer was selected to purchase the ticket{{plural}} when the auction
+            ended, and he/she earned {{winner_earnings}} francs. </p>
+
+        {% else %}
+        <p> The auction ended when you and another buyer exited simultaneously at a price of {{price}} francs per-ticket. You
+            were not selected to purchase the ticket{{plural}}. The purchaser earned a total of {{winner_earnings}}  francs.</p>
+
+        {% endif %}
+    </div>
+    <div class="right"
+         style="background-color: goldenrod;border-radius:20px; margin-top:10px; margin-left: 10px; padding: 20px">
+
+        <h1 style="padding-bottom: 25px;text-align: center"> Your Earnings This Round</h1>
+        {% if is_winner %}
+        <table style="font-size: x-large; ">
+            <tr>
+                <td style="float: end;: center">{{buyer_endowment}}</td>
+                <td> </td>
+                <td> </td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td style="color: dimgray; alignment: left"> francs you started with</td>
+            </tr>
+            <tr>
+                <td style="float: end;: center"></td>
+                <td></td>
+                <td> +</td>
+                <td>{{buyer_value}}</td>
+                <td> = {{quantity}}&times;{{ticket_value}}</td>
+                <td> &nbsp;&nbsp;&nbsp;&nbsp;</td>
+                <td style="color: dimgray;alignment: left"> francs from the ticket{{plural}} you purchased</td>
+            </tr>
+            <tr>
+                <td style="float: end;: center; border-bottom: 4px solid black"></td>
+                <td style=" border-bottom: 4px solid black"></td>
+                <td style=" border-bottom: 4px solid black"> -</td>
+                <td style=" border-bottom: 4px solid black">{{revenue}}</td>
+                <td style=" border-bottom: 4px solid black">= {{quantity}}&times;{{price}}</td>
+                <td></td>
+                <td style="color: dimgray;alignment: left"> francs you spent on the ticket{{plural}}</td>
+            </tr>
+            <tr>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td style="font-weight: bold;">= 524</td>
+                <td></td>
+                <td style="font-weight: bold"> francs you earned this round</td>
+            </tr>
+        </table>
+        {% else %}
+                <table style="font-size: x-large; ">
+            <tr>
+                <td style="float: end;: center">{{buyer_endowment}} </td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+                <td style="color: dimgray; alignment: left"> francs you started with</td>
+            </tr>
+            <tr>
+                <td style="float: end;: center">&nbsp;&nbsp;&nbsp;</td>
+                <td> + </td>
+                <td>0</td>
+                <td> </td>
+                <td> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+                <td style="color: dimgray;alignment: left"> francs from tickets purchased</td>
+            </tr>
+            <tr>
+                <td style="float: end;: center; border-bottom: 4px solid black">&nbsp;&nbsp;&nbsp;</td>
+                <td style=" border-bottom: 4px solid black"> - </td>
+                <td style=" border-bottom: 4px solid black">0</td>
+                <td style=" border-bottom: 4px solid black"></td>
+                <td> </td>
+                <td style="color: dimgray;alignment: left">francs spent on tickets</td>
+            </tr>
+            <tr>
+                 <td>&nbsp;&nbsp;&nbsp;</td>
+                <td> </td>
+                <td></td>
+                <td style="font-weight: bold;">= {{francs}} </td>
+                <td> </td>
+                <td style="font-weight: bold"> francs you earned this round</td>
+            </tr>
+        </table>
+        {% endif %}
+    </div>
+</div>
+
+</body>
+</html>

@@ -8,7 +8,6 @@ import channels
 import random
 from .models import loop, runEverySecond
 
-
 class Welcome(Page):
     def is_displayed(self):
         return self.round_number == 1
