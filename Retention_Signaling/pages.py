@@ -266,7 +266,8 @@ class PerformanceReview(Page):
             'data': data,
             'group_number': self.group.group_number,
             'num_groups': self.subsession.num_groups,
-            'group_numbers': self.participant.vars['group_numbers']
+            'group_numbers': self.participant.vars['group_numbers'],
+            'round_number': self.round_number
         }
 
     def before_next_page(self):
