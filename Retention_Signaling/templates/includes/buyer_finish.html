@@ -52,23 +52,23 @@
         </ul>
         <hr style="border-bottom: solid 1px;width: 420px; color: slategrey; ">
         {% if not is_winner and not player.in_auction  %}
-        <p>You did not purchase the ticket{{plural}}. You left the auction at a price of {{player.leave_price}} francs per ticket. The purchaser
+        <p> <b>You did not purchase the ticket{{plural}}.</b> You left the auction at a price of {{player.leave_price}} francs per ticket. The purchaser
             earned a total of {{winner_earnings}}  francs.</p>
 
         {% elif is_winner and player.in_auction  and price < fH %}
-        <p> You purchased the ticket{{plural}} because you were the last buyer remaining in the auction. </p>
+        <p> <b>You purchased the ticket{{plural}}</b> because you were the last buyer remaining in the auction. </p>
 
         {% elif is_winner and price == fH %}
-        <p> You were one of multiple buyers remaining when the auction ended, and you were selected to purchase the
-            ticket{{plural}}. </p>
+        <p> You were one of multiple buyers remaining when the auction ended, and <b>you were selected to purchase the
+            ticket{{plural}}</b>. </p>
 
         {% elif is_winner and not player.in_auction  %}
-        <p> The auction ended when you and another buyer exited simultaneously at a price of {price}}francs per-ticket. You
+        <p> The auction ended when you and another buyer exited simultaneously at a price of {price}}francs per-ticket. <b>You
             were selected to purchase the
-            ticket{{plural}}. </p>
+            ticket{{plural}}</b>. </p>
 
         {% elif player.in_auction and not is_winner %}
-        <p> You did not purchase the ticket{{plural}} A different buyer was selected to purchase the ticket{{plural}} when the auction
+        <p> <b>You did not purchase the ticket{{plural}}.</b> A different buyer was selected to purchase the ticket{{plural}} when the auction
             ended, and he/she earned {{winner_earnings}} francs. </p>
 
         {% endif %}
@@ -111,7 +111,7 @@
                 <td></td>
                 <td></td>
                 <td></td>
-                <td style="font-weight: bold;">= 524</td>
+                <td style="font-weight: bold;">= {{francs}}</td>
                 <td></td>
                 <td style="font-weight: bold"> francs you earned this round</td>
             </tr>
