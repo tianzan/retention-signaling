@@ -54,7 +54,7 @@ class Subsession(BaseSubsession):
 
         if self.round_number == 1:
             self.session.vars['current_round'] = {}
-            for i in range(1, self.session.config['num_groups']+1):
+            for i in range(1, self.session.config['num_groups'] + 1):
                 self.session.vars['current_round'].update({str(1) + 'R' + str(i): 1})
 
             rounds = []
