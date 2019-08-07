@@ -21,7 +21,7 @@ def group_model_exists():
 
 
 class Constants(BaseConstants):
-    name_in_url = 'Retention_Signaling'
+    name_in_url = 'app1'
     # Session configuration (mostly for demo purposes)
     players_per_group = None
     # Number of rounds and rounds which pay (experimental design)
