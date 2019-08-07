@@ -1,31 +1,37 @@
 {% extends "global/Page.html" %}
 {% load otree static %}
-
 {% block styles %}
-    <style>
-        .otree-timer {
-            display: none;
-        }
-    </style>
+<style>
+
+    .btn-primary:hover {
+        box-shadow: 0 12px 16px 0 rgba(0, 0, 0, 0.24), 0 17px 50px 0 rgba(0, 0, 0, 0.19);
+    }
+
+</style>
 {% endblock %}
-
-{% block scripts %}
-    <script>
-        $(function () {
-            $('.otree-timer__time-left').on('update.countdown', function (event) {
-                if (event.offset.totalSeconds === 10) {
-                    $('.otree-timer').show();
-                }
-            });
-        });
-    </script>
-{% endblock %}
-
-{% block title %}
-
-{% endblock %}
-
 {% block content %}
 
-<h2 style="text-align: center">Welcome</h2>
+
+<div style="text-align: center;margin-top:250px">
+    <button id="proceed" class="btn btn-primary btn-lg" style="font-size: xx-large;background-color:darkslategray;">
+        Click Here to Begin
+        Experiment
+    </button>
+</div>
+
+<script>
+    var seconds = Math.random() * 15000;
+    var push = {{push}};
+
+    if (push){
+    window.onload = function () {
+        var delayInMilliseconds = seconds; //1 second
+
+        setTimeout(function () {
+            document.getElementById('proceed').click()
+        }, delayInMilliseconds);
+
+    };}
+</script>
+
 {% endblock %}

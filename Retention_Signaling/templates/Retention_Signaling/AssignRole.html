@@ -2,9 +2,6 @@
 {% load staticfiles otree_tags %}
 {% block styles %}
     <style>
-        .otree-timer {
-            display: none;
-        }
         .btn-primary{
             border-radius: 5px;
         }
@@ -29,7 +26,7 @@ Round {{round_number}}
 
 <p style="font-size: x-large;"> At the seller stage, you chose to sell <b>{{quantity}}</b> of these tickets in the auction. </p>
 
-<button class="btn btn-primary btn-lg"> Proceed to Auction </button>
+<button id="proceed" class="btn btn-primary btn-lg"> Proceed to Auction </button>
 {% endif %}
 
 {% if role == 'buyer' %}
@@ -46,7 +43,7 @@ Round {{round_number}}
     <li style="padding-bottom:10px"> {{quantity}}&times;{{group.fH}}= {{vH}} francs if the ticket{{plural}} {{to_be}} <a style="color:green">green</a> or </li>
     <li>{{quantity}}&times;{{group.fL}}= {{vL}} francs if the ticket{{plural}} {{to_be}} <a style="color:blue">blue</a>.</li>
 </ul>
-<div style="text-align: center" ><button class="btn btn-primary btn-lg"> Proceed to Auction </button></div>
+<div style="text-align: center" ><button id="proceed" class="btn btn-primary btn-lg"> Proceed to Auction </button></div>
 <hr style="margin-bottom: 0;margin-top: 10px">
 
 {% if round_number > 1 %}
@@ -55,6 +52,22 @@ Round {{round_number}}
     {% endif %}
 
 </div>
+<script>
+    var seconds = Math.random() * 5000;
+    var push = {{push}};
+
+    if (push){
+    window.onload = function () {
+        var delayInMilliseconds = seconds; //1 second
+
+        setTimeout(function () {
+            document.getElementById('proceed').click()
+        }, delayInMilliseconds);
+
+    };}
+
+</script>
+
 {% endblock %}
 
 

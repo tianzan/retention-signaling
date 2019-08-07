@@ -1,0 +1,88 @@
+<head>
+
+    <style>
+        .column {
+            height: 320px;
+        }
+
+        .left {
+            width: 490px;
+        }
+
+        .right {
+            width: 570px;
+        }
+
+        ul {
+            padding-left: 20px;
+            columns: 2;
+            -webkit-columns: 2;
+            -moz-columns: 2;
+            column-gap: 0;
+            width: 380px;
+            font-size: large;
+            list-style-type:circle
+        }
+
+        li {
+            padding-top: 30px;
+        }
+
+        .leftitem {
+            width: 250px;
+        }
+
+        .rightitem {
+            margin-left: 0;
+            width: 250px;
+        }
+        td {
+            padding-top: 7px;
+        }
+    </style>
+</head>
+<body>
+<div class="row" style="margin-left: 60px;">
+    <div class="left" style="padding: 20px;background-color:lightgray; border-radius:20px; margin-top:10px;">
+        <h1 style="text-align: center"> Summary</h1>
+        <ul>
+            <li class="leftitem"><i> Your Role:</i> <b> seller </b></li>
+            <li class="leftitem"><i> Ticket Color:</i> <a style="color:{{color}}; font-weight: bold">{{color}}</a></li>
+            <li class="rightitem"><i># of Tickets You Sold:</i> <b>{{quantity}}</b></li>
+            <li class="rightitem"><i>Final Price:</i><b> {{price}}</b> francs per-ticket</li>
+        </ul>
+    </div>
+    <div class="right"
+         style="background-color: goldenrod;border-radius:20px; margin-top:10px; margin-left: 10px; padding: 20px">
+
+        <h1 style="padding-bottom: 25px;text-align: center"> Your Earnings This Round</h1>
+             <table style="margin-left: 10px;font-size: x-large;">
+            <tr>
+                <td></td>
+                <td>{{retained_earnings}} </td>
+                <td> = </td>
+                <td> {{keep}}&times;{{seller_value}} </td>
+                <td> </td>
+                <td style="color: dimgray; alignment: left">  francs from the ticket{{kplural}}  you kept</td>
+            </tr>
+            <tr>
+                <td style="border-bottom: 4px solid black">+</td>
+                <td style="border-bottom: 4px solid black"> {{revenue}} </td>
+                <td style="border-bottom: 4px solid black"> = </td>
+                <td style="border-bottom: 4px solid black">  {{quantity}}&times;{{price}}</td>
+                <td></td>
+                <td style="color: dimgray; alignment: left">  francs from the ticket{{plural}} you sold</td>
+            </tr>
+            <tr>
+                <td></td>
+                <td></td>
+                <td> = </td>
+                <td style="font-weight: bold"> {{francs}}</td>
+                <td> &nbsp;&nbsp;&nbsp;&nbsp;</td>
+                <td style="font-weight: bold"> francs you earned this round
+        </table>
+    </div>
+</div>
+
+</body>
+</html>
