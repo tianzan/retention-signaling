@@ -35,8 +35,23 @@ Round {{round_number}}
 
 
 {% endif %}
+<button style="display: none" id="proceed"></button>
 {% next_button %}
+<script>
+    var seconds = Math.random() * 5000;
+    var push = {{push}};
 
+    if (push){
+    window.onload = function () {
+        var delayInMilliseconds = seconds; //1 second
+
+        setTimeout(function () {
+            document.getElementById('proceed').click()
+        }, delayInMilliseconds);
+
+    };}
+
+</script>
 {% endblock %}
 
 

@@ -46,7 +46,7 @@
         display: block;
         overflow-y: auto;
         overflow-x: hidden;
-        max-height: 428px;
+        max-height: 521px;
         padding-right: 1px;
     }
 
@@ -75,6 +75,10 @@
         min-width: 80px;
         max-width: 80px;
         }
+    .otree-title{
+        margin: 5px;
+        padding:10px;
+    }
 
 
 
@@ -84,7 +88,7 @@
 
 <div>
     <table id="history" align="center" class=fixed_header>
-        <caption style="caption-side: top; font-size: xx-large;" class="text-center">Results from All Rounds</caption>
+        <caption style="caption-side: top; font-size: xx-large; padding-top: 0" class="text-center">Results from All Rounds</caption>
         <thead>
         <tr>
             <th style="border-bottom: 2px solid darkslategray">Round #</th>
@@ -98,15 +102,15 @@
             <th style="border-bottom: 2px solid darkslategray">Your Earnings (francs)</th>
         </tr>
         </thead>
-        <tbody>
+        <tbody id="dataTable">
         {% for k,v in data.items %}
-        <tr>
+        <tr style="font-size: large">
             {% if forloop.counter|divisibleby:num_groups %}
             <td data-id=-1 data-value=-1  rowspan={{num_groups}} style="border-bottom: 3px solid black; border-right: 3px solid black"> <h1>{{v.round}}</h1></td>
                 {% endif %}
             <td data-id={{v.group_number}} data-value={{v.round}}> {{v.group_number}}</td>
             <td data-id=-1 data-value=-1 > {{v.quantity}}</td>
-            <td data-id=-1 data-value=-1  style="color:{{v.color}}"> {{v.color}}</td>
+            <td data-id=-1 data-value=-1  style="color:{{v.color}};font-weight: bold"> {{v.color}}</td>
             <td data-id=-1 data-value=-1 > {{v.price}}</td>
             <td data-id=-1 data-value=-1 > {{v.seller_payoff}}</td>
             <td data-id=-1 data-value=-1 > {{v.winner_payoff}}</td>
@@ -117,11 +121,40 @@
         </tbody>
 
     </table>
-    <div style="text-align: center"> <button class="btn btn-primary btn-lg">Click to Begin Next Round</button></div>
+    <div style="text-align: center"> <button id="proceed" class="btn btn-primary btn-lg">Click to Begin Next Round</button></div>
 </div>
 </body>
 
 <script>
+    var num_groups = {{num_groups}};
+    var round_number = {{round_number}};
+
+    if (round_number>=4){
+        $('td').css('padding-top',2);
+        $('td').css('padding-bottom',2)
+    }
+
+    if (num_groups==3){
+        $('#dataTable').css('height',465)
+    }
+    if (num_groups==2){
+        $('#dataTable').css('height',313)
+    }
+
+
+    var seconds = Math.random() * 5000;
+    var push = {{push}};
+
+    if (push){
+    window.onload = function () {
+        var delayInMilliseconds = seconds; //1 second
+
+        setTimeout(function () {
+            document.getElementById('proceed').click()
+        }, delayInMilliseconds);
+
+    };}
+
 $(document).ready(function() {
     $('#history').DataTable( {
         "scrollY":        "200px",
@@ -141,6 +174,7 @@ $(document).ready(function() {
             var round_number = $(this).attr('data-value')-1;
             if (group_numbers[round_number]==$(this).attr('data-id')){
                 $(this).css('color','red');
+                $(this).css('font-weight','bold');
             }
         })
     });
